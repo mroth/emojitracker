@@ -1,3 +1,7 @@
+require 'tweetstream'
+require 'redis'
+require 'uri'
+
 # configure tweetstream instance
 TweetStream.configure do |config|
   config.consumer_key       = ENV['CONSUMER_KEY']

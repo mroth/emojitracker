@@ -7,18 +7,18 @@ class Emoji
   end
 
   def chars
-    @chars ||= self.codepoints.map { |cp| codepoint_to_char(cp) }
+    @chars ||= self.codepoints.map { |cp| Emoji.codepoint_to_char(cp) }
   end
 
   def codepoints
     @codepoints ||= @emoji_map.map { |es| es['unified'] }
   end
 
-  def char_to_codepoint(char)
+  def self.char_to_codepoint(char)
     char.unpack('U'*char.length).collect {|x| x.to_s 16}.join.upcase
   end
 
-  def codepoint_to_char(cp)
+  def self.codepoint_to_char(cp)
     [ cp.hex ].pack("U")
   end
 

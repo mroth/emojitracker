@@ -1,11 +1,9 @@
-require 'tweetstream'
-require 'oj'
-require 'colored'
-require 'redis'
-require 'uri'
+#!/usr/bin/env ruby
 
 require_relative 'lib/config'
 require_relative 'lib/emoji'
+
+require 'colored'
 
 # my options
 VERBOSE = ENV["VERBOSE"] || false
@@ -38,7 +36,7 @@ end
   matches = emoji.chars.select { |c| status.text.include? c  }
   matches.each do |matched_emoji_char|
     # puts matched_emoji_char, emoji.char_to_codepoint(matched_emoji_char), "+1"
-    REDIS.ZINCRBY 'emojitrack_score', 1, emoji.char_to_codepoint(matched_emoji_char)
+    REDIS.ZINCRBY 'emojitrack_score', 1, Emoji.char_to_codepoint(matched_emoji_char)
   end
   # if status.text =~ /#{DOGTERMS.join('|')}/i
   #   puts "   ...doggie!" if VERBOSE
