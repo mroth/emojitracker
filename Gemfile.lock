@@ -27,7 +27,6 @@ GEM
     http_parser.rb (0.5.3)
     multi_json (1.7.3)
     multipart-post (1.2.0)
-    newrelic_rpm (3.6.2.96)
     oj (2.0.13)
     redis (3.0.4)
     simple_oauth (0.2.0)
@@ -50,7 +49,6 @@ PLATFORMS
 DEPENDENCIES
   colored
   foreman
-  newrelic_rpm
   oj
   redis
   tweetstream (~> 2.5.0)

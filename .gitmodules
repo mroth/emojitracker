@@ -1,0 +1,3 @@
+[submodule "lib/vendor/emoji-data"]
+	path = lib/vendor/emoji-data
+	url = https://github.com/iamcal/emoji-data.git

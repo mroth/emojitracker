@@ -3,6 +3,7 @@ require 'oj'
 require 'colored'
 require 'redis'
 require 'uri'
+require_relative 'lib/emoji'
 
 # configure tweetstream instance
 TweetStream.configure do |config|
@@ -23,9 +24,7 @@ puts "...starting in verbose mode!" if VERBOSE
 $stdout.sync = true if VERBOSE
 
 #setup
-DOGTERMS = %w[dog dogs doggy doggie doggies puppy puppies]
-CATTERMS = %w[cat cats kitty kittie kitties kitten kittens]
-TERMS = DOGTERMS + CATTERMS
+TERMS = emoji_chars
 
 puts "Setting up a stream to track terms '#{TERMS}'..."
 @client = TweetStream::Client.new
@@ -46,18 +45,18 @@ end
   }
   status_json = Oj.dump(status_small)
   
-  if status.text =~ /#{DOGTERMS.join('|')}/i
-    puts "   ...doggie!" if VERBOSE
-    REDIS.INCR 'dog_count'
-    REDIS.PUBLISH 'stream.tweets.dog', status_json
-    REDIS.LPUSH 'dog_tweets', status_json
-    REDIS.LTRIM 'dog_tweets',0,9
-  end
-  if status.text =~ /#{CATTERMS.join('|')}/i
-    puts "   ...kitty!" if VERBOSE
-    REDIS.INCR 'cat_count'
-    REDIS.PUBLISH 'stream.tweets.cat', status_json
-    REDIS.LPUSH 'cat_tweets', status_json
-    REDIS.LTRIM 'cat_tweets',0,9
-  end
+  # if status.text =~ /#{DOGTERMS.join('|')}/i
+  #   puts "   ...doggie!" if VERBOSE
+  #   REDIS.INCR 'dog_count'
+  #   REDIS.PUBLISH 'stream.tweets.dog', status_json
+  #   REDIS.LPUSH 'dog_tweets', status_json
+  #   REDIS.LTRIM 'dog_tweets',0,9
+  # end
+  # if status.text =~ /#{CATTERMS.join('|')}/i
+  #   puts "   ...kitty!" if VERBOSE
+  #   REDIS.INCR 'cat_count'
+  #   REDIS.PUBLISH 'stream.tweets.cat', status_json
+  #   REDIS.LPUSH 'cat_tweets', status_json
+  #   REDIS.LTRIM 'cat_tweets',0,9
+  # end
 end
