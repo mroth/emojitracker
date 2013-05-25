@@ -37,7 +37,8 @@ class Emoji
   end
 
   def self.char_to_codepoint(char)
-    char.unpack('U'*char.length).collect {|x| x.to_s 16}.join.upcase
+    # char.unpack('U'*char.length).collect {|x| x.to_s 16}.join('-').upcase
+    char.codepoints.to_a.map {|i| i.to_s(16).rjust(4,'0')}.join('-').upcase
   end
 
   def self.codepoint_to_char(cp)
