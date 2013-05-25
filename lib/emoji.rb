@@ -18,7 +18,7 @@ class EmojiChar
   end
 
   def to_char
-    [ @unified.hex ].pack("U")
+    @unified.split('-').map { |i| i.hex }.pack("U*")
   end
 
 end
