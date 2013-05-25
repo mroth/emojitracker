@@ -2,8 +2,9 @@ source 'https://rubygems.org'
 ruby '1.9.3'
 
 group :web, :streamer do
-  gem 'redis'
-  gem 'oj'
+  gem 'redis', '~> 3.0.4'
+  gem 'hiredis', '~> 0.4.5'
+  gem 'oj', '~> 2.0.13'
 end
 
 group :web do

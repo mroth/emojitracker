@@ -43,7 +43,7 @@ end
 
 Thread.new do
   # we need a new instance of the redis object for this
-  t_redis = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password)
+  t_redis = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password, :driver => :hiredis)
 
   t_redis.psubscribe('stream.score_updates') do |on|
     on.pmessage do |match, channel, message|
