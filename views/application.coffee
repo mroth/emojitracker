@@ -28,12 +28,17 @@ processScoreUpdate = (event) -> incrementScore event.data
 
 incrementScore = (id) ->
   score_selector = $("li\##{id} > .score")
+  container_selector = $("li\##{id}")
+
   count = parseInt score_selector.text()
 
   score_selector.stop(true)
+  container_selector.stop(true)
   score_selector.css 'color', 'red'
+  container_selector.css 'background-color', 'lightgreen'
   score_selector.text ++count
-  score_selector.animate( {color: 'black'}, 1000 )
+  score_selector.animate( {'color': 'black'}, 1000 )
+  container_selector.animate( {'background-color': '#eee'}, 1000 )
 
 ###
 Polling
