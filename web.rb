@@ -42,10 +42,10 @@ get '/subscribe' do
 end
 
 Thread.new do
-  uri = URI.parse(ENV["BOXEN_REDIS_URL"])
-  redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
+  # we need a new instance of the redis object for this
+  t_redis = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password)
 
-  redis.psubscribe('stream.score_updates') do |on|
+  t_redis.psubscribe('stream.score_updates') do |on|
     on.pmessage do |match, channel, message|
       # type = channel.sub('stream.tweets.', '')
       conns.each do |out|
