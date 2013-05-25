@@ -8,10 +8,10 @@ require 'colored'
 # my options
 VERBOSE = ENV["VERBOSE"] || false
 puts "...starting in verbose mode!" if VERBOSE
-$stdout.sync = true if VERBOSE
+$stdout.sync = true
 
 #setup
-TERMS = Emoji.chars.first(200) #TODO: need to raise me with twitter....
+TERMS = Emoji.chars.first(400) #TODO: need to raise me with twitter....
 
 puts "Setting up a stream to track terms '#{TERMS}'..."
 @client = TweetStream::Client.new
@@ -21,7 +21,7 @@ puts "Setting up a stream to track terms '#{TERMS}'..."
 end
 @client.on_limit do |skip_count|
   # do something
-  puts "RATE LIMITED LOL"
+  puts "RATE LIMITED LOL - skipped #{skip_count}"
 end
 @client.track(TERMS) do |status|
   puts " ** @#{status.user.screen_name}: ".green + status.text.white if VERBOSE
@@ -34,21 +34,6 @@ end
 
   matches = Emoji.chars.select { |c| status.text.include? c  }
   matches.each do |matched_emoji_char|
-    # puts matched_emoji_char, emoji.char_to_codepoint(matched_emoji_char), "+1"
     REDIS.ZINCRBY 'emojitrack_score', 1, Emoji.char_to_codepoint(matched_emoji_char)
   end
-  # if status.text =~ /#{DOGTERMS.join('|')}/i
-  #   puts "   ...doggie!" if VERBOSE
-  #   REDIS.INCR 'dog_count'
-  #   REDIS.PUBLISH 'stream.tweets.dog', status_json
-  #   REDIS.LPUSH 'dog_tweets', status_json
-  #   REDIS.LTRIM 'dog_tweets',0,9
-  # end
-  # if status.text =~ /#{CATTERMS.join('|')}/i
-  #   puts "   ...kitty!" if VERBOSE
-  #   REDIS.INCR 'cat_count'
-  #   REDIS.PUBLISH 'stream.tweets.cat', status_json
-  #   REDIS.LPUSH 'cat_tweets', status_json
-  #   REDIS.LTRIM 'cat_tweets',0,9
-  # end
 end
