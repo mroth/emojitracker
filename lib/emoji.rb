@@ -17,6 +17,10 @@ class EmojiChar
     @text = emoji_hash['text']
   end
 
+  def to_char
+    [ @unified.hex ].pack("U")
+  end
+
 end
 
 class Emoji
@@ -37,7 +41,7 @@ class Emoji
   end
 
   def self.codepoint_to_char(cp)
-    [ cp.hex ].pack("U")
+    find_by_codepoint(cp).to_char
   end
 
   # def self.codepoint_to_obj(cp)
