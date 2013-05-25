@@ -22,4 +22,8 @@ class Emoji
     [ cp.hex ].pack("U")
   end
 
+  def codepoint_to_obj(cp)
+    @emoji_map.detect { |emoji_symbol| emoji_symbol['unified'] == cp}
+  end
+
 end
