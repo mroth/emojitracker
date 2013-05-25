@@ -5,13 +5,13 @@ require 'sinatra'
 require 'slim'
 require 'coffee-script'
 
-# get '/' do
-#   slim :index
-# end
+get '/' do
+  slim :index
+end
 
-# get '/application.js' do
-#   coffee :application
-# end
+get '/application.js' do
+  coffee :application
+end
 
 get '/data' do
   raw_scores = REDIS.zrange('emojitrack_score', 0, -1, { withscores: true } ).reverse
