@@ -21,6 +21,7 @@ end
 
 group :development do
   gem 'foreman'
+  gem 'rspec'
 end
 
 # group :production do
