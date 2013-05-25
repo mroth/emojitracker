@@ -30,27 +30,27 @@ get '/data' do
   Oj.dump( @scores )
 end
 
-# get '/subscribe' do
-#   content_type 'text/event-stream'
-#   stream(:keep_open) do |out|
-#     conns << out
-#     out.callback { conns.delete(out) }
-#   end
-# end
+conns = []
+get '/subscribe' do
+  content_type 'text/event-stream'
+  stream(:keep_open) do |out|
+    conns << out
+    out.callback { conns.delete(out) }
+  end
+end
 
-# Thread.new do
-#   uri = URI.parse(ENV["REDISTOGO_URL"])
-#   redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
+Thread.new do
+  uri = URI.parse(ENV["BOXEN_REDIS_URL"])
+  redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
 
-#   redis.psubscribe('stream.tweets.*') do |on|
-#     on.pmessage do |match, channel, message|
-#       type = channel.sub('stream.tweets.', '')
+  redis.psubscribe('stream.score_updates') do |on|
+    on.pmessage do |match, channel, message|
+      # type = channel.sub('stream.tweets.', '')
+      conns.each do |out|
+        out << "event: #{channel}\n"
+        out << "data: #{message}\n\n"
+      end
+    end
+  end
 
-#       conns.each do |out|
-#         out << "event: #{channel}\n"
-#         out << "data: #{message}\n\n"
-#       end
-#     end
-#   end
-
-# end
+end

@@ -36,6 +36,8 @@ end
 
   matches = Emoji.chars.select { |c| status.text.include? c  }
   matches.each do |matched_emoji_char|
-    REDIS.ZINCRBY 'emojitrack_score', 1, Emoji.char_to_codepoint(matched_emoji_char)
+    cp = Emoji.char_to_codepoint(matched_emoji_char)
+    REDIS.ZINCRBY 'emojitrack_score', 1, cp
+    REDIS.PUBLISH 'stream.score_updates', cp
   end
 end
