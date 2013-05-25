@@ -20,6 +20,7 @@ get '/data' do
     # yield "FUCK" if emo_obj.nil?
     {
       "char" => Emoji.codepoint_to_char(score[0]),
+      "id" => emo_obj.unified,
       "name" => emo_obj.nil? ? '***FUCK***' : emo_obj.name,
       "score" => score[1].to_i
     }
