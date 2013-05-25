@@ -30,11 +30,10 @@ incrementScore = (id) ->
   score_selector = $("li\##{id} > .score")
   count = parseInt score_selector.text()
 
-  score_selector.hide
+  score_selector.stop(true)
   score_selector.css 'color', 'red'
   score_selector.text ++count
-  score_selector.show
-  score_selector.animate( {color: 'black'}, 5000 )
+  score_selector.animate( {color: 'black'}, 1000 )
 
 ###
 Polling
