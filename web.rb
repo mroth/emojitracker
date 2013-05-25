@@ -5,6 +5,8 @@ require 'sinatra'
 require 'slim'
 require 'coffee-script'
 
+set :public_folder, 'public'
+
 get '/' do
   slim :index
 end

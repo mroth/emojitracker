@@ -12,7 +12,7 @@ drawEmojiStats = (stats) ->
   selector.empty()
   for emoji_char in stats
     do (emoji_char) ->
-      selector.append "<li class='emoji_char' id='#{emoji_char.id}'><span class='char'>#{emoji_char.char}</span><span class='score'>#{emoji_char.score}</span></li>"
+      selector.append "<li class='emoji_char' id='#{emoji_char.id}'><span class='char'>#{emoji.replace_unified(emoji_char.char)}</span><span class='score'>#{emoji_char.score}</span></li>"
 
 ###
 methods related to the streaming UI
@@ -45,6 +45,7 @@ Polling
   clearInterval(@refreshTimer)
 
 $ ->
+  emoji.img_path = "http://unicodey.com/js-emoji/emoji/"
   setTimeout(refreshUIFromServer, 1)
   # startRefreshTimer()
   startStreaming()
