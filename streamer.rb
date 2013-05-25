@@ -11,8 +11,7 @@ puts "...starting in verbose mode!" if VERBOSE
 $stdout.sync = true if VERBOSE
 
 #setup
-emoji = Emoji.new
-TERMS = emoji.chars.first(200) #TODO: need to raise me with twitter....
+TERMS = Emoji.chars.first(200) #TODO: need to raise me with twitter....
 
 puts "Setting up a stream to track terms '#{TERMS}'..."
 @client = TweetStream::Client.new
@@ -33,7 +32,7 @@ end
   }
   status_json = Oj.dump(status_small)
 
-  matches = emoji.chars.select { |c| status.text.include? c  }
+  matches = Emoji.chars.select { |c| status.text.include? c  }
   matches.each do |matched_emoji_char|
     # puts matched_emoji_char, emoji.char_to_codepoint(matched_emoji_char), "+1"
     REDIS.ZINCRBY 'emojitrack_score', 1, Emoji.char_to_codepoint(matched_emoji_char)

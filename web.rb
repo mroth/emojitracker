@@ -14,10 +14,9 @@ require 'coffee-script'
 # end
 
 get '/data' do
-  static_emoji = Emoji.new
   raw_scores = REDIS.zrange('emojitrack_score', 0, -1, { withscores: true } ).reverse
   @scores = raw_scores.map do |score|
-    emo_obj = static_emoji.codepoint_to_obj(score[0])
+    emo_obj = Emoji.codepoint_to_obj(score[0])
     # yield "FUCK" if emo_obj.nil?
     {
       "char" => Emoji.codepoint_to_char(score[0]),

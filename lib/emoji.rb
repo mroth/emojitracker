@@ -2,16 +2,14 @@ require 'oj'
 
 class Emoji
 
-  def initialize
-    @emoji_map = Oj.load_file 'lib/vendor/emoji-data/emoji.json'
-  end
+  EMOJI_MAP = Oj.load_file 'lib/vendor/emoji-data/emoji.json'
 
-  def chars
+  def self.chars
     @chars ||= self.codepoints.map { |cp| Emoji.codepoint_to_char(cp) }
   end
 
-  def codepoints
-    @codepoints ||= @emoji_map.map { |es| es['unified'] }
+  def self.codepoints
+    @codepoints ||= EMOJI_MAP.map { |es| es['unified'] }
   end
 
   def self.char_to_codepoint(char)
@@ -22,8 +20,11 @@ class Emoji
     [ cp.hex ].pack("U")
   end
 
-  def codepoint_to_obj(cp)
-    @emoji_map.detect { |emoji_symbol| emoji_symbol['unified'] == cp}
+  def self.codepoint_to_obj(cp)
+    EMOJI_MAP.detect { |emoji_symbol| emoji_symbol['unified'] == cp}
+  end
+
+end
   end
 
 end
