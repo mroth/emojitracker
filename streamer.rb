@@ -27,6 +27,9 @@ end
 @client.track(TERMS) do |status|
   @tracked += 1
   puts " ** @#{status.user.screen_name}: ".green + status.text.white if VERBOSE
+  is_retweet = status.text.start_with? "RT"
+  next if is_retweet
+
   status_small = {
     'id' => status.id.to_s,
     'text' => status.text,
