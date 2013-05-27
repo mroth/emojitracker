@@ -1,0 +1,30 @@
+@font-face {
+  font-family: 'AppleColorEmojiRestricted';
+  src: local('AppleColorEmoji');
+  unicode-range: U+1F300-1F5FF,U+1F600-1F64F,U+1F680-1F64F,U+2600-27FF;
+}
+.emoji {
+  font-family: 'AppleColorEmoji';
+}
+.emoji-restricted {
+  font-family: AppleColorEmojiRestricted, Helvetica;
+}
+.emoji_char {
+  width: 100px;
+  background-color: #eee;
+  margin: 1px;
+  padding: 3px;
+  float: left;
+  list-style-type: none;
+  padding-right: 20px;
+}
+.emoji_char > .char {
+  font-family: 'AppleColorEmoji';
+}
+.emoji_char > .score {
+   padding-left: 10px;
+}
+
+#tweets li {
+  color: gray;
+}
