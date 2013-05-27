@@ -52,13 +52,17 @@ incrementScore = (id) ->
 
   count = parseInt score_selector.text()
 
-  score_selector.stop(true)
-  container_selector.stop(true)
-  score_selector.css 'color', 'red'
-  container_selector.css 'background-color', 'lightgreen'
+  iOS = if navigator.userAgent.match(/(iPad|iPhone|iPod)/g) then true else false
+  jquery_animation = !iOS
+  if jquery_animation
+    score_selector.stop(true)
+    container_selector.stop(true)
+    score_selector.css 'color', 'red'
+    container_selector.css 'background-color', 'lightgreen'
   score_selector.text ++count
-  score_selector.animate( {'color': 'black'}, 1000 )
-  container_selector.animate( {'background-color': '#eee'}, 1000 )
+  if jquery_animation
+    score_selector.animate( {'color': 'black'}, 1000 )
+    container_selector.animate( {'background-color': '#eee'}, 1000 )
 
 ###
 detail page UI helpers
