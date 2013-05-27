@@ -3,10 +3,10 @@
   src: local('AppleColorEmoji');
   unicode-range: U+1F300-1F5FF,U+1F600-1F64F,U+1F680-1F64F,U+2600-27FF;
 }
-.emoji {
+.emojifont {
   font-family: 'AppleColorEmoji';
 }
-.emoji-restricted {
+.emojifont-restricted {
   font-family: AppleColorEmojiRestricted, Helvetica;
 }
 .emoji_char {
@@ -19,10 +19,10 @@
   padding-right: 20px;
 }
 .emoji_char > .char {
-  font-family: 'AppleColorEmoji';
 }
 .emoji_char > .score {
    padding-left: 10px;
+   color: black;
 }
 
 #tweets li {
