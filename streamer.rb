@@ -47,6 +47,9 @@ end
       # for each emoji char, store the most recent 10 tweets in a list
       REDIS.LPUSH "emojitrack_tweets_#{cp}", status_json
       REDIS.LTRIM "emojitrack_tweets_#{cp}",0,9
+
+      # also stream all tweet updates to named streams by char
+      REDIS.PUBLISH "stream.tweet_updates.#{cp}", status_json
     end
   end
 end
