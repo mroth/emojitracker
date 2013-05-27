@@ -11,6 +11,11 @@ get '/' do
   slim :index
 end
 
+get '/details/:char' do
+  @emoji_char = Emoji.find_by_codepoint( params[:char] )
+  slim :details
+end
+
 get '/application.js' do
   coffee :application
 end
