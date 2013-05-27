@@ -1,7 +1,22 @@
 h1 emojitracker
 
+h2 = @emoji_char.to_char
+
 section#details
-  h2 = @emoji_char.to_char
-  ul
+  table
+    dl
+      dt unified id
+      dd = @emoji_char.unified
+      dt unified character name
+      dd = @emoji_char.name
+      dt emoji shorthand name
+      dd
+        code = ":#{@emoji_char.short_name}:"
+      dt current popularity
+      dd XX out of XY
+
+section#tweets
+  h3 most recent tweets
+  ul#tweet_list
     - for tweet in @emoji_tweets
       li = tweet
