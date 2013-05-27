@@ -79,7 +79,7 @@ class TaggedStream
 end
 
 detail_conns = []
-get '/subscribefoo/:char' do
+get '/subscribe/details/:char' do
   content_type 'text/event-stream'
   stream(:keep_open) do |out|
     ts = TaggedStream.new(out, params[:char])
