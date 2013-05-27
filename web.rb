@@ -47,9 +47,8 @@ Thread.new do
 
   t_redis.psubscribe('stream.score_updates') do |on|
     on.pmessage do |match, channel, message|
-      # type = channel.sub('stream.tweets.', '')
       conns.each do |out|
-        out << "event: #{channel}\n"
+        # out << "event: #{channel}\n"
         out << "data: #{message}\n\n"
       end
     end

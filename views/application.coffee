@@ -7,7 +7,6 @@ methods related to the polling UI
   , "json")
 
 drawEmojiStats = (stats) ->
-  # console.log(s) for s in stats
   selector = $("#data")
   selector.empty()
   for emoji_char in stats
@@ -19,12 +18,13 @@ methods related to the streaming UI
 ###
 @startStreaming = ->
   @source = new EventSource('/subscribe')
-  @source.addEventListener('stream.score_updates', processScoreUpdate, false)
+  # @source.addEventListener('stream.score_updates', processScoreUpdate, false)
+  @source.onmessage = (event) -> incrementScore(event.data)
 
 @stopStreaming = ->
   @source.close()
 
-processScoreUpdate = (event) -> incrementScore event.data
+# processScoreUpdate = (event) -> incrementScore event.data
 
 incrementScore = (id) ->
   score_selector = $("li\##{id} > .score")
