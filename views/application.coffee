@@ -57,6 +57,3 @@ Polling
 
 $ ->
   emoji.img_path = "http://unicodey.com/js-emoji/emoji/"
-  setTimeout(refreshUIFromServer, 1)
-  # startRefreshTimer()
-  startStreaming()
