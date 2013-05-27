@@ -17,6 +17,9 @@ html
 
       section#details
         h2 = @emoji_char.to_char
+        ul
+          - for tweet in @emoji_tweets
+            li = tweet
 
       hr clear="all"
       hr

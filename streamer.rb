@@ -27,19 +27,26 @@ end
 @client.track(TERMS) do |status|
   @tracked += 1
   puts " ** @#{status.user.screen_name}: ".green + status.text.white if VERBOSE
-  # status_small = {
-  #   'id' => status.id.to_s,
-  #   'text' => status.text,
-  #   'username' => status.user.screen_name
-  # }
-  # status_json = Oj.dump(status_small)
+  status_small = {
+    'id' => status.id.to_s,
+    'text' => status.text,
+    'username' => status.user.screen_name
+  }
+  status_json = Oj.dump(status_small)
 
   matches = Emoji.chars.select { |c| status.text.include? c  }
   matches.each do |matched_emoji_char|
     cp = Emoji.char_to_codepoint(matched_emoji_char)
     REDIS.pipelined do
+      # increment the score in a sorted set
       REDIS.ZINCRBY 'emojitrack_score', 1, cp
+
+      # stream the fact that the score was updated
       REDIS.PUBLISH 'stream.score_updates', cp
+
+      # for each emoji char, store the most recent 10 tweets in a list
+      REDIS.LPUSH "emojitrack_tweets_#{cp}", status_json
+      REDIS.LTRIM "emojitrack_tweets_#{cp}",0,9
     end
   end
 end
