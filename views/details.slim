@@ -18,5 +18,13 @@ section#details
 section#tweets
   h3 most recent tweets
   ul#tweet_list
-    - for tweet in @emoji_tweets
-      li = tweet
+
+javascript:
+  char_id = "#{@emoji_char.unified}";
+coffee:
+  $ ->
+    $.get("/api/details/#{char_id}", (response) ->
+      for tweet in response.recent_tweets
+        appendTweetList tweet
+      startDetailStreaming(char_id)
+    , "json")

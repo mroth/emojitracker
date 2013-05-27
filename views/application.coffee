@@ -22,16 +22,30 @@ drawEmojiStats = (stats) ->
 ###
 methods related to the streaming UI
 ###
-@startStreaming = ->
+@startScoreStreaming = ->
   @source = new EventSource('/subscribe')
   # @source.addEventListener('stream.score_updates', processScoreUpdate, false)
   @source.onmessage = (event) -> incrementScore(event.data)
 
-@stopStreaming = ->
+@stopScoreStreaming = ->
   @source.close()
 
-# processScoreUpdate = (event) -> incrementScore event.data
+@startDetailStreaming = (id) ->
+  console.log "Subscribing to detail stream for #{id}"
+  @detail_source = new EventSource("/subscribe/details/#{id}")
+  @detail_source.addEventListener("stream.tweet_updates.#{id}", processDetailTweetUpdate, false)
 
+@stopDetailStreaming = ->
+  @detail_source.close()
+
+processDetailTweetUpdate = (event) ->
+  console.log event.data
+  appendTweetList $.parseJSON(event.data)
+
+
+###
+index page UI helpers
+###
 incrementScore = (id) ->
   score_selector = $("li\##{id} > .score")
   container_selector = $("li\##{id}")
@@ -45,6 +59,22 @@ incrementScore = (id) ->
   score_selector.text ++count
   score_selector.animate( {'color': 'black'}, 1000 )
   container_selector.animate( {'background-color': '#eee'}, 1000 )
+
+###
+detail page UI helpers
+###
+@appendTweetList = (tweet) ->
+  tweet_list = $('ul#tweet_list')
+  tweet_list_elements = $("ul#tweet_list li")
+  tweet_list_elements.last().remove() if tweet_list_elements.size() >= 20
+  tweet_list.prepend( formattedTweet tweet  )
+
+###
+general purpose UI helpers
+###
+formattedTweet = (tweet) ->
+  tweet_url = "http://twitter.com/#{tweet.username}/status/#{tweet.id}"
+  "<li><strong>@#{tweet.username}:</strong> #{tweet.text} <a href='#{tweet_url}'>\#</a></li>"
 
 ###
 Polling

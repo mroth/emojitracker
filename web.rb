@@ -13,8 +13,20 @@ end
 
 get '/details/:char' do
   @emoji_char = Emoji.find_by_codepoint( params[:char] )
-  @emoji_tweets = REDIS.LRANGE("emojitrack_tweets_#{@emoji_char.unified}",0,9)
+  #@emoji_tweets = REDIS.LRANGE("emojitrack_tweets_#{@emoji_char.unified}",0,9)
+  #@emoji_tweets_json = @emoji_tweets.map! {|t| Oj.load(t)}
   slim :details
+end
+
+get '/api/details/:char' do
+  @emoji_char = Emoji.find_by_codepoint( params[:char] )
+  @emoji_tweets = REDIS.LRANGE("emojitrack_tweets_#{@emoji_char.unified}",0,9)
+  @emoji_tweets_json = @emoji_tweets.map! {|t| Oj.load(t)}
+  content_type :json
+  Oj.dump( {
+    'char_details' => @emoji_char,
+    'recent_tweets' => @emoji_tweets_json
+  })
 end
 
 get '/application.js' do
