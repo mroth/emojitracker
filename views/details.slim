@@ -1,23 +1,28 @@
-h1 emojitracker
-
 h2.emoji = @emoji_char.to_char
 
-section#details
-  table
-    dl
-      dt unified id
-      dd = @emoji_char.unified
-      dt unified character name
-      dd = @emoji_char.name
-      dt emoji shorthand name
-      dd
-        code = ":#{@emoji_char.short_name}:"
-      dt current popularity
-      dd = "\##{@emoji_char_rank}"
+div.container-fluid
+  div.row-fluid
+    section#details.span3
+      h3 details
+      table
+        dl
+          dt unified id
+          dd
+            tt = @emoji_char.unified
+          dt unified character name
+          dd
+            tt = @emoji_char.name
+          dt emoji shorthand name
+          dd
+            code = ":#{@emoji_char.short_name}:"
+          dt current popularity
+          dd.badge.badge-info = "\##{@emoji_char_rank}"
 
-section#tweets
-  h3 most recent tweets
-  ul#tweet_list
+      a.btn.btn-mini href="/api/details/#{@emoji_char.unified}" get details as JSON
+
+    section#tweets.span9
+      h3 most recent tweets
+      ul#tweet_list
 
 javascript:
   char_id = "#{@emoji_char.unified}";
