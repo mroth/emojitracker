@@ -1,4 +1,4 @@
-h2.emojifont = @emoji_char.to_char
+h2.emojifont-restricted = @emoji_char.to_char
 
 div.container-fluid
   div.row-fluid
@@ -28,6 +28,7 @@ javascript:
   char_id = "#{@emoji_char.unified}";
 coffee:
   $ ->
+    $('h2').html emoji.replace_unified( $('h2').text() ) #js-emojify the h2 for shit browsers
     $.get("/api/details/#{char_id}", (response) ->
       for tweet in response.recent_tweets
         appendTweetList tweet
