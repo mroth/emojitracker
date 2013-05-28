@@ -1,4 +1,9 @@
 ###
+config
+###
+css_animation = true
+
+###
 methods related to the polling UI
 ###
 @refreshUIFromServer = ->
@@ -52,17 +57,13 @@ incrementScore = (id) ->
 
   count = parseInt score_selector.text()
 
-  iOS = if navigator.userAgent.match(/(iPad|iPhone|iPod)/g) then true else false
-  jquery_animation = !iOS
-  if jquery_animation
-    score_selector.stop(true)
-    container_selector.stop(true)
-    score_selector.css 'color', 'red'
-    container_selector.css 'background-color', 'lightgreen'
+  if css_animation
+    container_selector.addClass('highlighted')
+    container_selector.focus()
+    # focus needed because of http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
   score_selector.text ++count
-  if jquery_animation
-    score_selector.animate( {'color': 'black'}, 1000 )
-    container_selector.animate( {'background-color': '#eee'}, 1000 )
+  if css_animation
+    container_selector.removeClass('highlighted')
 
 ###
 detail page UI helpers

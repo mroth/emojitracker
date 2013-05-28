@@ -17,13 +17,22 @@
   float: left;
   list-style-type: none;
   padding-right: 20px;
+  -webkit-transition: all 0.75s linear 0.1s;
+  transition: all 0.75s linear 0.1s;
+  color: black;
 }
 .emoji_char > .char {
 }
 .emoji_char > .score {
    padding-left: 10px;
-   color: black;
 }
+.highlighted {
+  background-color: lightgreen;
+  color: red;
+  -webkit-transition: all 0s;
+  transition: all 0s;
+}
+
 
 #tweets li {
   color: gray;
