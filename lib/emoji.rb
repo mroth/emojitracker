@@ -41,17 +41,12 @@ class Emoji
   end
 
   def self.char_to_codepoint(char)
-    # char.unpack('U'*char.length).collect {|x| x.to_s 16}.join('-').upcase
     char.codepoints.to_a.map {|i| i.to_s(16).rjust(4,'0')}.join('-').upcase
   end
 
   def self.codepoint_to_char(cp)
     find_by_codepoint(cp).to_char
   end
-
-  # def self.codepoint_to_obj(cp)
-  #   EMOJI_MAP.detect { |emoji_symbol| emoji_symbol['unified'] == cp}
-  # end
 
   def self.find_by_codepoint(cp)
     EMOJI_CHARS.detect { |ec| ec.unified == cp }
