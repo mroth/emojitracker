@@ -1,6 +1,0 @@
-[submodule "lib/vendor/emoji-data"]
-	path = lib/vendor/emoji-data
-	url = https://github.com/iamcal/emoji-data.git
-[submodule "public/vendor/js-emoji"]
-	path = public/vendor/js-emoji
-	url = https://github.com/iamcal/js-emoji.git
