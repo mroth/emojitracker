@@ -29,7 +29,6 @@ methods related to the streaming UI
 ###
 @startScoreStreaming = ->
   @source = new EventSource('/subscribe')
-  # @source.addEventListener('stream.score_updates', processScoreUpdate, false)
   @source.onmessage = (event) -> incrementScore(event.data)
 
 @stopScoreStreaming = ->
@@ -44,8 +43,7 @@ methods related to the streaming UI
   @detail_source.close()
 
 processDetailTweetUpdate = (event) ->
-  console.log event.data
-  appendTweetList $.parseJSON(event.data)
+  appendTweetList $.parseJSON(event.data), true
 
 
 ###
@@ -68,18 +66,24 @@ incrementScore = (id) ->
 ###
 detail page UI helpers
 ###
-@appendTweetList = (tweet) ->
+@appendTweetList = (tweet, new_marker = false) ->
   tweet_list = $('ul#tweet_list')
   tweet_list_elements = $("ul#tweet_list li")
   tweet_list_elements.last().remove() if tweet_list_elements.size() >= 20
-  tweet_list.prepend( formattedTweet tweet  )
+  new_entry = $(formattedTweet(tweet, new_marker))
+  tweet_list.prepend( new_entry )
+  if css_animation
+    new_entry.focus()
+    new_entry.removeClass('new')
 
 ###
 general purpose UI helpers
 ###
-formattedTweet = (tweet) ->
+formattedTweet = (tweet, new_marker = false) ->
   tweet_url = "http://twitter.com/#{tweet.username}/status/#{tweet.id}"
-  "<li><strong>@#{tweet.username}:</strong> #{tweet.text} <a href='#{tweet_url}'>\#</a></li>"
+  class_to_be = "styled_tweet"
+  class_to_be += " new" if new_marker && css_animation
+  "<li class='#{class_to_be}'><strong>@#{tweet.username}:</strong> #{tweet.text} <a href='#{tweet_url}'>\#</a></li>"
 
 ###
 Polling

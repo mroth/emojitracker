@@ -34,6 +34,12 @@
 }
 
 
-#tweets li {
+.styled_tweet {
   color: gray;
+  background-color: transparent;
+  -webkit-transition:background-color 1s ease-out;
+  transition:background-color 1s ease-out;
+}
+.styled_tweet.new {
+  background-color: #ffc;
 }
