@@ -29,7 +29,7 @@ end
 
 class Emoji
 
-  EMOJI_MAP = Oj.load_file 'lib/vendor/emoji-data/emoji.json'
+  EMOJI_MAP = Oj.load_file './lib/vendor/emoji-data/emoji.json'
   EMOJI_CHARS = EMOJI_MAP.map { |em| EmojiChar.new(em) }
 
   def self.chars
