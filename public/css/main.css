@@ -1,14 +1,3 @@
-@font-face {
-  font-family: 'AppleColorEmojiRestricted';
-  src: local('AppleColorEmoji');
-  unicode-range: U+1F300-1F5FF,U+1F600-1F64F,U+1F680-1F64F,U+2600-27FF;
-}
-.emojifont {
-  font-family: 'AppleColorEmoji';
-}
-.emojifont-restricted {
-  font-family: AppleColorEmojiRestricted, Helvetica;
-}
 .emoji_char {
   width: 100px;
   background-color: #eee;

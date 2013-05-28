@@ -21,6 +21,10 @@ class EmojiChar
     @unified.split('-').map { |i| i.hex }.pack("U*")
   end
 
+  def doublebyte?
+    @unified.match(/-/)
+  end
+
 end
 
 class Emoji
@@ -51,6 +55,41 @@ class Emoji
 
   def self.find_by_codepoint(cp)
     EMOJI_CHARS.detect { |ec| ec.unified == cp }
+  end
+
+  def self.generate_css_map
+    working_map = EMOJI_CHARS.reject { |c| c.doublebyte? } #get rid of doublebyte chars until we figure out how to represent in map (TODO:)
+    distance_map = [0] + working_map.each_cons(2).collect {|i| (i[1].unified.hex - i[0].unified.hex) }
+    combined_map = working_map.zip(distance_map)
+
+    reduced_map = []
+    combined_map.each do |char, distance|
+      if distance == 1
+        active_range = reduced_map.last
+        active_range.finish = char.unified
+        active_range.size += 1
+      else
+        reduced_map << CharRange.new(char.unified)
+      end
+    end
+    reduced_map.join(',') + ";"
+  end
+
+  private
+  class CharRange
+    attr_reader :start
+    attr_accessor :finish, :size
+
+    def initialize(start)
+      @start = start
+      @finish = start
+      @size = 1
+    end
+
+    def to_s
+      return "U+#{@start}" if @size == 1
+      "U+#{@start}-#{@finish}"
+    end
   end
 
 end
