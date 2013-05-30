@@ -5,7 +5,7 @@ section#rankings
 div#detailview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
   div.modal-header
     button.close type="button" data-dismiss="modal" aria-hidden="true" &times;
-    h3 SUN WITH RAYS
+    h3.emojifont-restricted SUN WITH RAYS
     dl
       dt unified id
       dd#uid
@@ -25,7 +25,7 @@ div#detailview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myMo
 coffee:
   @popDetails = (char_id) ->
     $.get("/api/details/#{char_id}", (response) ->
-      $('#detailview h3').html emoji.replace_unified(response.char) + " " + response.char_details.name
+      $('#detailview h3').html "#{emoji.replace_unified(response.char)} #{response.char_details.name}"
       $('#detailview #uid tt').text response.char_details.unified
       $('#detailview #shorthand code').text ":#{response.char_details.short_name}:"
       $('#detailview #rank').text "\##{response.popularity_rank}"
