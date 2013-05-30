@@ -2,9 +2,10 @@
 
     git clone mroth/emojitrack
     cd emojitrack
-    git submodule init
-    git submodule update
+    #git submodule init
+    #git submodule update
     bundle install --without=production
+    echo "RACK_ENV=development" >> .env
 
 ## Production setup
 

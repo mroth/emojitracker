@@ -12,4 +12,5 @@ if memcache_servers = ENV["MEMCACHIER_SERVERS"]
     entitystore: "memcached://#{memcache_servers}"
 end
 
+$stdout.sync = true
 run Sinatra::Application
