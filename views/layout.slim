@@ -14,12 +14,12 @@ html
     script src='/application.js'
   body
 
-    div.container
-      div.navbar
-        div.navbar-inner
-          a.brand href="/" emojitracker
+    / div.container
+    div.navbar.navbar-static-top
+      div.navbar-inner
+        a.brand href="/" emojitracker
 
-      == yield
+    == yield
 
       /hr clear="all"
       /footer
