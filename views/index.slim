@@ -43,6 +43,9 @@ coffee:
     refreshUIFromServer ->
       console.log "UI refreshed"
 
+      # show tooltip
+      $('.emoji_char').tooltip({'placement':'top', 'trigger':'hover'})
+
       # intercept clicks for popup modal instead
       $('.emoji_char').parent('a').click (event) ->
         event.preventDefault()

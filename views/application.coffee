@@ -18,7 +18,7 @@ drawEmojiStats = (stats, callback) ->
     do (emoji_char) ->
       selector.append "
         <a href='/details/#{emoji_char.id}' data-id='#{emoji_char.id}'>
-        <li class='emoji_char' id='#{emoji_char.id}'>
+        <li class='emoji_char' id='#{emoji_char.id}' data-title='#{emoji_char.name}'>
           <span class='char emojifont'>#{emoji.replace_unified(emoji_char.char)}</span>
           <span class='score'>#{emoji_char.score}</span>
         </li>
