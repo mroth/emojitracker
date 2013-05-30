@@ -13,4 +13,5 @@ if memcache_servers = ENV["MEMCACHIER_SERVERS"]
 end
 
 $stdout.sync = true
+use Rack::Deflater
 run Sinatra::Application
