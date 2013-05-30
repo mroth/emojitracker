@@ -6,8 +6,8 @@
   float: left;
   list-style-type: none;
   padding-right: 20px;
-  -webkit-transition: all 0.75s linear 0.1s;
-  transition: all 0.75s linear 0.1s;
+  -webkit-transition: color 0.75s linear 0.1s, background-color 0.75s linear 0.1s;
+  transition: color 0.75s linear 0.1s, background-color 0.75s linear 0.1s;
   color: black;
 }
 .emoji_char > .char {
@@ -21,6 +21,11 @@
   -webkit-transition: all 0s;
   transition: all 0s;
 }
+.emoji_char:hover {
+  -webkit-box-shadow: inset 0 0 30px pink;
+  -webkit-transition: all 0s;
+}
+
 
 
 .styled_tweet {
