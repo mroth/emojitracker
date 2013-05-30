@@ -1,13 +1,16 @@
-require_relative 'lib/config'
-require_relative 'lib/emoji'
-require_relative 'web_stream'
-
 require 'sinatra'
 require 'slim'
 require 'coffee-script'
 require 'dalli'
 require 'rack-cache'
 
+configure :production do
+  require 'newrelic_rpm'
+end
+
+require_relative 'lib/config'
+require_relative 'lib/emoji'
+require_relative 'web_stream'
 
 helpers do
   def protected!

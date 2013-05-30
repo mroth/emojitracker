@@ -37,6 +37,7 @@ GEM
     memcachier (0.0.2)
     multi_json (1.7.3)
     multipart-post (1.2.0)
+    newrelic_rpm (3.6.2.96)
     oj (2.0.13)
     rack (1.5.2)
     rack-cache (1.2)
@@ -90,6 +91,7 @@ DEPENDENCIES
   foreman
   hiredis (~> 0.4.5)
   memcachier
+  newrelic_rpm
   oj (~> 2.0.13)
   rack-cache
   redis (~> 3.0.4)
