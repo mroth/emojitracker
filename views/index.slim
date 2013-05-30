@@ -44,7 +44,8 @@ coffee:
       console.log "UI refreshed"
 
       # show tooltip
-      $('.emoji_char').tooltip({'placement':'top', 'trigger':'hover'})
+      # disable for now, too many thingies and degrades performance!
+      #$('.emoji_char').tooltip({'placement':'top', 'trigger':'hover'})
 
       # intercept clicks for popup modal instead
       $('.emoji_char').parent('a').click (event) ->
