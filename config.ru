@@ -1,7 +1,7 @@
 require "./web"
 
-require 'dalli'
-require 'memcachier'
+# require 'dalli'
+# require 'memcachier'
 
 # Defined in ENV on Heroku. To try locally, start memcached and uncomment:
 # ENV["MEMCACHIER_SERVERS"] = "localhost"
