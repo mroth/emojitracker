@@ -57,6 +57,8 @@ get '/application.js' do
 end
 
 get '/data' do
+  cache_control :public, max_age: 10  # 10 secs.
+
   raw_scores = REDIS.zrange('emojitrack_score', 0, -1, { withscores: true } ).reverse
   @scores = raw_scores.map do |score|
     emo_obj = Emoji.find_by_codepoint(score[0])
