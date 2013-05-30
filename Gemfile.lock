@@ -9,6 +9,7 @@ GEM
     colored (1.2)
     cookiejar (0.3.0)
     daemons (1.1.9)
+    dalli (2.6.4)
     diff-lcs (1.2.4)
     dotenv (0.7.0)
     em-http-request (1.0.3)
@@ -37,6 +38,8 @@ GEM
     multipart-post (1.2.0)
     oj (2.0.13)
     rack (1.5.2)
+    rack-cache (1.2)
+      rack (>= 0.4)
     rack-protection (1.5.0)
       rack
     redis (3.0.4)
@@ -82,9 +85,11 @@ PLATFORMS
 DEPENDENCIES
   coffee-script
   colored
+  dalli
   foreman
   hiredis (~> 0.4.5)
   oj (~> 2.0.13)
+  rack-cache
   redis (~> 3.0.4)
   rspec
   sass

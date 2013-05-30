@@ -13,6 +13,8 @@ group :web do
   gem 'coffee-script'
   gem 'sass', :require => 'sass'
   gem 'thin'
+  gem 'dalli'
+  gem 'rack-cache'
 end
 
 group :streamer do

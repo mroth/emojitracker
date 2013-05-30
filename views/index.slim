@@ -5,5 +5,4 @@ section#rankings
 coffee:
   $ ->
     setTimeout(refreshUIFromServer, 1)
-    # startRefreshTimer()
-    startScoreStreaming()
+    setTimeout(startScoreStreaming, 10)
