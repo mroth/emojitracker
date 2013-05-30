@@ -2,7 +2,55 @@ section#rankings
   ul#data
   br style="clear:both"
 
+div#detailview.modal.hide.fade
+  div.modal-header
+    button.close type="button" data-dismiss="modal" aria-hidden="true" &times;
+    h3 SUN WITH RAYS
+    dl
+      dt unified id
+      dd#uid
+        tt sdf
+      dt shorthand
+      dd#shorthand
+        code ?
+      dt popularity
+      dd#rank.badge.badge-info #-
+  div.modal-body
+    h4 recent tweets
+    ul#tweet_list
+  div.modal-footer
+    a#openbtn.btn.btn-small href="#" target="new" open in new tab
+    a#jsonbtn.btn.btn-small href="#" target="new" get details as JSON
+
 coffee:
+  @popDetails = (char_id) ->
+    $.get("/api/details/#{char_id}", (response) ->
+      $('#detailview h3').text emoji.replace_unified(response.char) + " " + response.char_details.name
+      $('#detailview #uid tt').text response.char_details.unified
+      $('#detailview #shorthand code').text ":#{response.char_details.short_name}:"
+      $('#detailview #rank').text "\##{response.popularity_rank}"
+
+      $('#detailview #openbtn').prop 'href', "/details/#{char_id}"
+      $('#detailview #jsonbtn').prop 'href', "/api/details/#{char_id}"
+
+      for tweet in response.recent_tweets
+        appendTweetList tweet
+      $('#detailview').modal({ keyboard: true })
+    , "json")
+    startDetailStreaming(char_id)
+
   $ ->
-    setTimeout(refreshUIFromServer, 1)
-    setTimeout(startScoreStreaming, 10)
+    refreshUIFromServer ->
+      console.log "UI refreshed"
+
+      # intercept clicks for popup modal instead
+      $('.emoji_char').parent('a').click (event) ->
+        event.preventDefault()
+        clicked_id = $(this).data('id')
+        popDetails(clicked_id)
+
+      #configure the details popup modal
+      $('#detailview').on 'hidden', ->
+        stopDetailStreaming()
+
+      startScoreStreaming()

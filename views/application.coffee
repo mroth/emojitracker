@@ -6,23 +6,24 @@ css_animation = true
 ###
 methods related to the polling UI
 ###
-@refreshUIFromServer = ->
+@refreshUIFromServer = (callback) ->
   $.get('/data', (response) ->
-    drawEmojiStats(response)
+    drawEmojiStats(response, callback)
   , "json")
 
-drawEmojiStats = (stats) ->
+drawEmojiStats = (stats, callback) ->
   selector = $("#data")
   selector.empty()
   for emoji_char in stats
     do (emoji_char) ->
       selector.append "
-        <a href='/details/#{emoji_char.id}'>
+        <a href='/details/#{emoji_char.id}' data-id='#{emoji_char.id}'>
         <li class='emoji_char' id='#{emoji_char.id}'>
           <span class='char emojifont'>#{emoji.replace_unified(emoji_char.char)}</span>
           <span class='score'>#{emoji_char.score}</span>
         </li>
         </a>"
+  callback() if (callback)
 
 ###
 methods related to the streaming UI
@@ -40,6 +41,7 @@ methods related to the streaming UI
   @detail_source.addEventListener("stream.tweet_updates.#{id}", processDetailTweetUpdate, false)
 
 @stopDetailStreaming = ->
+  console.log "Unsubscribing to detail stream"
   @detail_source.close()
 
 processDetailTweetUpdate = (event) ->

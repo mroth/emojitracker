@@ -42,11 +42,14 @@ end
 
 get '/api/details/:char' do
   @emoji_char = Emoji.find_by_codepoint( params[:char] )
+  @emoji_char_rank = REDIS.ZREVRANK('emojitrack_score', @emoji_char.unified).to_i + 1
   @emoji_tweets = REDIS.LRANGE("emojitrack_tweets_#{@emoji_char.unified}",0,9)
   @emoji_tweets_json = @emoji_tweets.map! {|t| Oj.load(t)}
   content_type :json
   Oj.dump( {
+    'char' => @emoji_char.to_char,
     'char_details' => @emoji_char,
+    'popularity_rank' => @emoji_char_rank,
     'recent_tweets' => @emoji_tweets_json
   })
 end
