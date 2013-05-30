@@ -34,6 +34,7 @@ GEM
       thor (>= 0.13.6)
     hiredis (0.4.5)
     http_parser.rb (0.5.3)
+    memcachier (0.0.2)
     multi_json (1.7.3)
     multipart-post (1.2.0)
     oj (2.0.13)
@@ -88,6 +89,7 @@ DEPENDENCIES
   dalli
   foreman
   hiredis (~> 0.4.5)
+  memcachier
   oj (~> 2.0.13)
   rack-cache
   redis (~> 3.0.4)

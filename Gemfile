@@ -15,6 +15,7 @@ group :web do
   gem 'thin'
   gem 'dalli'
   gem 'rack-cache'
+  gem 'memcachier'
 end
 
 group :streamer do

@@ -8,4 +8,4 @@
 
 ## Production setup
 
-    heroku create --stack cedar --addons redistogo:nano memcache
+    heroku create --stack cedar --addons redistogo:nano memcachier
