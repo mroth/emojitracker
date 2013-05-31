@@ -98,4 +98,3 @@ Polling
 
 $ ->
   emoji.img_path = "http://unicodey.com/js-emoji/emoji/"
-  $('a.brand').html emoji.replace_colons(':shit:') + ' emojitracker'

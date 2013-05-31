@@ -19,11 +19,37 @@ html
     div.navbar.navbar-static-top
       div.navbar-inner
         a.brand href="/" emojitracker
+        ul.nav.pull-right
+          li.dropdown
+            a.dropdown-toggle data-toggle="dropdown"
+              | &#9881;
+              b.caret
+            ul.dropdown-menu
+              li
+                a href="#aboutview" data-toggle="modal" About EmojiTracker
+              li
+                a href="#" poop
+
 
     == yield
+
+    div#aboutview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+      div.modal-header
+        button.close type="button" data-dismiss="modal" aria-hidden="true" &times;
+        h3.emojifont-restricted about emojitracker
+      div.modal-body
+        p this is an experiment in realtime tracking of all emoji characters used on twitter.  it takes advantage of a number of technologies, notably the twitter streaming API, redis, SSE, and other good stuff.  If you're a nerd, you can <a href="#">fork the code on github</a> and make it better!
+        p so yeah
+        h4 like it? spread the word
+        p [buttons and shit here]
+      div.modal-footer.emojifont-restricted
+        | built with :heart: in nyc.  this is a <a href="http://rocketws.com" target="new">rocket workshop :rocket:</a> project.
 
       /hr clear="all"
       /footer
       /  p
       /    | <strong>Wut?</strong>  this is some crazy emoji shit, description to go here.  <a href="#">Source on Github.</a>
 
+      coffee:
+        $('a.brand').html emoji.replace_colons(':shit:') + ' emojitracker'
+        $('#aboutview .modal-footer').html emoji.replace_colons( $('#aboutview .modal-footer').html() )
