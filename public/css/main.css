@@ -25,7 +25,10 @@
   -webkit-box-shadow: inset 0 0 30px pink;
   -webkit-transition: all 0s;
 }
-
+/* we want to stick the byline in a span and apply this so the text-indent in emoji-css works */
+#byline {
+  text-align: left;
+}
 
 
 .styled_tweet {

@@ -42,8 +42,8 @@ html
         p so yeah
         h4 like it? spread the word
         p [buttons and shit here]
-      div.modal-footer.emojifont-restricted
-        | built with :heart: in nyc.  this is a <a href="http://rocketws.com" target="new">rocket workshop :rocket:</a> project.
+      div.modal-footer
+        span#byline.emojifont-restricted built with :heart: in nyc.  this is a <a href="http://rocketws.com" target="new">rocket workshop :rocket:</a> project.
 
       /hr clear="all"
       /footer
@@ -53,4 +53,4 @@ html
       coffee:
         $ ->
           $('a.brand').html emoji.replace_colons(':shit:') + ' emojitracker'
-          $('#aboutview .modal-footer').html emoji.replace_colons( $('#aboutview .modal-footer').html() )
+          $('#aboutview #byline').html emoji.replace_colons( $('#aboutview #byline').html() )
