@@ -51,5 +51,6 @@ html
       /    | <strong>Wut?</strong>  this is some crazy emoji shit, description to go here.  <a href="#">Source on Github.</a>
 
       coffee:
-        $('a.brand').html emoji.replace_colons(':shit:') + ' emojitracker'
-        $('#aboutview .modal-footer').html emoji.replace_colons( $('#aboutview .modal-footer').html() )
+        $ ->
+          $('a.brand').html emoji.replace_colons(':shit:') + ' emojitracker'
+          $('#aboutview .modal-footer').html emoji.replace_colons( $('#aboutview .modal-footer').html() )
