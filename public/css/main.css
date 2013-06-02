@@ -11,6 +11,7 @@
   color: black;
 }
 .emoji_char > .char {
+  font-size: 16px;
 }
 .emoji_char > .score {
    padding-left: 10px;

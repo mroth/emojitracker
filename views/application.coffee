@@ -97,4 +97,4 @@ Polling
   clearInterval(@refreshTimer)
 
 $ ->
-  emoji.img_path = "http://unicodey.com/js-emoji/emoji/"
+  emoji.img_path = "http://mroth.github.com/emojistatic/images/emoji/32/"
