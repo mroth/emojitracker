@@ -4,8 +4,10 @@ section#rankings
 
 div#detailview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
   div.modal-header
-    button.close type="button" data-dismiss="modal" aria-hidden="true" &times;
-    h3.emojifont-restricted SUN WITH RAYS
+    button.close type="button" data-dismiss="modal" aria-hidden="true" title="close" &times;
+    a#openbtn.close title="open in new tab"
+      i.icon-external-link.fake-close
+    h3.emojifont-restricted EMOJI NAME
     dl
       dt unified id
       dd#uid
@@ -19,8 +21,12 @@ div#detailview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myMo
     h4 recent tweets (live)
     ul#tweet_list
   div.modal-footer
-    a#openbtn.btn.btn-small href="#" target="new" open in new tab
-    a#jsonbtn.btn.btn-small href="#" target="new" get details as JSON
+    a.btn.btn-small.disabled href="#" target="new"
+      li.icon-twitter &nbsp;tweet
+    a.btn.btn-small.disabled href="#" target="new"
+      li.icon-facebook &nbsp;like
+    a#jsonbtn.btn.btn-small href="#" target="new"
+      li.icon-code &nbsp;get details as json
 
 coffee:
   @popDetails = (char_id) ->
@@ -57,4 +63,8 @@ coffee:
       $('#detailview').on 'hidden', ->
         stopDetailStreaming()
 
-      startScoreStreaming()
+      #iOS = false
+      #p = navigator.platform
+      #iOS = true if( p == 'iPad' || p == 'iPhone' || p == 'iPod' )
+
+      startScoreStreaming() #unless iOS

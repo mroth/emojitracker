@@ -87,7 +87,11 @@ formattedTweet = (tweet, new_marker = false) ->
   tweet_url = "http://twitter.com/#{tweet.username}/status/#{tweet.id}"
   class_to_be = "styled_tweet"
   class_to_be += " new" if new_marker && css_animation
-  "<li class='#{class_to_be}'><strong>@#{tweet.username}:</strong> <span class='emojifont-restricted'>#{emoji.replace_unified tweet.text}</span> <a href='#{tweet_url}'>\#</a></li>"
+  "<li class='#{class_to_be}'>
+    <strong>@#{tweet.username}:</strong>
+    <span class='emojifont-restricted'>#{emoji.replace_unified tweet.text}</span>
+    <a href='#{tweet_url}'><i class='icon-external-link'></i></a>
+  </li>"
 
 ###
 Polling

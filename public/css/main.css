@@ -38,6 +38,14 @@
   -webkit-transition:background-color 1s ease-out;
   transition:background-color 1s ease-out;
 }
+.styled_tweet a {
+  color: gray;
+  opacity: 0.3;
+}
 .styled_tweet.new {
   background-color: #ffc;
+}
+.fake-close {
+  font-size: 14px;
+  margin-right: 4px;
 }

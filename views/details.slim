@@ -20,7 +20,8 @@ div.container
             dt current popularity
             dd.badge.badge-info = "\##{@emoji_char_rank}"
 
-        a.btn.btn-mini href="/api/details/#{@emoji_char.unified}" get details as JSON
+        a.btn.btn-mini href="/api/details/#{@emoji_char.unified}"
+          li.icon-code &nbsp;get details as json
 
       section#tweets.span9
         h3 most recent tweets
