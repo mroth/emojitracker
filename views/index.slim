@@ -21,27 +21,42 @@ div#detailview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myMo
     h4 recent tweets (live)
     ul#tweet_list
   div.modal-footer
-    a.btn.btn-small.disabled href="#" target="new"
-      li.icon-twitter &nbsp;tweet
-    a.btn.btn-small.disabled href="#" target="new"
-      li.icon-facebook &nbsp;like
-    a#jsonbtn.btn.btn-small href="#" target="new"
+    span#tweetbtn
+    a#jsonbtn.btn.btn-mini href="#" target="new"
       li.icon-code &nbsp;get details as json
 
 coffee:
   @popDetails = (char_id) ->
     $.get("/api/details/#{char_id}", (response) ->
+      #populate details for template
       $('#detailview h3').html "#{emoji.replace_unified(response.char)} #{response.char_details.name}"
       $('#detailview #uid tt').text response.char_details.unified
       $('#detailview #shorthand code').text ":#{response.char_details.short_name}:"
       $('#detailview #rank').text "\##{response.popularity_rank}"
-
       $('#detailview #openbtn').prop 'href', "/details/#{char_id}"
       $('#detailview #jsonbtn').prop 'href', "/api/details/#{char_id}"
 
+      #construct permalink url
+      permalink = document.URL + "details/#{char_id}"
+
+      tweetbutton = $('<a></a>')
+      tweetbutton.attr 'data-url', permalink
+      tweetbutton.attr 'data-text', "#{response.char_details.name} #{response.char}, ranked \##{response.popularity_rank} out of 841"
+      tweetbutton.attr 'data-hashtags', 'emojitracker'
+      tweetbutton.attr 'data-dnt', 'true'
+      tweetbutton.addClass 'twitter-share-button'
+
+      $('.modal-footer iframe').remove() #remove previous tweetbtn generated iframe, if present
+      tweetbutton.insertAfter('#tweetbtn')
+      twttr.widgets.load() #force widget to reload
+
+      #populate the list of historic  tweets
       for tweet in response.recent_tweets
         appendTweetList tweet
+      
+      #popup the modal
       $('#detailview').modal({ keyboard: true })
+
     , "json")
     startDetailStreaming(char_id)
 
@@ -60,7 +75,7 @@ coffee:
         popDetails(clicked_id)
 
       #configure the details popup modal
-      $('#detailview').on 'hidden', ->
+      $('#detailview').on 'hide', ->
         stopDetailStreaming()
 
       #iOS = false
