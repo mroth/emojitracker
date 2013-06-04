@@ -29,10 +29,12 @@ drawEmojiStats = (stats, callback) ->
 methods related to the streaming UI
 ###
 @startScoreStreaming = ->
+  console.log "Subscribing to score stream"
   @source = new EventSource('/subscribe')
   @source.onmessage = (event) -> incrementScore(event.data)
 
 @stopScoreStreaming = ->
+  console.log "Unsubscribing to score stream"
   @source.close()
 
 @startDetailStreaming = (id) ->
