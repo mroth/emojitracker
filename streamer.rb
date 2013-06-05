@@ -11,7 +11,7 @@ puts "...starting in verbose mode!" if VERBOSE
 $stdout.sync = true
 
 #setup
-TERMS = Emoji.chars.first(400) #TODO: need to raise me with twitter....
+TERMS = Emoji.chars #.first(400) #TODO: need to raise me with twitter....
 
 puts "Setting up a stream to track terms '#{TERMS}'..."
 @tracked = 0
