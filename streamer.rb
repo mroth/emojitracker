@@ -11,6 +11,9 @@ puts "...starting in verbose mode!" if VERBOSE
 $stdout.sync = true
 
 # TODO: check for development mode with remote redis server, if so refuse to run
+if (REDIS_URI.to_s.match(/redistogo/) && ENV["RACK_ENV"] != 'production')
+  Kernel::abort "You shouldn't be using the production redis server with a local version of feeder! Quitting..."
+end
 
 # SETUP
 # 400 terms is the max twitter will allow with a normal dev account
