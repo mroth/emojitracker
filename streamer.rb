@@ -10,10 +10,19 @@ VERBOSE = ENV["VERBOSE"] || false
 puts "...starting in verbose mode!" if VERBOSE
 $stdout.sync = true
 
-#setup
-TERMS = Emoji.chars #.first(400) #TODO: need to raise me with twitter....
+# TODO: check for development mode with remote redis server, if so refuse to run
 
-puts "Setting up a stream to track terms '#{TERMS}'..."
+# SETUP
+# 400 terms is the max twitter will allow with a normal dev account
+# set that if you are on a normal key otherwise the stream will not return anything to you
+MAX_TERMS = ENV["MAX_TERMS"].to_i || nil
+if MAX_TERMS
+  TERMS = Emoji.chars.first(MAX_TERMS)
+else
+  TERMS = Emoji.chars
+end
+
+puts "Setting up a stream to track #{TERMS.size} terms '#{TERMS}'..."
 @tracked = 0
 @client = TweetStream::Client.new
 @client.on_error do |message|
