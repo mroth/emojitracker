@@ -15,9 +15,9 @@ $stdout.sync = true
 # SETUP
 # 400 terms is the max twitter will allow with a normal dev account
 # set that if you are on a normal key otherwise the stream will not return anything to you
-MAX_TERMS = ENV["MAX_TERMS"].to_i || nil
+MAX_TERMS = ENV["MAX_TERMS"] || nil
 if MAX_TERMS
-  TERMS = Emoji.chars.first(MAX_TERMS)
+  TERMS = Emoji.chars.first(MAX_TERMS.to_i)
 else
   TERMS = Emoji.chars
 end
