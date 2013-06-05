@@ -68,8 +68,8 @@ EM.run do
     end
   end
 
-  @stats_refresh_rate = 5
-  EM::PeriodicTimer.new(@stats_refresh_rate = 5) do
+  @stats_refresh_rate = 10
+  EM::PeriodicTimer.new(@stats_refresh_rate) do
     tracked_period = @tracked-@tracked_last
     tracked_period_rate = tracked_period / @stats_refresh_rate
     puts "Terms tracked: #{@tracked} (\u2191#{tracked_period}, +#{tracked_period_rate}/sec.), rate limited: #{@skipped} (+#{@skipped-@skipped_last})"
