@@ -24,7 +24,7 @@ Thread.new do
     on.pmessage do |match, channel, message|
       conns.each do |out|
         # out << "event: #{channel}\n"
-        out << "data: #{message}\n\n"
+        out << "data:#{message}\n\n"
       end
     end
   end
