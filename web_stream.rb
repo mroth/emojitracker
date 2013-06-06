@@ -61,8 +61,8 @@ Thread.new do
     on.pmessage do |match, channel, message|
       channel_id = channel.split('.')[2] #TODO: perf profile this versus a regex later
       detail_conns.select { |c| c.tag == channel_id}.each do |ts|
-        ts.out << "event: #{channel}\n"
-        ts.out << "data: #{message}\n\n"
+        ts.out << "event:#{channel}\n"
+        ts.out << "data:#{message}\n\n"
       end
     end
   end
