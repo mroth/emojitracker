@@ -29,18 +29,23 @@ set :public_folder, 'public'
 set :static_cache_control, [:public, max_age: 1800] # 30 mins.
 
 get '/' do
-  # cache_control :public, max_age: 600  # 10 mins. #need to disable until password is gone
+  # cache_control :public, max_age: 600  # 10 mins. #disable until password is gone
   protected! if ENV['RACK_ENV'] == 'production'
+
   slim :index
 end
 
 get '/details/:char' do
+  cache_control :public, max_age: 600  # 10 mins.
+
   @emoji_char = Emoji.find_by_codepoint( params[:char] )
   @emoji_char_rank = REDIS.ZREVRANK('emojitrack_score', @emoji_char.unified).to_i + 1
   slim :details
 end
 
 get '/api/details/:char' do
+  cache_control :public, max_age: 30
+
   @emoji_char = Emoji.find_by_codepoint( params[:char] )
   @emoji_char_rank = REDIS.ZREVRANK('emojitrack_score', @emoji_char.unified).to_i + 1
   @emoji_tweets = REDIS.LRANGE("emojitrack_tweets_#{@emoji_char.unified}",0,9)
@@ -60,16 +65,16 @@ get '/application.js' do
 end
 
 get '/data' do
-  cache_control :public, max_age: 10  # 10 secs.
+  cache_control :public, max_age: 10  # this needs to be pretty fresh :-/
 
-  raw_scores = REDIS.zrange('emojitrack_score', 0, -1, { withscores: true } ).reverse
+  raw_scores = REDIS.zrevrange('emojitrack_score', 0, -1, { withscores: true } )
   @scores = raw_scores.map do |score|
     emo_obj = Emoji.find_by_codepoint(score[0])
     # yield "FUCK" if emo_obj.nil?
     {
-      "char" => Emoji.codepoint_to_char(score[0]),
-      "id" => emo_obj.unified,
-      "name" => emo_obj.name,
+      "char"  => Emoji.codepoint_to_char(score[0]),
+      "id"    => emo_obj.unified,
+      "name"  => emo_obj.name,
       "score" => score[1].to_i
     }
   end

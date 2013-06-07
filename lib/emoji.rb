@@ -18,7 +18,7 @@ class EmojiChar
   end
 
   def to_char
-    @unified.split('-').map { |i| i.hex }.pack("U*")
+    @char ||= @unified.split('-').map { |i| i.hex }.pack("U*")
   end
 
   def doublebyte?
