@@ -70,7 +70,6 @@ get '/data' do
       "char" => Emoji.codepoint_to_char(score[0]),
       "id" => emo_obj.unified,
       "name" => emo_obj.name,
-      # "tracked" => emo_obj.actively_tracked?,
       "score" => score[1].to_i
     }
   end

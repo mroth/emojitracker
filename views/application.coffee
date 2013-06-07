@@ -6,24 +6,11 @@ css_animation = true
 ###
 methods related to the polling UI
 ###
+# grab the initial data and scores and pass along to draw the grid
 @refreshUIFromServer = (callback) ->
   $.get('/data', (response) ->
     drawEmojiStats(response, callback)
   , "json")
-
-drawEmojiStats = (stats, callback) ->
-  selector = $("#data")
-  selector.empty()
-  for emoji_char in stats
-    do (emoji_char) ->
-      selector.append "
-        <a href='/details/#{emoji_char.id}' title='#{emoji_char.name}' data-id='#{emoji_char.id}'>
-        <li class='emoji_char' id='#{emoji_char.id}' data-title='#{emoji_char.name}'>
-          <span class='char emojifont'>#{emoji.replace_unified(emoji_char.char)}</span>
-          <span class='score'>#{emoji_char.score}</span>
-        </li>
-        </a>"
-  callback() if (callback)
 
 ###
 methods related to the streaming UI
@@ -53,6 +40,23 @@ processDetailTweetUpdate = (event) ->
 ###
 index page UI helpers
 ###
+
+# redraw the entire emoji grid and scores based on data
+drawEmojiStats = (stats, callback) ->
+  selector = $("#data")
+  selector.empty()
+  for emoji_char in stats
+    do (emoji_char) ->
+      selector.append "
+        <a href='/details/#{emoji_char.id}' title='#{emoji_char.name}' data-id='#{emoji_char.id}'>
+        <li class='emoji_char' id='#{emoji_char.id}' data-title='#{emoji_char.name}'>
+          <span class='char emojifont'>#{emoji.replace_unified(emoji_char.char)}</span>
+          <span class='score'>#{emoji_char.score}</span>
+        </li>
+        </a>"
+  callback() if (callback)
+
+# increment the score of a single emoji char
 incrementScore = (id) ->
   score_selector = $("li\##{id} > .score")
   container_selector = $("li\##{id}")
@@ -68,7 +72,7 @@ incrementScore = (id) ->
     container_selector.removeClass('highlighted')
 
 ###
-detail page UI helpers
+detail page/view UI helpers
 ###
 @appendTweetList = (tweet, new_marker = false) ->
   tweet_list = $('ul#tweet_list')
@@ -101,6 +105,8 @@ Polling
 
 @stopRefreshTimer = ->
   clearInterval(@refreshTimer)
-
+###
+Configuration vars we need to set globally
+###
 $ ->
   emoji.img_path = "http://mroth.github.io/emojistatic/images/32/"
