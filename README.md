@@ -22,7 +22,7 @@ You can do work on the web component only by utilizing the hosted production red
 
 Then, set `REDISTOGO_URL` environment variable via `.env` to be the full URI of the production redis instance (get it from @mroth if you are a developer on this project).
 
-Note, if you do this, **DO NOT RUN THE STREAMER PROCESS** as it will risk corrupting our production data, just run the *web component only* with `foreman start web`.
+Note, if you do this, **DO NOT RUN THE FEEDER PROCESS** as it will risk corrupting our production data, just run the *web component only* with `foreman start web`.
 
 ## Production setup
 For heroku:

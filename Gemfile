@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '1.9.3'
 
-group :web, :streamer do
+group :web, :feeder do
   gem 'redis', '~> 3.0.4'
   gem 'hiredis', '~> 0.4.5'
   gem 'oj', '~> 2.0.13'
@@ -18,7 +18,7 @@ group :web do
   gem 'memcachier'
 end
 
-group :streamer do
+group :feeder do
   gem 'tweetstream', "~> 2.5.0"
   gem 'colored'
 end

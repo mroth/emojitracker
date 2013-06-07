@@ -3,6 +3,7 @@
 require_relative 'lib/config'
 require_relative 'lib/emoji'
 
+# require 'oj'
 require 'colored'
 
 # my options
