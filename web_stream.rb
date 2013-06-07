@@ -1,7 +1,8 @@
 require_relative 'lib/config'
-require_relative 'lib/emoji'
-
+# require_relative 'lib/emoji'
+# require 'emoji_data' #dont seem to need this at all here...
 require 'sinatra'
+require 'oj'
 
 ################################################
 # streaming thread for score updates (main page)

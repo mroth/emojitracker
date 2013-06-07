@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
 require_relative 'lib/config'
-require_relative 'lib/emoji'
-
-# require 'oj'
+#require_relative 'lib/emoji'
+require 'emoji_data'
+require 'oj'
 require 'colored'
 
 # my options
@@ -21,9 +21,9 @@ end
 # set that if you are on a normal key otherwise the stream will not return anything to you
 MAX_TERMS = ENV["MAX_TERMS"] || nil
 if MAX_TERMS
-  TERMS = Emoji.chars.first(MAX_TERMS.to_i)
+  TERMS = EmojiData.chars.first(MAX_TERMS.to_i)
 else
-  TERMS = Emoji.chars
+  TERMS = EmojiData.chars
 end
 
 EM.run do
@@ -52,9 +52,9 @@ EM.run do
     }
     status_json = Oj.dump(status_small)
 
-    matches = Emoji.chars.select { |c| status.text.include? c  }
+    matches = EmojiData.chars.select { |c| status.text.include? c  }
     matches.each do |matched_emoji_char|
-      cp = Emoji.char_to_codepoint(matched_emoji_char)
+      cp = EmojiData.char_to_unified(matched_emoji_char)
       REDIS.pipelined do
         # increment the score in a sorted set
         REDIS.ZINCRBY 'emojitrack_score', 1, cp

@@ -3,13 +3,15 @@ require 'slim'
 require 'coffee-script'
 require 'dalli'
 require 'rack-cache'
+require 'oj'
 
 configure :production do
   require 'newrelic_rpm'
 end
 
 require_relative 'lib/config'
-require_relative 'lib/emoji'
+# require_relative 'lib/emoji'
+require 'emoji_data'
 require_relative 'web_stream'
 
 helpers do
@@ -38,7 +40,7 @@ end
 get '/details/:char' do
   cache_control :public, max_age: 600  # 10 mins.
 
-  @emoji_char = Emoji.find_by_codepoint( params[:char] )
+  @emoji_char = EmojiData.find_by_unified( params[:char] )
   @emoji_char_rank = REDIS.ZREVRANK('emojitrack_score', @emoji_char.unified).to_i + 1
   slim :details
 end
@@ -46,13 +48,13 @@ end
 get '/api/details/:char' do
   cache_control :public, max_age: 30
 
-  @emoji_char = Emoji.find_by_codepoint( params[:char] )
+  @emoji_char = EmojiData.find_by_unified( params[:char] )
   @emoji_char_rank = REDIS.ZREVRANK('emojitrack_score', @emoji_char.unified).to_i + 1
   @emoji_tweets = REDIS.LRANGE("emojitrack_tweets_#{@emoji_char.unified}",0,9)
   @emoji_tweets_json = @emoji_tweets.map! {|t| Oj.load(t)}
   content_type :json
   Oj.dump( {
-    'char' => @emoji_char.to_char,
+    'char' => @emoji_char.char,
     'char_details' => @emoji_char,
     'popularity_rank' => @emoji_char_rank,
     'recent_tweets' => @emoji_tweets_json
@@ -69,10 +71,10 @@ get '/data' do
 
   raw_scores = REDIS.zrevrange('emojitrack_score', 0, -1, { withscores: true } )
   @scores = raw_scores.map do |score|
-    emo_obj = Emoji.find_by_codepoint(score[0])
+    emo_obj = EmojiData.find_by_unified(score[0])
     # yield "FUCK" if emo_obj.nil?
     {
-      "char"  => Emoji.codepoint_to_char(score[0]),
+      "char"  => EmojiData.unified_to_char(score[0]),
       "id"    => emo_obj.unified,
       "name"  => emo_obj.name,
       "score" => score[1].to_i
