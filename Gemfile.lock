@@ -87,7 +87,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-script
   colored
-  dalli
+  dalli (~> 2.6)
   foreman
   hiredis (~> 0.4.5)
   memcachier
@@ -95,9 +95,9 @@ DEPENDENCIES
   oj (~> 2.0.13)
   rack-cache
   redis (~> 3.0.4)
-  rspec
+  rspec (~> 2.13.0)
   sass
-  sinatra
-  slim
-  thin
+  sinatra (~> 1.4.2)
+  slim (~> 1.3.9)
+  thin (~> 1.5)
   tweetstream (~> 2.5.0)

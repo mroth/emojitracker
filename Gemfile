@@ -8,24 +8,24 @@ group :web, :feeder do
 end
 
 group :web do
-  gem 'sinatra'
-  gem 'slim'
+  gem 'sinatra', '~> 1.4.2'
+  gem 'slim', '~> 1.3.9'
   gem 'coffee-script'
   gem 'sass', :require => 'sass'
-  gem 'thin'
-  gem 'dalli'
+  gem 'thin', '~> 1.5'
+  gem 'dalli', '~> 2.6'
   gem 'rack-cache'
   gem 'memcachier'
 end
 
 group :feeder do
-  gem 'tweetstream', "~> 2.5.0"
+  gem 'tweetstream', '~> 2.5.0'
   gem 'colored'
 end
 
 group :development do
   gem 'foreman'
-  gem 'rspec'
+  gem 'rspec', '~> 2.13.0'
 end
 
 group :production do
