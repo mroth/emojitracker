@@ -24,7 +24,7 @@ GEM
       eventmachine (~> 1.0)
       http_parser.rb (~> 0.5)
       simple_oauth (~> 0.1)
-    emoji_data (0.0.1pre1)
+    emoji_data (0.0.1)
       json
     eventmachine (1.0.3)
     execjs (1.4.0)
@@ -91,7 +91,7 @@ DEPENDENCIES
   coffee-script
   colored
   dalli (~> 2.6)
-  emoji_data (~> 0.0.1pre1)
+  emoji_data (~> 0.0.1)
   foreman
   hiredis (~> 0.4.5)
   memcachier
