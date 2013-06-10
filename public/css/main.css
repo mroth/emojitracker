@@ -7,6 +7,7 @@
   list-style-type: none;
   padding-right: 20px;
   -webkit-transition: color 0.75s linear 0.1s, background-color 0.75s linear 0.1s;
+  -moz-transition: color 0.75s linear 0.1s, background-color 0.75s linear 0.1s;
   transition: color 0.75s linear 0.1s, background-color 0.75s linear 0.1s;
   color: black;
 }
@@ -20,11 +21,16 @@
   background-color: lightgreen;
   color: red;
   -webkit-transition: all 0s;
+  -moz-transition: all 0s;
   transition: all 0s;
 }
 .emoji_char:hover {
   -webkit-box-shadow: inset 0 0 30px pink;
+  -moz-box-shadow: inset 0 0 30px pink;
+  box-shadow: inset 0 0 30px pink;
   -webkit-transition: all 0s;
+  -moz-transition: all 0s;
+  transition: all 0s;
 }
 /* we want to stick the byline in a span and apply this so the text-indent in emoji-css works */
 #byline {
@@ -36,6 +42,7 @@
   color: gray;
   background-color: transparent;
   -webkit-transition:background-color 1s ease-out;
+  -moz-transition:background-color 1s ease-out;
   transition:background-color 1s ease-out;
 }
 .styled_tweet a {
