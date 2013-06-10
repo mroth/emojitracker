@@ -51,15 +51,17 @@ drawEmojiStats = (stats, callback) ->
         <a href='/details/#{emoji_char.id}' title='#{emoji_char.name}' data-id='#{emoji_char.id}'>
         <li class='emoji_char' id='#{emoji_char.id}' data-title='#{emoji_char.name}'>
           <span class='char emojifont'>#{emoji.replace_unified(emoji_char.char)}</span>
-          <span class='score'>#{emoji_char.score}</span>
+          <span class='score' id='score-#{emoji_char.id}'>#{emoji_char.score}</span>
         </li>
         </a>"
   callback() if (callback)
 
 # increment the score of a single emoji char
 incrementScore = (id) ->
-  score_selector = $("li\##{id} > .score")
-  container_selector = $("li\##{id}")
+  # score_selector = $("li\##{id} > .score")
+  score_selector = $("\#score-#{id}")
+  # container_selector = $("li\##{id}")
+  container_selector = $("\##{id}") if css_animation
 
   count = parseInt score_selector.text()
 
