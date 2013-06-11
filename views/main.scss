@@ -52,15 +52,20 @@
 .styled_tweet {
   color: gray;
   background-color: transparent;
-  @include transition(background-color 1s ease-out);
 }
 .styled_tweet a {
   color: gray;
   opacity: 0.3;
 }
 .styled_tweet.new {
-  background-color: #ffc;
+  @include animation(highlight_content 0.75s ease-out)
 }
+@include keyframes(highlight_content) {
+  from {
+    background-color: #ffc;
+  }
+}
+
 .fake-close {
   font-size: 14px;
   margin-right: 4px;

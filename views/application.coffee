@@ -85,7 +85,7 @@ detail page/view UI helpers
   tweet_list.prepend( new_entry )
   if css_animation
     new_entry.focus()
-    new_entry.removeClass('new')
+    # new_entry.removeClass('new') # no longer needed with animation style
 
 ###
 general purpose UI helpers
