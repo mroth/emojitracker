@@ -60,25 +60,17 @@ drawEmojiStats = (stats, callback) ->
 
 # increment the score of a single emoji char
 incrementScore = (id) ->
-  # score_selector = $("li\##{id} > .score")
-  # score_selector = $("\#score-#{id}")
   score_selector = document.getElementById("score-#{id}")
-  # container_selector = $("li\##{id}")
-  # container_selector = $("\##{id}")
   container_selector = document.getElementById(id)
 
-  # count = parseInt score_selector.text()
-
   if css_animation
-    # container_selector.addClass('highlighted')
+    # replacement for jquery container_selector.addClass('highlighted') - WARNING: BRITTLE!
     container_selector.className = 'emoji_char highlighted'
     container_selector.focus()
     # focus needed because of http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
-  # score_selector.text ++count
-  # score_selector.innerHTML = parseInt(score_selector.innerHTML) + 1
   score_selector.innerHTML = (@score_cache[id] += 1);
   if css_animation
-    # container_selector.removeClass('highlighted')
+    # replacement for jQuery container_selector.removeClass('highlighted') - WARNING: BRITTLE!
     container_selector.className = 'emoji_char'
 
 ###
