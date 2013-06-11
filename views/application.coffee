@@ -71,6 +71,8 @@ get_cached_selectors = (id) ->
 
 # increment the score of a single emoji char
 incrementScore = (id) ->
+  # TODO: figure out how to profile and either remove cached selectors or enable
+  # http://jsperf.com/getelementbyid-vs-keeping-hash-updated/edit
   use_cached_selectors = false
   if use_cached_selectors
     [score_selector, container_selector] = get_cached_selectors(id)
