@@ -63,15 +63,16 @@ incrementScore = (id) ->
   score_selector = document.getElementById("score-#{id}")
   container_selector = document.getElementById(id)
 
-  if css_animation
-    # replacement for jquery container_selector.addClass('highlighted') - WARNING: BRITTLE!
-    container_selector.className = 'emoji_char highlighted'
-    container_selector.focus()
-    # focus needed because of http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
   score_selector.innerHTML = (@score_cache[id] += 1);
   if css_animation
-    # replacement for jQuery container_selector.removeClass('highlighted') - WARNING: BRITTLE!
-    container_selector.className = 'emoji_char'
+    # replacement for jquery container_selector.addClass('highlighted') - WARNING: BRITTLE!
+    # container_selector.classList.remove('highlight_score_update')
+    # container_selector.focus()
+    container_selector.classList.add('highlight_score_update')
+    new_container = container_selector.cloneNode(true)
+    container_selector.parentNode.replaceChild(new_container, container_selector)
+    # container_selector.focus()
+    # focus needed because of http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
 
 ###
 detail page/view UI helpers
