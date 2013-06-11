@@ -1,7 +1,17 @@
 ###
 config
 ###
+# animate all the things
 css_animation = true
+# load css sheets of images instead of individual files
+use_css_sheets = true
+# some urls
+emojistatic_img_path = 'http://mroth.github.io/emojistatic/images/32/'
+emojistatic_css_uri  = 'http://mroth.github.io/emojistatic/css-sheets/emoji-32px.min.css'
+
+###
+inits
+###
 @score_cache = {}
 @selector_cache = {}
 
@@ -136,8 +146,30 @@ Polling
 
 @stopRefreshTimer = ->
   clearInterval(@refreshTimer)
+
+###
+Shit to dynamically load css-sheets only on browsers that don't properly support emoji fun
+###
+@loadEmojiSheet = (css_url) ->
+  cssId = 'emoji-css-sheet' # you could encode the css path itself to generate id..
+  if (!document.getElementById(cssId))
+    head  = document.getElementsByTagName('head')[0]
+    link  = document.createElement('link')
+    link.id   = cssId
+    link.rel  = 'stylesheet'
+    link.type = 'text/css'
+    link.href = css_url
+    link.media = 'all'
+    head.appendChild(link)
+
 ###
 Configuration vars we need to set globally
 ###
 $ ->
-  emoji.img_path = "http://mroth.github.io/emojistatic/images/32/"
+  emoji.img_path = emojistatic_img_path
+  emoji.init_env()
+  console.log "INFO: js-emoji replace mode is #{emoji.replace_mode}"
+  if emoji.replace_mode == 'css' && use_css_sheets
+    console.log "In a browser that supports CSS fanciness but not emoji characters, dynamically injecting css-sheet!"
+    emoji.use_css_imgs = true
+    loadEmojiSheet(emojistatic_css_uri)
