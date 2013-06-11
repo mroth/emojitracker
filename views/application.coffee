@@ -82,8 +82,8 @@ detail page/view UI helpers
   tweet_list.empty()
 
 @appendTweetList = (tweet, new_marker = false) ->
-  tweet_list = $('ul#tweet_list')
-  tweet_list_elements = $("ul#tweet_list li")
+  tweet_list = $('#tweet_list')
+  tweet_list_elements = $("#tweet_list li")
   tweet_list_elements.last().remove() if tweet_list_elements.size() >= 20
   new_entry = $(formattedTweet(tweet, new_marker))
   tweet_list.prepend( new_entry )
