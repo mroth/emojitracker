@@ -61,11 +61,6 @@ get '/api/details/:char' do
   })
 end
 
-get '/application.js' do
-  cache_control :public, max_age: 600  # 10 mins.
-  coffee :application
-end
-
 get '/data' do
   cache_control :public, max_age: 10  # this needs to be pretty fresh :-/
 
@@ -83,4 +78,13 @@ get '/data' do
 
   content_type :json
   Oj.dump( @scores )
+end
+
+get '/application.js' do
+  cache_control :public, max_age: 600  # 10 mins.
+  coffee :application
+end
+
+get '/assets/main.css' do
+  scss :main
 end

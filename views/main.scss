@@ -1,3 +1,9 @@
+@mixin animation($animation) {
+  -webkit-animation: $animation;
+  -moz-animation: $animation;
+  animation: $animation;
+}
+
 .emoji_char {
   width: 100px;
   background-color: #eee;
@@ -23,9 +29,7 @@
   transition: all 0s;
 }
 .highlight_score_update {
-  -webkit-animation: highlight 0.75s linear 0.0s;
-  -moz-animation: highlight 0.75s linear 0.0s;
-  animation: highlight 0.75s linear 0.0s;
+  @include animation(highlight 0.75s linear 0.0s);
 }
 @-webkit-keyframes highlight {
   from { color: red; background-color: lightgreen; }
