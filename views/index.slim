@@ -51,6 +51,7 @@ coffee:
       twttr.widgets.load() #force widget to reload
 
       #populate the list of historic  tweets
+      emptyTweetList()
       for tweet in response.recent_tweets
         appendTweetList tweet
       

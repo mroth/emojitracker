@@ -77,6 +77,10 @@ incrementScore = (id) ->
 ###
 detail page/view UI helpers
 ###
+@emptyTweetList = ->
+  tweet_list = $('#tweet_list')
+  tweet_list.empty()
+
 @appendTweetList = (tweet, new_marker = false) ->
   tweet_list = $('ul#tweet_list')
   tweet_list_elements = $("ul#tweet_list li")
