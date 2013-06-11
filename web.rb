@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'slim'
 require 'coffee-script'
+require 'sass'
 require 'dalli'
 require 'rack-cache'
 require 'oj'
