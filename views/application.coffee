@@ -2,6 +2,7 @@
 config
 ###
 css_animation = true
+@score_cache = {}
 
 ###
 methods related to the polling UI
@@ -47,6 +48,7 @@ drawEmojiStats = (stats, callback) ->
   selector.empty()
   for emoji_char in stats
     do (emoji_char) ->
+      @score_cache[emoji_char.id] = emoji_char.score
       selector.append "
         <a href='/details/#{emoji_char.id}' title='#{emoji_char.name}' data-id='#{emoji_char.id}'>
         <li class='emoji_char' id='#{emoji_char.id}' data-title='#{emoji_char.name}'>
@@ -73,7 +75,8 @@ incrementScore = (id) ->
     container_selector.focus()
     # focus needed because of http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
   # score_selector.text ++count
-  score_selector.innerHTML = parseInt(score_selector.innerHTML) + 1
+  # score_selector.innerHTML = parseInt(score_selector.innerHTML) + 1
+  score_selector.innerHTML = (@score_cache[id] += 1);
   if css_animation
     # container_selector.removeClass('highlighted')
     container_selector.className = 'emoji_char'
