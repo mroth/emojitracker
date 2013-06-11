@@ -3,6 +3,21 @@
   -moz-animation: $animation;
   animation: $animation;
 }
+@mixin transition($transition) {
+  -webkit-transition: $transition;
+  -moz-transition: $transition;
+  transition: $transition;
+}
+@mixin box-shadow($box-shadow) {
+  -webkit-box-shadow: $box-shadow;
+  -moz-box-shadow: $box-shadow;
+  box-shadow: $box-shadow;
+}
+@mixin keyframes($name) {
+  @-webkit-keyframes $name { @content };
+  @-moz-keyframes $name { @content };
+  @keyframes $name { @content };
+}
 
 .emoji_char {
   width: 100px;
@@ -21,32 +36,23 @@
    padding-left: 10px;
 }
 .emoji_char:hover {
-  -webkit-box-shadow: inset 0 0 30px pink;
-  -moz-box-shadow: inset 0 0 30px pink;
-  box-shadow: inset 0 0 30px pink;
-  -webkit-transition: all 0s;
-  -moz-transition: all 0s;
-  transition: all 0s;
+  @include box-shadow(inset 0 0 30px pink);
+  @include transition(all 0s);
 }
 .highlight_score_update {
   @include animation(highlight 0.75s linear 0.0s);
 }
-@-webkit-keyframes highlight {
-  from { color: red; background-color: lightgreen; }
-}
-@-moz-keyframes highlight {
-  from { color: red; background-color: lightgreen; }
-}
-@keyframes highlight {
-  from { color: red; background-color: lightgreen; }
+@include keyframes(highlight) {
+  from {
+    color: red;
+    background-color: lightgreen;
+  }
 }
 
 .styled_tweet {
   color: gray;
   background-color: transparent;
-  -webkit-transition:background-color 1s ease-out;
-  -moz-transition:background-color 1s ease-out;
-  transition:background-color 1s ease-out;
+  @include transition(background-color 1s ease-out);
 }
 .styled_tweet a {
   color: gray;
