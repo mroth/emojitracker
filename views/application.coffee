@@ -3,6 +3,7 @@ config
 ###
 css_animation = true
 @score_cache = {}
+@selector_cache = {}
 
 ###
 methods related to the polling UI
@@ -58,21 +59,42 @@ drawEmojiStats = (stats, callback) ->
         </a>"
   callback() if (callback)
 
+# getter for cached score_selector elements
+get_cached_selectors = (id) ->
+  if @selector_cache[id] != undefined
+    return [@selector_cache[id][0], @selector_cache[id][1]]
+  else
+    score_selector = document.getElementById("score-#{id}")
+    container_selector = document.getElementById(id)
+    @selector_cache[id] = [score_selector, container_selector]
+    return [score_selector, container_selector]
+
 # increment the score of a single emoji char
 incrementScore = (id) ->
-  score_selector = document.getElementById("score-#{id}")
-  container_selector = document.getElementById(id)
+  use_cached_selectors = false
+  if use_cached_selectors
+    [score_selector, container_selector] = get_cached_selectors(id)
+  else
+    score_selector = document.getElementById("score-#{id}")
+    container_selector = document.getElementById(id)
 
   score_selector.innerHTML = (@score_cache[id] += 1);
   if css_animation
-    # replacement for jquery container_selector.addClass('highlighted') - WARNING: BRITTLE!
-    # container_selector.classList.remove('highlight_score_update')
-    # container_selector.focus()
-    container_selector.classList.add('highlight_score_update')
-    new_container = container_selector.cloneNode(true)
-    container_selector.parentNode.replaceChild(new_container, container_selector)
-    # container_selector.focus()
-    # focus needed because of http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
+    replace_technique = true
+    reflow_technique = false
+    if replace_technique
+      new_container = container_selector.cloneNode(true)
+      # new_container.classList.add('highlight_score_update')
+      new_container.className = 'emoji_char highlight_score_update'
+      container_selector.parentNode.replaceChild(new_container, container_selector)
+      selector_cache[id] = [new_container.childNodes[3], new_container] if use_cached_selectors
+    else if reflow_technique
+      # replacement for jquery container_selector.addClass('highlighted') - WARNING: BRITTLE!
+      container_selector.classList.remove('highlight_score_update')
+      container_selector.focus()
+      container_selector.classList.add('highlight_score_update')
+      # focus needed because of http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
+      # this has WAY worse performance it seems like on low power devices
 
 ###
 detail page/view UI helpers
