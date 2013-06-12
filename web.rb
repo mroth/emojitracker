@@ -89,3 +89,8 @@ end
 get '/assets/main.css' do
   scss :main
 end
+
+get '/:char' do
+  unified_id = EmojiData.char_to_unified(params[:char])
+  redirect "/details/#{unified_id}"
+end
