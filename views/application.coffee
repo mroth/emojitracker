@@ -97,7 +97,10 @@ incrementScore = (id) ->
     if replace_technique
       new_container = container_selector.cloneNode(true)
       new_container.classList.add('highlight_score_update')
-      # new_container.className = 'emoji_char highlight_score_update'
+      # if @disco_time is true
+      #   new_container.className = 'emoji_char highlight_score_update disco'
+      # else
+      #   new_container.className = 'emoji_char highlight_score_update'
       container_selector.parentNode.replaceChild(new_container, container_selector)
       selector_cache[id] = [new_container.childNodes[3], new_container] if use_cached_selectors
     else if reflow_technique

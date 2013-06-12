@@ -40,13 +40,13 @@
   @include transition(all 0s);
 }
 .highlight_score_update {
-  @include animation(highlight 0.75s linear 0.0s);
+  @include animation(highlight 0.75s linear);
 }
 @include keyframes(highlight) {
   from {
     color: red;
     background-color: lightgreen;
-    opacity: 1.0;
+    // opacity: 1.0;
   }
 }
 
@@ -95,12 +95,21 @@
 #discoball.in-position {
   top: 0px;
 }
-
 body.disco {
-  background-color: #333;
+  background-color: #1b1b1b;
 }
 .emoji_char.disco {
   opacity: 0.1;
+}
+.highlight_score_update.disco {
+  @include animation(disco-highlight 0.75s linear);
+}
+@include keyframes(disco-highlight) {
+  from {
+    color: red;
+    background-color: lightgreen;
+    opacity: 0.9;
+  }
 }
 
 /* imported from iamcal/emoji.css */
