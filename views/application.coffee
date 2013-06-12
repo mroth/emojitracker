@@ -96,8 +96,8 @@ incrementScore = (id) ->
     reflow_technique = false
     if replace_technique
       new_container = container_selector.cloneNode(true)
-      # new_container.classList.add('highlight_score_update')
-      new_container.className = 'emoji_char highlight_score_update'
+      new_container.classList.add('highlight_score_update')
+      # new_container.className = 'emoji_char highlight_score_update'
       container_selector.parentNode.replaceChild(new_container, container_selector)
       selector_cache[id] = [new_container.childNodes[3], new_container] if use_cached_selectors
     else if reflow_technique
@@ -163,6 +163,47 @@ Shit to dynamically load css-sheets only on browsers that don't properly support
     head.appendChild(link)
 
 ###
+Secret disco mode (easter egg)
+###
+@enableDiscoMode = () ->
+  @disco_time = true
+  disco_embed = "
+  <audio autoplay='autoplay'>
+    <source src='http://mroth.info/disco/getlucky-64.mp3' type='audio/mpeg' />
+    <source src='http://mroth.info/disco/getlucky-64.ogg' type='audio/ogg' />
+  </audio>
+  "
+  $('#discoball').html(disco_embed)
+  $('body').addClass('disco')
+  $('.emoji_char').addClass('disco')
+  $('.navbar').addClass('navbar-inverse')
+  $('#discoball').addClass('in-position')
+
+@disableDiscoMode = () ->
+  @disco_time = false
+  $('#discoball').removeClass('in-position')
+  $('.disco').removeClass('disco')
+  $('.navbar').removeClass('navbar-inverse')
+  kill_music = -> $('#discoball').empty()
+  setTimeout kill_music, 2000
+
+initDiscoMode = () ->
+  @disco_time = false
+  disco_keys = [68,73,83,67,79]
+  disco_index = 0
+  $(document).keydown (e) ->
+    if e.keyCode is disco_keys[disco_index++]
+      if disco_index is disco_keys.length
+        enableDiscoMode()
+    else
+      disco_index = 0
+
+  $(document).keyup (e) ->
+      if e.keyCode is 27
+        if disco_time is true
+          disableDiscoMode()
+
+###
 Configuration vars we need to set globally
 ###
 $ ->
@@ -173,3 +214,5 @@ $ ->
     console.log "In a browser that supports CSS fanciness but not emoji characters, dynamically injecting css-sheet!"
     emoji.use_css_imgs = true
     loadEmojiSheet(emojistatic_css_uri)
+
+  initDiscoMode()

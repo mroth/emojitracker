@@ -46,6 +46,7 @@
   from {
     color: red;
     background-color: lightgreen;
+    opacity: 1.0;
   }
 }
 
@@ -74,6 +75,32 @@
 /* we want to stick the byline in a span and apply this so the text-indent in emoji-css works */
 #byline {
   text-align: left;
+}
+
+/***************************************
+ * secret disco mode!
+ ***************************************/
+#discoball {
+  width: 310px;
+  height: 350px;
+  background-image: url('http://mroth.info/disco/discoball.gif');
+  background-color: transparent;
+  position: fixed;
+  top: -350px;
+  left: 50%;
+  margin-left: -155px;
+  z-index: 10;
+  @include transition(top 2s linear);
+}
+#discoball.in-position {
+  top: 0px;
+}
+
+body.disco {
+  background-color: #333;
+}
+.emoji_char.disco {
+  opacity: 0.1;
 }
 
 /* imported from iamcal/emoji.css */
