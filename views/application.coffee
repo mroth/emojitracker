@@ -142,7 +142,7 @@ String.prototype.linkify = () ->
   this.linkifyUrls().linkifyUsernames().linkifyHashtags()
 
 formattedTweet = (tweet, new_marker = false) ->
-  tweet_url = "http://twitter.com/#{tweet.username}/status/#{tweet.id}"
+  tweet_url = "https://twitter.com/#{tweet.screen_name}/status/#{tweet.id}"
   #mini_profile_url = tweet.avatar.replace('_normal','_mini')
   prepared_tweet = tweet.text.linkify()
   class_to_be = "styled_tweet"
@@ -154,16 +154,18 @@ formattedTweet = (tweet, new_marker = false) ->
       #{emoji.replace_unified prepared_tweet}
     </p>
    &mdash;
-    <strong class='emojifont-restricted'>#{emoji.replace_unified tweet.name}</strong>
+    <a href='https://twitter.com/#{tweet.screen_name}' target='_blank'>
+      <strong class='emojifont-restricted'>#{emoji.replace_unified tweet.name}</strong>
+    </a>
     <span class='screen_name'>@#{tweet.screen_name}</span>
-  <span class='intents'>
-    <a class='icon' href='https://twitter.com/intent/tweet?in_reply_to=#{tweet.id}'><i class='icon-reply'></i></a>
-    <a class='icon' href='https://twitter.com/intent/retweet?tweet_id=#{tweet.id}'><i class='icon-retweet'></i></a>
-    <a class='icon' href='https://twitter.com/intent/favorite?tweet_id=#{tweet.id}'><i class='icon-star'></i></a>
-    <a class='icon' href='#{tweet_url}'><i class='icon-external-link'></i></a>
-  </span>
-   </blockquote>
-   </li>"
+    <span class='intents'>
+      <a class='icon' href='https://twitter.com/intent/tweet?in_reply_to=#{tweet.id}'><i class='icon-reply'></i></a>
+      <a class='icon' href='https://twitter.com/intent/retweet?tweet_id=#{tweet.id}'><i class='icon-retweet'></i></a>
+      <a class='icon' href='https://twitter.com/intent/favorite?tweet_id=#{tweet.id}'><i class='icon-star'></i></a>
+      <a class='icon' href='#{tweet_url}'><i class='icon-external-link'></i></a>
+    </span>
+  </blockquote>
+  </li>"
 
 ###
 Polling
