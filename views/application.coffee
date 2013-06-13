@@ -131,15 +131,40 @@ detail page/view UI helpers
 ###
 general purpose UI helpers
 ###
+linkifyHashtags = (text) ->
+  text.replace /(\#\w+)/g, "<a href='#'>#{$1}</a>"
+linkifyUsernames = (text) ->
+  text.replace /@(\w+)/g, "<a href='//twitter.com/$1'>@$1</a>"
+
 formattedTweet = (tweet, new_marker = false) ->
   tweet_url = "http://twitter.com/#{tweet.username}/status/#{tweet.id}"
+  mini_profile_url = tweet.avatar.replace('_normal','_mini')
+  prepared_tweet = linkifyUsernames(tweet.text)
   class_to_be = "styled_tweet"
   class_to_be += " new" if new_marker && css_animation
-  "<li class='#{class_to_be}'>
-    <strong>@#{tweet.username}:</strong>
+  old = "<li class='#{class_to_be}'>
+    <i class='icon-li icon-angle-right'></i>
+    <img src='#{mini_profile_url}' width='24' height='24' />
+    <strong>@#{tweet.username}</strong>
+    <p>
     <span class='emojifont-restricted'>#{emoji.replace_unified tweet.text}</span>
+    <br/>
+    <a href='#'><i class='icon-reply'></i></a>
+    <a href='#'><i class='icon-retweet'></i></a>
     <a href='#{tweet_url}'><i class='icon-external-link'></i></a>
+    </p>
   </li>"
+  "<li class='#{class_to_be}'>
+  <i class='icon-li icon-angle-right'></i>
+  <blockquote class='twitter-tweet'>
+   <p>#{emoji.replace_unified prepared_tweet}</p>
+   &mdash; <strong>#{tweet.name}</strong> (@#{tweet.screen_name})
+    <a class='icon' href='https://twitter.com/intent/tweet?in_reply_to=#{tweet.id}'><i class='icon-reply'></i></a>
+    <a class='icon' href='https://twitter.com/intent/retweet?tweet_id=#{tweet.id}'><i class='icon-retweet'></i></a>
+    <a class='icon' href='https://twitter.com/intent/favorite?tweet_id=#{tweet.id}'><i class='icon-star'></i></a>
+    <a class='icon' href='#{tweet_url}'><i class='icon-external-link'></i></a>
+   </blockquote>
+   </li>"
 
 ###
 Polling

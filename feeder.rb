@@ -48,7 +48,9 @@ EM.run do
     status_small = {
       'id' => status.id.to_s,
       'text' => status.text,
-      'username' => status.user.screen_name
+      'screen_name' => status.user.screen_name,
+      'name' => status.user.name
+      #'avatar' => status.user.profile_image_url
     }
     status_json = Oj.dump(status_small)
 
