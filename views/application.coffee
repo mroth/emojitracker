@@ -170,6 +170,8 @@ Secret disco mode (easter egg)
 ###
 @enableDiscoMode = () ->
   @disco_time = true
+  $('body').append("<div id='discoball'></div>")
+  $('#discoball').focus()
   disco_embed = "
   <audio autoplay='autoplay'>
     <source src='http://mroth.info/disco/getlucky-64.mp3' type='audio/mpeg' />
@@ -187,7 +189,7 @@ Secret disco mode (easter egg)
   $('#discoball').removeClass('in-position')
   $('.disco').removeClass('disco')
   $('.navbar').removeClass('navbar-inverse')
-  kill_music = -> $('#discoball').empty()
+  kill_music = -> $('#discoball').empty().remove()
   setTimeout kill_music, 2000
 
 initDiscoMode = () ->
