@@ -135,8 +135,11 @@ String.prototype.linkifyHashtags = () ->
   this.replace /#(\w+)/g, "<a href='https://twitter.com/search?q=%23$1&src=hash' target='_blank'>#$1</a>"
 String.prototype.linkifyUsernames = () ->
   this.replace /@(\w+)/g, "<a href='https://twitter.com/$1' target='_blank'>@$1</a>"
+String.prototype.linkifyUrls = () ->
+  # this.replace /(https?:\/\/[^\s]+)/g, "<a href='$1' target='_blank'>$1</a>"
+  this.replace /(https?:\/\/t.co\/\w+)/g, "<a href='$1' target='_blank'>$1</a>"
 String.prototype.linkify = () ->
-  this.linkifyUsernames().linkifyHashtags()
+  this.linkifyUrls().linkifyUsernames().linkifyHashtags()
 
 formattedTweet = (tweet, new_marker = false) ->
   tweet_url = "http://twitter.com/#{tweet.username}/status/#{tweet.id}"
