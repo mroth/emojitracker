@@ -68,6 +68,16 @@
 .styled_tweet.new {
   @include animation(highlight_content 0.75s ease-out)
 }
+.styled_tweet strong {
+  color: #555;
+}
+.styled_tweet .intents {
+  // margin-left: 20px;
+}
+.screen_name {
+  font-size: smaller;
+  color: #999;
+}
 /* override default bootstrap blockquote to make slightly smaller */
 blockquote p {
   font-size: 16px;
