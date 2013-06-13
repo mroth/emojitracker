@@ -150,7 +150,7 @@ formattedTweet = (tweet, new_marker = false) ->
   "<li class='#{class_to_be}'>
   <i class='icon-li icon-angle-right'></i>
   <blockquote class='twitter-tweet'>
-   <p>#{emoji.replace_unified prepared_tweet}</p>
+   <p class='emojifont-restricted'>#{emoji.replace_unified(prepared_tweet)}</p>
    &mdash; <strong>#{tweet.name}</strong> <span class='screen_name'>@#{tweet.screen_name}</span>
   <span class='intents'>
     <a class='icon' href='https://twitter.com/intent/tweet?in_reply_to=#{tweet.id}'><i class='icon-reply'></i></a>
