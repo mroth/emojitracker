@@ -138,22 +138,10 @@ linkifyUsernames = (text) ->
 
 formattedTweet = (tweet, new_marker = false) ->
   tweet_url = "http://twitter.com/#{tweet.username}/status/#{tweet.id}"
-  mini_profile_url = tweet.avatar.replace('_normal','_mini')
+  #mini_profile_url = tweet.avatar.replace('_normal','_mini')
   prepared_tweet = linkifyUsernames(tweet.text)
   class_to_be = "styled_tweet"
   class_to_be += " new" if new_marker && css_animation
-  old = "<li class='#{class_to_be}'>
-    <i class='icon-li icon-angle-right'></i>
-    <img src='#{mini_profile_url}' width='24' height='24' />
-    <strong>@#{tweet.username}</strong>
-    <p>
-    <span class='emojifont-restricted'>#{emoji.replace_unified tweet.text}</span>
-    <br/>
-    <a href='#'><i class='icon-reply'></i></a>
-    <a href='#'><i class='icon-retweet'></i></a>
-    <a href='#{tweet_url}'><i class='icon-external-link'></i></a>
-    </p>
-  </li>"
   "<li class='#{class_to_be}'>
   <i class='icon-li icon-angle-right'></i>
   <blockquote class='twitter-tweet'>
