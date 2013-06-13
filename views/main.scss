@@ -54,12 +54,23 @@
   color: gray;
   background-color: transparent;
 }
+.styled_tweet a {
+
+}
 .styled_tweet a.icon {
-  color: gray;
-  opacity: 0.3;
+  color: black;
+  opacity: 0.2;
+}
+.styled_tweet a.icon:hover {
+  opacity: 0.4;
+  text-decoration: none;
 }
 .styled_tweet.new {
   @include animation(highlight_content 0.75s ease-out)
+}
+/* override default bootstrap blockquote to make slightly smaller */
+blockquote p {
+  font-size: 16px;
 }
 @include keyframes(highlight_content) {
   from {
