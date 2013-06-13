@@ -131,15 +131,17 @@ detail page/view UI helpers
 ###
 general purpose UI helpers
 ###
-linkifyHashtags = (text) ->
-  text.replace /(\#\w+)/g, "<a href='#'>#{$1}</a>"
-linkifyUsernames = (text) ->
-  text.replace /@(\w+)/g, "<a href='//twitter.com/$1'>@$1</a>"
+String.prototype.linkifyHashtags = () ->
+  this.replace /#(\w+)/g, "<a href='https://twitter.com/search?q=%23$1&src=hash' target='_blank'>#$1</a>"
+String.prototype.linkifyUsernames = () ->
+  this.replace /@(\w+)/g, "<a href='https://twitter.com/$1' target='_blank'>@$1</a>"
+String.prototype.linkify = () ->
+  this.linkifyUsernames().linkifyHashtags()
 
 formattedTweet = (tweet, new_marker = false) ->
   tweet_url = "http://twitter.com/#{tweet.username}/status/#{tweet.id}"
   #mini_profile_url = tweet.avatar.replace('_normal','_mini')
-  prepared_tweet = linkifyUsernames(tweet.text)
+  prepared_tweet = tweet.text.linkify()
   class_to_be = "styled_tweet"
   class_to_be += " new" if new_marker && css_animation
   "<li class='#{class_to_be}'>
