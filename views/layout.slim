@@ -2,7 +2,7 @@ doctype html
 html
   head
     meta charset="utf-8"
-    title emojitracker: realtime emoji usage on twitter
+    title emojitracker: realtime emoji use on twitter
     meta name="viewport" content="width=device-width, initial-scale=1.0"
 
     /external libraries loaded via CDN
@@ -42,14 +42,14 @@ html
         button.close type="button" data-dismiss="modal" aria-hidden="true" &times;
         h3.emojifont-restricted about emojitracker
       div.modal-body
-        p this is an experiment in realtime tracking of all emoji characters used on twitter.  it takes advantage of a number of technologies, notably the twitter streaming API, redis, SSE, and other good stuff.  If you're a nerd, you can <a href="http://github.com/mroth/emojitrack">fork the code on github</a> and make it better!
-        p so yeah
+        p this is an experiment in realtime tracking of all emoji used on twitter.  it takes advantage of a number of technologies, notably the twitter streaming API, redis, SSE, and other good stuff.  If you're a nerd, you can <a href="http://github.com/mroth/emojitrack">check out the code on github</a> and make it better!
+        p so yeah, something else here!
         h4 like it? spread the word
-        p buttons and shit will go here
+        p tweet/like buttons and shit will go here
       div.modal-footer
         span#byline.emojifont-restricted built with :heart: in nyc.  this is a <a href="http://rocketws.com" target="new">rocket workshop :rocket:</a> project.
 
       coffee:
         $ ->
-          $('a.brand').html emoji.replace_colons(':shit:') + ' emojitracker'
+          $('a.brand').html emoji.replace_colons(':shit:') + ' emojitracker: <small>realtime emoji use on twitter</small>'
           $('#aboutview #byline').html emoji.replace_colons( $('#aboutview #byline').html() )
