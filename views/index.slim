@@ -23,9 +23,12 @@ div#detailview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myMo
       i.icon-refresh.icon-spin title="tweets are streaming live from twitter, no need to refresh"
     ul#tweet_list.icons-ul
   div.modal-footer
-    span#tweetbtn
-    a#jsonbtn.btn.btn-mini href="#" target="new"
-      li.icon-code &nbsp;get details as json
+    div.foot-buttons
+      span.twitter
+        span#tweetbtn
+      span.json
+        a#jsonbtn.btn.btn-mini href="#" target="new"
+          li.icon-code &nbsp;get details as json
 
 coffee:
   @popDetails = (char_id) ->
@@ -41,16 +44,20 @@ coffee:
       #construct permalink url
       permalink = document.URL + "details/#{char_id}"
 
-      tweetbutton = $('<a></a>')
-      tweetbutton.attr 'data-url', permalink
-      tweetbutton.attr 'data-text', "#{response.char_details.name} #{response.char}, ranked \##{response.popularity_rank} out of 841"
-      tweetbutton.attr 'data-hashtags', 'emojitracker'
-      tweetbutton.attr 'data-dnt', 'true'
-      tweetbutton.addClass 'twitter-share-button'
-
-      $('.modal-footer iframe').remove() #remove previous tweetbtn generated iframe, if present
-      tweetbutton.insertAfter('#tweetbtn')
-      twttr.widgets.load() #force widget to reload
+      #replace tweet button with new one
+      $('#tweetbtn').empty()
+      twttr.widgets.createShareButton(
+        permalink,
+        document.getElementById('tweetbtn'),
+        null,
+        {
+          dnt: true,
+          count: 'horizontal',
+          hashtags: 'emojitracker',
+          related: 'rocketws,mroth',
+          text: "#{response.char_details.name} #{response.char}, ranked \##{response.popularity_rank} out of 842"
+        }
+      )
 
       #populate the list of historic  tweets
       emptyTweetList()
