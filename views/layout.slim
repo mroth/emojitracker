@@ -52,5 +52,5 @@ html
 
       coffee:
         $ ->
-          $('a.brand').html emoji.replace_colons(':shit:') + ' emojitracker: <small>realtime emoji use on twitter</small>'
+          $('a.brand').html emoji.replace_colons(':shit:') + ' emojitracker<small class="hidden-phone">: realtime emoji use on twitter</small>'
           $('#aboutview #byline').html emoji.replace_colons( $('#aboutview #byline').html() )
