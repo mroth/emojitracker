@@ -9,7 +9,6 @@ use_css_sheets = true
 emojistatic_img_path = 'http://emojistatic.github.io/images/32/'
 emojistatic_css_uri  = 'http://emojistatic.github.io/css-sheets/emoji-32px.min.css'
 
-
 ###
 inits
 ###
@@ -30,8 +29,10 @@ methods related to the streaming UI
 ###
 @startScoreStreaming = ->
   console.log "Subscribing to score stream"
-  @source = new EventSource('/subscribe')
-  @source.onmessage = (event) -> incrementScore(event.data)
+  # @source = new EventSource('/subscribe')
+  # @source.onmessage = (event) -> incrementScore(event.data)
+  @source = new EventSource('/subscribe60fps')
+  @source.onmessage = (event) -> incrementMultipleScores(event.data)
 
 @stopScoreStreaming = ->
   console.log "Unsubscribing to score stream"
@@ -80,8 +81,13 @@ get_cached_selectors = (id) ->
     @selector_cache[id] = [score_selector, container_selector]
     return [score_selector, container_selector]
 
+# increment multiple scores from a JSON hash
+incrementMultipleScores = (data) ->
+  scores = $.parseJSON(data)
+  incrementScore(key,value) for key,value of scores
+
 # increment the score of a single emoji char
-incrementScore = (id) ->
+incrementScore = (id, incrby=1) ->
   # TODO: figure out how to profile and either remove cached selectors or enable
   # http://jsperf.com/getelementbyid-vs-keeping-hash-updated/edit
   use_cached_selectors = true
@@ -91,8 +97,7 @@ incrementScore = (id) ->
     score_selector = document.getElementById("score-#{id}")
     container_selector = document.getElementById(id)
 
-  
-  score_selector.innerHTML = (@score_cache[id] += 1);
+  score_selector.innerHTML = (@score_cache[id] += incrby);
   if css_animation
     # various ways to do this....
     # some discussion at http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery

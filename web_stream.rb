@@ -31,6 +31,54 @@ Thread.new do
 end
 
 ################################################
+# 60fps streaming thread for score updates
+################################################
+
+fps_conns = []
+cached_scores = {}
+semaphore = Mutex.new
+
+get '/subscribe60fps' do
+  content_type 'text/event-stream'
+  stream(:keep_open) do |conn|
+    fps_conns << conn
+    conn.callback { fps_conns.delete(conn) }
+  end
+end
+
+Thread.new do
+  scores = {}
+  while true
+    semaphore.synchronize do
+      scores = cached_scores.clone
+      cached_scores.clear
+    end
+
+    fps_conns.each do |out|
+      out << "data:#{Oj.dump scores}\n\n" unless scores.empty?
+    end
+
+    sleep 0.017 #60fps
+  end
+end
+
+
+Thread.new do
+  # we need a new instance of the redis object for this
+  t_redis = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password, :driver => :hiredis)
+
+  t_redis.psubscribe('stream.score_updates') do |on|
+    on.pmessage do |match, channel, message|
+      semaphore.synchronize do
+        cached_scores[message] ||= 0
+        cached_scores[message] += 1
+      end
+    end
+  end
+
+end
+
+################################################
 # streaming thread for tweet updates (detail pages)
 ################################################
 
