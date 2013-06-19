@@ -80,6 +80,15 @@ get '/data' do
   Oj.dump( @scores )
 end
 
+get '/stats' do
+  @raw_score = REDIS.zrevrange('emojitrack_score', 0, -1, { withscores: true } ).map { |s| s[1] }.inject(:+).to_i
+  Oj.dump(
+    {
+      'raw_score' => @raw_score
+    }
+  )
+end
+
 get '/application.js' do
   cache_control :public, max_age: 600  # 10 mins.
   coffee :application
