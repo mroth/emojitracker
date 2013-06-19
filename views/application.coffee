@@ -6,8 +6,8 @@ css_animation = true
 # load css sheets of images instead of individual files
 use_css_sheets = true
 # some urls
-emojistatic_img_path = 'http://mroth.github.io/emojistatic/images/32/'
-emojistatic_css_uri  = 'http://mroth.github.io/emojistatic/css-sheets/emoji-32px.min.css'
+emojistatic_img_path = 'http://emojistatic.github.io/images/32/'
+emojistatic_css_uri  = 'http://emojistatic.github.io/css-sheets/emoji-32px.min.css'
 
 ###
 inits
