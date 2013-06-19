@@ -1,4 +1,10 @@
 # emojitrack
+emojitrack tracks realtime emoji usage on twitter!
+
+Note: many of the components emojitrack uses have been carved out into independent open-source projects, see the following:
+
+ - emoji_data.rb
+ - emojistatic
 
 ## Development Setup
 ### Full stack
