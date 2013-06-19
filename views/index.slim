@@ -74,22 +74,23 @@ coffee:
     refreshUIFromServer ->
       console.log "UI refreshed"
 
+      iOS = false
+      p = navigator.platform
+      iOS = true if( p == 'iPad' || p == 'iPhone' || p == 'iPod' )
+
       # show tooltip
       # disable for now, too many thingies and degrades performance!
       #$('.emoji_char').tooltip({'placement':'top', 'trigger':'hover'})
 
       # intercept clicks for popup modal instead
-      $('.emoji_char').parent('a').click (event) ->
-        event.preventDefault()
-        clicked_id = $(this).data('id')
-        popDetails(clicked_id)
+      unless iOS
+        $('.emoji_char').parent('a').click (event) ->
+          event.preventDefault()
+          clicked_id = $(this).data('id')
+          popDetails(clicked_id)
 
       #configure the details popup modal
       $('#detailview').on 'hide', ->
         stopDetailStreaming()
-
-      #iOS = false
-      #p = navigator.platform
-      #iOS = true if( p == 'iPad' || p == 'iPhone' || p == 'iPod' )
 
       startScoreStreaming() #unless iOS
