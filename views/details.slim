@@ -30,7 +30,8 @@ div.container
         ul#tweet_list.icons-ul
 
 javascript:
-  char_id = "#{@emoji_char.unified}";
+  var char_id = "#{@emoji_char.unified}";
+  var char_char = "#{@emoji_char.char}";
 coffee:
   $ ->
     $('h2').html emoji.replace_unified( $('h2').text() ) #js-emojify the h2 for shit browsers
@@ -39,3 +40,6 @@ coffee:
         appendTweetList tweet
       startDetailStreaming(char_id)
     , "json")
+
+    #history.replaceState(null,null,"/#{char_char}") if emoji.replace_mode == 'unified'
+    #holdoff on above until we are sure it wont fuck with twitter buttons etc
