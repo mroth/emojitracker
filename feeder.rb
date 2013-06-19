@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require_relative 'lib/config'
-#require_relative 'lib/emoji'
 require 'emoji_data'
 require 'oj'
 require 'colored'

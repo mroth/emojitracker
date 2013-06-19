@@ -11,7 +11,6 @@ configure :production do
 end
 
 require_relative 'lib/config'
-# require_relative 'lib/emoji'
 require 'emoji_data'
 require_relative 'web_stream'
 
