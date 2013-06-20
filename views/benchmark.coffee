@@ -13,6 +13,7 @@ setupBenchmarkUI = ->
         <input id='fpsbox' class='span1' type='text' disabled>
       </div>
     </form>"
+  initResultsBox()
   @fpsbox_selector = $('#fpsbox')
   @testnamebox_selector = $('#testnamebox')
   $('#benchbtn').click (event) ->
@@ -33,6 +34,27 @@ testRunUIStop = ->
 
 displayFPS = (fps) ->
   @fpsbox_selector.val "#{fps} fps"
+
+initResultsBox = ->
+  $('body').append '
+  <div id="resultsmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">Benchmark results</h3>
+    </div>
+    <div class="modal-body">
+      <p>One fine body…</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+      <button class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+  '
+
+displayResultsBox = (results) ->
+  $('#resultsmodal > .modal-body').html( "<p>#{JSON.stringify results}</p>" )
+  $('#resultsmodal').modal({keyboard: true, backdrop: 'static'})
 
 setDefaults = (animation,replace,reflow,timeout,capped_stream) ->
   @use_css_animation = animation
@@ -115,6 +137,7 @@ class TestRunner
   displayAllResults: ->
     for test in @resultsArray
       test.printResults()
+    displayResultsBox( @results() )
 
   runNextTestIfExists: =>
     if @testQueue.length > 0
