@@ -3,7 +3,7 @@
   -moz-animation: $animation;
   animation: $animation;
 }
-@mixin transition($transition) {
+@mixin transition($transition...) {
   -webkit-transition: $transition;
   -moz-transition: $transition;
   transition: $transition;
@@ -28,7 +28,7 @@
   list-style-type: none;
   padding-right: 20px;
   color: black;
-  @include transition(all 750ms);
+  @include transition(color 0.75s linear, background-color 0.75s linear);
 }
 .emoji_char > .char {
   font-size: 16px;
