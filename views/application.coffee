@@ -99,26 +99,26 @@ incrementScore = (id) ->
   
   score_selector.innerHTML = (@score_cache[id] += 1);
   if css_animation
+    # various ways to do this....
+    # some discussion at http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
+    # only one of the below techniques may be set true
     replace_technique = false
-    reflow_technique = true
+    reflow_technique  = false
+    timeout_technique = true
+
     if replace_technique
       new_container = container_selector.cloneNode(true)
       new_container.classList.add('highlight_score_update')
-      # if @disco_time is true
-      #   new_container.className = 'emoji_char highlight_score_update disco'
-      # else
-      #   new_container.className = 'emoji_char highlight_score_update'
       container_selector.parentNode.replaceChild(new_container, container_selector)
       selector_cache[id] = [new_container.childNodes[3], new_container] if use_cached_selectors
     else if reflow_technique
-      #console.log container_selector.className
-      # replacement for jquery container_selector.addClass('highlighted') - WARNING: BRITTLE!
-      #container_selector.classList.remove('highlight_score_update')
-      #container_selector.focus()
+      container_selector.classList.remove('highlight_score_update')
+      container_selector.focus()
+      container_selector.classList.add('highlight_score_update')
+      # this has WAY worse performance it seems like on low power devices
+    else if timeout_technique
       container_selector.classList.add('highlight_score_update')
       setTimeout -> container_selector.classList.remove('highlight_score_update')
-      # focus needed because of http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
-      # this has WAY worse performance it seems like on low power devices
 
 ###
 detail page/view UI helpers
