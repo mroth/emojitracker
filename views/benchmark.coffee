@@ -57,6 +57,17 @@ class Test
   deinitFPSHandler: ->
     document.removeEventListener 'fps', @fpsHandler
 
+  fpsAvg: -> @fpsLog.reduce( (x,y) -> x+y ) / @fpsLog.length
+  fpsMin: -> Math.min @fpsLog...
+  fpsMax: -> Math.max @fpsLog...
+
+  results: ->
+    "max: #{@fpsMax()}, min: #{@fpsMin()}, avg: #{@fpsAvg()}"
+
+  printResults: ->
+    console.log "Results for test #{@name} - #{@results()}"
+
+
   run: (callback=null, duration=10) ->
     console.log "*** Beginning test run for: #{@name}"
     @setupFn()
@@ -71,7 +82,7 @@ class Test
       stopScoreStreaming()
       FPSMeter.stop()
       @deinitFPSHandler()
-      handleResultsFromRun(@fpsLog)
+      @printResults()
       callback() if callback
     setTimeout endGame, duration*1000
 
@@ -79,6 +90,7 @@ class Test
 class TestRunner
   constructor: () ->
     @testQueue = []
+    @results = []
 
   add: (test) ->
     @testQueue.push(test)
@@ -116,11 +128,6 @@ class TestRunner
   console.log "Test queue: #{tests.testQueue}"
   tests.runNextTestIfExists()
 
-
-handleResultsFromRun = (results, testName='unnamedTest') ->
-  console.log "Results for test "
-  avg = results.reduce( (x,y) -> x+y ) / results.length
-  console.log "max: #{Math.max results...}, min: #{Math.min results...}, avg: #{avg}"
 
 $ ->
   setupBenchmarkUI()
