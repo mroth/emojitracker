@@ -110,35 +110,6 @@ class TestRunner
   tests.runNextTestIfExists()
 
 
-# @runTest = (setupFn, duration=30, callback) ->
-#   #do whatever setup is required before this test run
-#   setupFn()
-
-#   # set up a handler for gathering the results
-#   fpsLog = []
-#   fpsHandler = (e) =>
-#     fpsLog.push e.fps
-#     displayFPS e.fps
-#     # console.log "FPS: #{e.fps}"
-#   document.addEventListener 'fps', fpsHandler
-
-#   #get the UI ready to display feedback
-#   testRunUIStart()
-
-#   # actually do the deed
-#   console.log "Beginning to profile FPS"
-#   FPSMeter.run()
-#   startScoreStreaming()
-
-#   endGame = ->
-#     stopScoreStreaming()
-#     FPSMeter.stop()
-#     document.removeEventListener 'fps', fpsHandler
-#     handleResultsFromRun(fpsLog)
-#     callback()
-#   setTimeout endGame, duration*1000
-
-
 handleResultsFromRun = (results, testName='unnamedTest') ->
   console.log "Results for test "
   avg = results.reduce( (x,y) -> x+y ) / results.length
