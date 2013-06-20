@@ -3,17 +3,17 @@ config
 ###
 
 # animate ALL the things!
-css_animation = true
+@css_animation = true
 # only one of the below css animation techniques may be set to true
-replace_technique = false
-reflow_technique  = false
-timeout_technique = true
+@replace_technique = false
+@reflow_technique  = false
+@timeout_technique = true
 
 # load css sheets of images instead of individual files
-use_css_sheets = true
+@use_css_sheets = true
 
 # use the capped stream instead of raw?
-use_capped_stream = false
+@use_capped_stream = false
 
 # some urls
 emojistatic_img_path = 'http://emojistatic.github.io/images/32/'
