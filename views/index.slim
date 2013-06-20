@@ -84,9 +84,12 @@ coffee:
 
       # intercept clicks for popup modal instead
       unless iOS
-        $('.emoji_char').parent('a').click (event) ->
+        $('#data').click (event) ->
+          $tgt = $ event.target
+          $a = $tgt.closest('a')
+          return unless $a.length
           event.preventDefault()
-          clicked_id = $(this).data('id')
+          clicked_id = $a.data('id')
           popDetails(clicked_id)
 
       #configure the details popup modal
