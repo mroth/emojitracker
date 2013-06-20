@@ -116,7 +116,7 @@ incrementScore = (id) ->
       #container_selector.classList.remove('highlight_score_update')
       #container_selector.focus()
       container_selector.classList.add('highlight_score_update')
-      reqAnimFrame -> container_selector.classList.remove('highlight_score_update')
+      setTimeout -> container_selector.classList.remove('highlight_score_update')
       # focus needed because of http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
       # this has WAY worse performance it seems like on low power devices
 
