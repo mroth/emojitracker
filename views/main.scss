@@ -28,6 +28,7 @@
   list-style-type: none;
   padding-right: 20px;
   color: black;
+  @include transition(all 750ms);
 }
 .emoji_char > .char {
   font-size: 16px;
@@ -40,8 +41,12 @@
   @include transition(all 0s);
 }
 .highlight_score_update {
-  @include animation(highlight 0.75s linear);
+  color: red;
+  background-color: lightgreen;
+  @include transition(all 0s);
+  //@include animation(highlight 0.75s linear);
 }
+
 @include keyframes(highlight) {
   from {
     color: red;

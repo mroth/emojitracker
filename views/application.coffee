@@ -83,17 +83,18 @@ get_cached_selectors = (id) ->
 incrementScore = (id) ->
   # TODO: figure out how to profile and either remove cached selectors or enable
   # http://jsperf.com/getelementbyid-vs-keeping-hash-updated/edit
-  use_cached_selectors = false
+  use_cached_selectors = true
   if use_cached_selectors
     [score_selector, container_selector] = get_cached_selectors(id)
   else
     score_selector = document.getElementById("score-#{id}")
     container_selector = document.getElementById(id)
 
+  
   score_selector.innerHTML = (@score_cache[id] += 1);
   if css_animation
-    replace_technique = true
-    reflow_technique = false
+    replace_technique = false
+    reflow_technique = true
     if replace_technique
       new_container = container_selector.cloneNode(true)
       new_container.classList.add('highlight_score_update')
@@ -104,10 +105,12 @@ incrementScore = (id) ->
       container_selector.parentNode.replaceChild(new_container, container_selector)
       selector_cache[id] = [new_container.childNodes[3], new_container] if use_cached_selectors
     else if reflow_technique
+      #console.log container_selector.className
       # replacement for jquery container_selector.addClass('highlighted') - WARNING: BRITTLE!
-      container_selector.classList.remove('highlight_score_update')
-      container_selector.focus()
+      #container_selector.classList.remove('highlight_score_update')
+      #container_selector.focus()
       container_selector.classList.add('highlight_score_update')
+      setTimeout -> container_selector.classList.remove('highlight_score_update')
       # focus needed because of http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
       # this has WAY worse performance it seems like on low power devices
 
