@@ -72,7 +72,7 @@ class Test
     console.log "Results for test #{@name} - #{@results()}"
 
 
-  run: (callback=null, duration=10) ->
+  run: (callback=null, duration=5) ->
     console.log "*** Beginning test run for: #{@name}"
     @setupFn()
     @initFPSHandler()
@@ -99,12 +99,19 @@ class TestRunner
   add: (test) ->
     @testQueue.push(test)
 
+  displayAllResults: ->
+    for test in @results
+      test.printResults()
+
   runNextTestIfExists: =>
     if @testQueue.length > 0
-      setTimeout (=> @testQueue.pop().run(@runNextTestIfExists) ), 1500
+      nextTest = @testQueue.pop()
+      @results.push(nextTest)
+      setTimeout (=> nextTest.run(@runNextTestIfExists) ), 1000
     else
       console.log "...Test queue is exhausted!"
       testRunUIStop()
+      @displayAllResults()
       null
 
 
