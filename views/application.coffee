@@ -1,8 +1,13 @@
 ###
 config
 ###
-# animate all the things
+
+# animate ALL the things!
 css_animation = true
+# only one of the below css animation techniques may be set to true
+replace_technique = false
+reflow_technique  = false
+timeout_technique = true
 
 # load css sheets of images instead of individual files
 use_css_sheets = true
@@ -112,10 +117,6 @@ incrementScore = (id, incrby=1) ->
   if css_animation
     # various ways to do this....
     # some discussion at http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
-    # only one of the below techniques may be set true
-    replace_technique = false
-    reflow_technique  = false
-    timeout_technique = true
 
     if replace_technique
       new_container = container_selector.cloneNode(true)
