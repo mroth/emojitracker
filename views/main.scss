@@ -28,7 +28,7 @@
   list-style-type: none;
   padding-right: 20px;
   color: black;
-  @include transition(color 0.75s linear, background-color 0.75s linear);
+  @include transition(color 0.75s linear, background-color 0.75s linear, opacity 0.75s linear);
 }
 .emoji_char > .char {
   font-size: 16px;
