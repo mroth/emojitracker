@@ -10,11 +10,6 @@ emojistatic_img_path = 'http://emojistatic.github.io/images/32/'
 emojistatic_css_uri  = 'http://emojistatic.github.io/css-sheets/emoji-32px.min.css'
 
 
-reqAnimFrame = do ->
-  window.requestAnimationFrame or window.webkitRequestAnimationFrame or window.mozRequestAnimationFrame or window.oRequestAnimationFrame or window.msRequestAnimationFrame or
-  (callback) ->
-      setTimeout -> callback(new Date().getTime())
-
 ###
 inits
 ###
