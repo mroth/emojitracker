@@ -102,19 +102,24 @@ class Test
 class TestRunner
   constructor: () ->
     @testQueue = []
-    @results = []
+    @resultsArray = []
 
   add: (test) ->
     @testQueue.push(test)
 
+  results: ->
+    {
+      'benchmarks': (test.results() for test in @resultsArray)
+    }
+
   displayAllResults: ->
-    for test in @results
+    for test in @resultsArray
       test.printResults()
 
   runNextTestIfExists: =>
     if @testQueue.length > 0
       nextTest = @testQueue.pop()
-      @results.push(nextTest)
+      @resultsArray.push(nextTest)
       setTimeout (=> nextTest.run(@runNextTestIfExists) ), 1000
     else
       console.log "...Test queue is exhausted!"
