@@ -106,13 +106,13 @@ class TestRunner
 
   @tests = new TestRunner
   tests.add( new Test "none+raw",       -> setDefaults(false,false,false,false,false) )
-  tests.add( new Test "none+capped",    -> setDefaults(false,false,false,false,true) )
+  tests.add( new Test "none+rollup",    -> setDefaults(false,false,false,false,true) )
   tests.add( new Test "replace+raw",    -> setDefaults(true, true, false,false,false) )
-  tests.add( new Test "replace+capped", -> setDefaults(true, true, false,false,true) )
+  tests.add( new Test "replace+rollup", -> setDefaults(true, true, false,false,true) )
   tests.add( new Test "reflow+raw",     -> setDefaults(true, false,true, false,false) )
-  tests.add( new Test "reflow+capped",  -> setDefaults(true, false,true, false,true) )
+  tests.add( new Test "reflow+rollup",  -> setDefaults(true, false,true, false,true) )
   tests.add( new Test "timeout+raw",    -> setDefaults(true, false,false,true, false) )
-  tests.add( new Test "timeout+capped", -> setDefaults(true, false,false,true, true) )
+  tests.add( new Test "timeout+rollup", -> setDefaults(true, false,false,true, true) )
   console.log "Test queue: #{tests.testQueue}"
   tests.runNextTestIfExists()
 

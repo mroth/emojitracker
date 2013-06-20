@@ -31,14 +31,14 @@ Thread.new do
 end
 
 ################################################
-# 60fps streaming thread for score updates
+# 60 events per second rollup streaming thread for score updates
 ################################################
 
 fps_conns = []
 cached_scores = {}
 semaphore = Mutex.new
 
-get '/subscribe_60fps' do
+get '/subscribe_60eps' do
   content_type 'text/event-stream'
   stream(:keep_open) do |conn|
     fps_conns << conn

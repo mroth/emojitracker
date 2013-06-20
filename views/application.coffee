@@ -12,7 +12,7 @@ config
 # load css sheets of images instead of individual files
 @use_css_sheets = true
 
-# use the capped stream instead of raw?
+# use the 60 events per second capped rollup stream instead of raw?
 @use_capped_stream = false
 
 # some urls
@@ -46,8 +46,8 @@ methods related to the streaming UI
   @source.onmessage = (event) -> incrementScore(event.data)
 
 @startCappedScoreStreaming = ->
-  console.log "Subscribing to score stream (60fps capped)"
-  @source = new EventSource('/subscribe_60fps')
+  console.log "Subscribing to score stream (60eps rollup)"
+  @source = new EventSource('/subscribe_60eps')
   @source.onmessage = (event) -> incrementMultipleScores(event.data)
 
 @stopScoreStreaming = ->
