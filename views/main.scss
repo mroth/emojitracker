@@ -131,7 +131,10 @@ body.disco {
   opacity: 0.1;
 }
 .highlight_score_update.disco {
-  @include animation(disco-highlight 0.75s linear);
+    color: red;
+    background-color: lightgreen;
+    opacity: 0.9;
+  //@include animation(disco-highlight 0.75s linear);
 }
 @include keyframes(disco-highlight) {
   from {

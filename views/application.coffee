@@ -9,6 +9,12 @@ use_css_sheets = true
 emojistatic_img_path = 'http://emojistatic.github.io/images/32/'
 emojistatic_css_uri  = 'http://emojistatic.github.io/css-sheets/emoji-32px.min.css'
 
+
+reqAnimFrame = do ->
+  window.requestAnimationFrame or window.webkitRequestAnimationFrame or window.mozRequestAnimationFrame or window.oRequestAnimationFrame or window.msRequestAnimationFrame or
+  (callback) ->
+      setTimeout -> callback(new Date().getTime())
+
 ###
 inits
 ###
@@ -110,7 +116,7 @@ incrementScore = (id) ->
       #container_selector.classList.remove('highlight_score_update')
       #container_selector.focus()
       container_selector.classList.add('highlight_score_update')
-      setTimeout -> container_selector.classList.remove('highlight_score_update')
+      reqAnimFrame -> container_selector.classList.remove('highlight_score_update')
       # focus needed because of http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
       # this has WAY worse performance it seems like on low power devices
 
