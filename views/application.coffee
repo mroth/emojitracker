@@ -108,17 +108,17 @@ incrementScore = (id) ->
 
     if replace_technique
       new_container = container_selector.cloneNode(true)
-      new_container.classList.add('highlight_score_update')
+      new_container.classList.add('highlight_score_update_anim')
       container_selector.parentNode.replaceChild(new_container, container_selector)
       selector_cache[id] = [new_container.childNodes[3], new_container] if use_cached_selectors
     else if reflow_technique
-      container_selector.classList.remove('highlight_score_update')
+      container_selector.classList.remove('highlight_score_update_anim')
       container_selector.focus()
-      container_selector.classList.add('highlight_score_update')
+      container_selector.classList.add('highlight_score_update_anim')
       # this has WAY worse performance it seems like on low power devices
     else if timeout_technique
-      container_selector.classList.add('highlight_score_update')
-      setTimeout -> container_selector.classList.remove('highlight_score_update')
+      container_selector.classList.add('highlight_score_update_trans')
+      setTimeout -> container_selector.classList.remove('highlight_score_update_trans')
 
 ###
 detail page/view UI helpers
