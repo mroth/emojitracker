@@ -4,9 +4,14 @@
 setupBenchmarkUI = ->
   $('li.dropdown').before "
     <form class='navbar-form pull-right'>
-      <button id='benchbtn' class='btn btn-danger'><i class='icon-beaker'></i> benchmark</button>
+      <button id='benchbtn' class='btn btn-danger'>
+        <i class='icon-beaker'></i> benchmark
+      </button>
       <input id='testnamebox' style='display:none;' type='text' class='span2' disabled>
-      <input id='fpsbox' style='display:none;' type='text' class='span1' disabled>
+      <div id='fspcontainer' class='input-prepend' style='margin-bottom:0px; display:none;'>
+        <span class='add-on'><i class='icon-time'></i></span>
+        <input id='fpsbox' class='span1' type='text' disabled>
+      </div>
     </form>"
   @fpsbox_selector = $('#fpsbox')
   @testnamebox_selector = $('#testnamebox')
@@ -15,10 +20,12 @@ setupBenchmarkUI = ->
     startBenchmarking()
 
 testRunUIStart = (testName='unnamedTest') ->
+  $('#benchbtn').attr('disabled','disabled')
   @testnamebox_selector.val testName
   @fpsbox_selector.val '-'
   @testnamebox_selector.show()
-  @fpsbox_selector.show()
+  $('#fspcontainer').show()
+  #@fpsbox_selector.show()
 
 displayFPS = (fps) ->
   @fpsbox_selector.val "#{fps} fps"
@@ -54,7 +61,7 @@ class Test
     console.log "*** Beginning test run for: #{@name}"
     @setupFn()
     @initFPSHandler()
-    testRunUIStart()
+    testRunUIStart(@name)
 
     console.log " - beginning to profile FPS..."
     FPSMeter.run()
