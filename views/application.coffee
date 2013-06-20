@@ -3,8 +3,13 @@ config
 ###
 # animate all the things
 css_animation = true
+
 # load css sheets of images instead of individual files
 use_css_sheets = true
+
+# use the capped stream instead of raw?
+use_capped_stream = false
+
 # some urls
 emojistatic_img_path = 'http://emojistatic.github.io/images/32/'
 emojistatic_css_uri  = 'http://emojistatic.github.io/css-sheets/emoji-32px.min.css'
@@ -28,10 +33,16 @@ methods related to the polling UI
 methods related to the streaming UI
 ###
 @startScoreStreaming = ->
-  console.log "Subscribing to score stream"
-  # @source = new EventSource('/subscribe')
-  # @source.onmessage = (event) -> incrementScore(event.data)
-  @source = new EventSource('/subscribe60fps')
+  if use_capped_stream then startCappedScoreStreaming() else startRawScoreStreaming()
+
+@startRawScoreStreaming = ->
+  console.log "Subscribing to score stream (raw)"
+  @source = new EventSource('/subscribe')
+  @source.onmessage = (event) -> incrementScore(event.data)
+
+@startCappedScoreStreaming = ->
+  console.log "Subscribing to score stream (60fps capped)"
+  @source = new EventSource('/subscribe_60fps')
   @source.onmessage = (event) -> incrementMultipleScores(event.data)
 
 @stopScoreStreaming = ->

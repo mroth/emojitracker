@@ -38,7 +38,7 @@ fps_conns = []
 cached_scores = {}
 semaphore = Mutex.new
 
-get '/subscribe60fps' do
+get '/subscribe_60fps' do
   content_type 'text/event-stream'
   stream(:keep_open) do |conn|
     fps_conns << conn
