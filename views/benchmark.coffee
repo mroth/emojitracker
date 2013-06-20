@@ -25,7 +25,11 @@ testRunUIStart = (testName='unnamedTest') ->
   @fpsbox_selector.val '-'
   @testnamebox_selector.show()
   $('#fspcontainer').show()
-  #@fpsbox_selector.show()
+
+testRunUIStop = ->
+  @testnamebox_selector.hide()
+  $('#fspcontainer').hide()
+  $('#benchbtn').removeAttr('disabled')
 
 displayFPS = (fps) ->
   @fpsbox_selector.val "#{fps} fps"
@@ -100,6 +104,7 @@ class TestRunner
       setTimeout (=> @testQueue.pop().run(@runNextTestIfExists) ), 1500
     else
       console.log "...Test queue is exhausted!"
+      testRunUIStop()
       null
 
 
