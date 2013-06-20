@@ -66,10 +66,18 @@ class Test
   fpsMax: -> Math.max @fpsLog...
 
   results: ->
-    "max: #{@fpsMax()}, min: #{@fpsMin()}, avg: #{@fpsAvg()}"
+    {
+      'test_name': @name,
+      'results': {
+        'fps_min': @fpsMin(),
+        'fps_max': @fpsMax(),
+        'fps_avg': @fpsAvg()
+      }
+    }
 
   printResults: ->
-    console.log "Results for test #{@name} - #{@results()}"
+    # console.log "Results for test #{@name} - #{@results()}"
+    console.log "Results #{JSON.stringify @results()}"
 
 
   run: (callback=null, duration=5) ->
