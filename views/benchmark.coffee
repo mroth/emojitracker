@@ -1,6 +1,6 @@
-##########################
-# UI methods
-##########################
+##############################################################################
+# messy and ugly UI methods
+##############################################################################
 setupBenchmarkUI = ->
   $('li.dropdown').before "
     <form class='navbar-form pull-right'>
@@ -41,9 +41,9 @@ setDefaults = (animation,replace,reflow,timeout,capped_stream) ->
   @timeout_technique = timeout
   @use_capped_stream = capped_stream
 
-##########################
-# classes to handle testing
-##########################
+##############################################################################
+# classes to handle testing, my brain actually works from this point onward
+##############################################################################
 class Test
   constructor: (@name, @setupFn) ->
     @fpsLog = []
