@@ -21,8 +21,9 @@ html
     script src='/application.js'
 
     /benchmark stuff (TODO: conditional me)
-    script src='/vendor/fpsmeter/fpsmeter.js'
-    script src='/benchmark.js'
+    - if @benchmark_mode
+      script src='/vendor/fpsmeter/fpsmeter.js'
+      script src='/benchmark.js'
 
   body
     div.navbar.navbar-static-top

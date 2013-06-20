@@ -33,7 +33,11 @@ set :static_cache_control, [:public, max_age: 1800] # 30 mins.
 get '/' do
   # cache_control :public, max_age: 600  # 10 mins. #disable until password is gone
   protected! if ENV['RACK_ENV'] == 'production'
+  slim :index
+end
 
+get '/benchmark' do
+  @benchmark_mode = true
   slim :index
 end
 

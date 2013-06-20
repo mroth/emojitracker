@@ -96,4 +96,6 @@ coffee:
       $('#detailview').on 'hide', ->
         stopDetailStreaming()
 
-      startScoreStreaming() #unless iOS
+- unless @benchmark_mode
+  coffee:
+    startScoreStreaming()
