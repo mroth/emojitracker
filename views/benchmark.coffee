@@ -177,6 +177,9 @@ class TestRunner
 
   results: ->
     {
+      timestamp: new Date,
+      user_agent: navigator.userAgent,
+      window_size: "#{$(window).width()}x#{$(window).height()}"
       benchmarks: (test.results() for test in @resultsArray)
     }
 
