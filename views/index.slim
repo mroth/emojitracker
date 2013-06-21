@@ -76,10 +76,6 @@ coffee:
     refreshUIFromServer ->
       console.log "UI refreshed"
 
-      iOS = false
-      p = navigator.platform
-      iOS = true if( p == 'iPad' || p == 'iPhone' || p == 'iPod' )
-
       # show tooltip
       # disable for now, too many thingies and degrades performance!
       #$('.emoji_char').tooltip({'placement':'top', 'trigger':'hover'})

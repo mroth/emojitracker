@@ -28,6 +28,10 @@ inits
 @score_cache = {}
 @selector_cache = {}
 
+@iOS = false
+p = navigator.platform
+@iOS = true if( p == 'iPad' || p == 'iPhone' || p == 'iPod' )
+
 ###
 methods related to the polling UI
 ###
