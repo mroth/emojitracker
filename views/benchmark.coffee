@@ -108,7 +108,7 @@ class Test
     console.log "Results #{JSON.stringify @results()}"
 
 
-  run: (callback=null, duration=5) ->
+  run: (callback=null, duration=10) ->
     console.log "*** Beginning test run for: #{@name}"
     @setupFn()
     @initFPSHandler()
