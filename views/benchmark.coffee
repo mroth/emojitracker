@@ -52,8 +52,42 @@ initResultsBox = ->
   </div>
   '
 
-displayResultsBox = (results) ->
-  $('#resultsmodal > .modal-body').html( "<p>#{JSON.stringify results}</p>" )
+@renderResultsTable = (resultsArray) ->
+  # for now, just assume first value is source of truth of how others will look
+  first = _.first(resultsArray)
+  test_names = _.pluck(first.benchmarks,'test_name')
+  """
+  <table>
+    <caption>
+      fartbutt
+    </caption>
+    #{renderResultsTableHeader( test_names  )}
+    <tbody>
+    </tbody>
+  </table>
+  """
+
+renderResultsTableHeader = (columns=['foo','bar','hey']) ->
+  colspanners = ("<th colspan='3'>#{colname}</th>" for colname in columns).join ""
+  colheaders = Array(columns.length + 1).join "<th>min</th><th>max</th><th>avg</th>"
+  """
+    <thead>
+      <tr>
+        #{colspanners}
+      </tr>
+      <tr>
+        #{colheaders}
+      </tr>
+    </thead>
+  """
+renderResultsTableRow = (benchmarks) ->
+  """
+  <tr>
+    <td>69</td>
+  </tr>
+
+  # $('#resultsmodal > .modal-body').html( "<p>#{JSON.stringify results}</p>" )
+  $('#resultsmodal > .modal-body').html( renderResultsTable( [results] ) )
   $('#resultsmodal').modal({keyboard: true, backdrop: 'static'})
 
 setDefaults = (animation,replace,reflow,timeout,capped_stream) ->
@@ -89,11 +123,11 @@ class Test
 
   results: ->
     {
-      'test_name': @name,
-      'results': {
-        'fps_min': @fpsMin(),
-        'fps_max': @fpsMax(),
-        'fps_avg': @fpsAvg()
+      test_name: @name,
+      results: {
+        fps_min: @fpsMin(),
+        fps_max: @fpsMax(),
+        fps_avg: @fpsAvg()
       }
     }
 
@@ -131,7 +165,7 @@ class TestRunner
 
   results: ->
     {
-      'benchmarks': (test.results() for test in @resultsArray)
+      benchmarks: (test.results() for test in @resultsArray)
     }
 
   displayAllResults: ->
