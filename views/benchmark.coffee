@@ -52,42 +52,54 @@ initResultsBox = ->
   </div>
   '
 
-@renderResultsTable = (resultsArray) ->
-  # for now, just assume first value is source of truth of how others will look
-  first = _.first(resultsArray)
-  test_names = _.pluck(first.benchmarks,'test_name')
-  """
-  <table>
-    <caption>
-      fartbutt
-    </caption>
-    #{renderResultsTableHeader( test_names  )}
-    <tbody>
-    </tbody>
-  </table>
-  """
+# @renderResultsTable = (resultsArray) ->
+#   # for now, just assume first value is source of truth of how others will look
+#   first = _.first(resultsArray)
+#   test_names = _.pluck(first.benchmarks,'test_name')
 
-renderResultsTableHeader = (columns=['foo','bar','hey']) ->
-  colspanners = ("<th colspan='3'>#{colname}</th>" for colname in columns).join ""
-  colheaders = Array(columns.length + 1).join "<th>min</th><th>max</th><th>avg</th>"
-  """
-    <thead>
-      <tr>
-        #{colspanners}
-      </tr>
-      <tr>
-        #{colheaders}
-      </tr>
-    </thead>
-  """
-renderResultsTableRow = (benchmarks) ->
-  """
-  <tr>
-    <td>69</td>
-  </tr>
+#   """
+#   <table>
+#     <caption>
+#       fartbutt
+#     </caption>
+#     #{renderResultsTableHeader( test_names  )}
+#     <tbody>
+#       #{renderResultsTableRow( first, test_names  )}
+#     </tbody>
+#   </table>
+#   """
 
-  # $('#resultsmodal > .modal-body').html( "<p>#{JSON.stringify results}</p>" )
-  $('#resultsmodal > .modal-body').html( renderResultsTable( [results] ) )
+# renderResultsTableHeader = (columns) ->
+#   colspanners = ("<th colspan='3'>#{colname}</th>" for colname in columns).join ""
+#   colheaders = Array(columns.length + 1).join "<th>min</th><th>max</th><th>avg</th>"
+#   """
+#     <thead>
+#       <tr>
+#         <th rowspan="2">name</th>
+#         #{colspanners}
+#       </tr>
+#       <tr>
+#         #{colheaders}
+#       </tr>
+#     </thead>
+#   """
+
+# renderResultsTableRow = (test_results, columns) ->
+#   subcols = renderResultsTableRowSub(test_results, column) for column in columns.join "\n"
+#   """
+#       <tr>
+#         <td>butt</td>
+#         #{subcols}
+#       </tr>
+#   """
+
+# renderResultsTableRowSub = (test_results, column_name) ->
+#   sub = test_results[column_name]
+#   "<td>#{sub.fps_min}</td><td>#{sub.fps_max}</td><td>#{sub.fps_avg}</td>"
+
+@displayResultsBox = (results) ->
+  $('#resultsmodal > .modal-body').html( "<pre>#{JSON.stringify results, null, '  '}</pre>" )
+  # $('#resultsmodal > .modal-body').html( renderResultsTable( [results] ) )
   $('#resultsmodal').modal({keyboard: true, backdrop: 'static'})
 
 setDefaults = (animation,replace,reflow,timeout,capped_stream) ->
