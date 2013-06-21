@@ -179,7 +179,8 @@ class TestRunner
     {
       timestamp: new Date,
       user_agent: navigator.userAgent,
-      window_size: "#{$(window).width()}x#{$(window).height()}"
+      window_size: "#{$(window).width()}x#{$(window).height()}",
+      server: window.location.hostname,
       benchmarks: (test.results() for test in @resultsArray)
     }
 
