@@ -47,13 +47,19 @@ initResultsBox = ->
     </div>
     <div class="modal-footer">
       <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-      <button class="btn btn-primary">Submit</button>
+      <button id="submitbtn" class="btn btn-primary">Submit</button>
     </div>
   </div>
   '
 
 @displayResultsBox = (results) ->
   $('#resultsmodal > .modal-body').html( "<pre>#{JSON.stringify results, null, '  '}</pre>" )
+  $('#submitbtn').click ->
+    console.log "Submitting report to server...."
+    $.post "/benchmarks", { report: JSON.stringify(results) }, (data) ->
+      console.log("...Received #{JSON.stringify data} from server.")
+      $('#resultsmodal').modal('hide')
+
   $('#resultsmodal').modal({keyboard: true, backdrop: 'static'})
 
 setDefaults = (animation,replace,reflow,timeout,capped_stream) ->
