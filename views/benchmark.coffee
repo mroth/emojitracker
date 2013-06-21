@@ -52,11 +52,14 @@ initResultsBox = ->
   </div>
   '
 
+reducePrecision = (key, val) ->
+  if val.toFixed then Number(val.toFixed(1)) else val
+
 @displayResultsBox = (results) ->
-  $('#resultsmodal > .modal-body').html( "<pre>#{JSON.stringify results, null, '  '}</pre>" )
+  $('#resultsmodal > .modal-body').html( "<pre>#{JSON.stringify results, reducePrecision, '  '}</pre>" )
   $('#submitbtn').click ->
     console.log "Submitting report to server...."
-    $.post "/benchmarks", { report: JSON.stringify(results) }, (data) ->
+    $.post "/benchmarks", { report: JSON.stringify(results, reducePrecision) }, (data) ->
       console.log("...Received #{JSON.stringify data} from server.")
       $('#resultsmodal').modal('hide')
 
