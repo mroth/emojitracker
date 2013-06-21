@@ -7,7 +7,7 @@ setupBenchmarkUI = ->
       <button id='benchbtn' class='btn btn-danger'>
         <i class='icon-beaker'></i> benchmark
       </button>
-      <input id='testnamebox' style='display:none;' type='text' class='span2' disabled>
+      <input id='testnamebox' style='display:none;' type='text' class='span3' disabled>
       <div id='fspcontainer' class='input-prepend' style='margin-bottom:0px; display:none;'>
         <span class='add-on'><i class='icon-time'></i></span>
         <input id='fpsbox' class='span1' type='text' disabled>
@@ -62,12 +62,13 @@ initResultsBox = ->
 
   $('#resultsmodal').modal({keyboard: true, backdrop: 'static'})
 
-setDefaults = (animation,replace,reflow,timeout,capped_stream) ->
+setDefaults = (animation,replace,reflow,timeout,capped_stream,cached_selectors) ->
   @use_css_animation = animation
   @replace_technique = replace
   @reflow_technique = reflow
   @timeout_technique = timeout
   @use_capped_stream = capped_stream
+  @use_cached_selectors = cached_selectors
 
 ##############################################################################
 # classes to handle testing, my brain actually works from this point onward
@@ -175,14 +176,22 @@ class TestRunner
   stopDetailStreaming() if @detail_source
 
   @tests = new TestRunner
-  tests.add( new Test "none+raw",       -> setDefaults(false,false,false,false,false) )
-  tests.add( new Test "none+rollup",    -> setDefaults(false,false,false,false,true) )
-  tests.add( new Test "replace+raw",    -> setDefaults(true, true, false,false,false) )
-  tests.add( new Test "replace+rollup", -> setDefaults(true, true, false,false,true) )
-  tests.add( new Test "reflow+raw",     -> setDefaults(true, false,true, false,false) )
-  tests.add( new Test "reflow+rollup",  -> setDefaults(true, false,true, false,true) )
-  tests.add( new Test "timeout+raw",    -> setDefaults(true, false,false,true, false) )
-  tests.add( new Test "timeout+rollup", -> setDefaults(true, false,false,true, true) )
+  tests.add( new Test "none+raw+nocache",       -> setDefaults(false,false,false,false,false, false) )
+  tests.add( new Test "none+raw+cache",         -> setDefaults(false,false,false,false,false, true) )
+  tests.add( new Test "none+rollup+nocache",    -> setDefaults(false,false,false,false,true,  false) )
+  tests.add( new Test "none+rollup+cache",      -> setDefaults(false,false,false,false,true,  true) )
+  tests.add( new Test "replace+raw+nocache",    -> setDefaults(true, true, false,false,false, false) )
+  tests.add( new Test "replace+raw+cache",      -> setDefaults(true, true, false,false,false, true) )
+  tests.add( new Test "replace+rollup+nocache", -> setDefaults(true, true, false,false,true,  false) )
+  tests.add( new Test "replace+rollup+cache",   -> setDefaults(true, true, false,false,true,  true) )
+  tests.add( new Test "reflow+raw+nocache",     -> setDefaults(true, false,true, false,false, false) )
+  tests.add( new Test "reflow+raw+cache",       -> setDefaults(true, false,true, false,false, true) )
+  tests.add( new Test "reflow+rollup+nocache",  -> setDefaults(true, false,true, false,true,  false) )
+  tests.add( new Test "reflow+rollup+cache",    -> setDefaults(true, false,true, false,true,  true) )
+  tests.add( new Test "timeout+raw+nocache",    -> setDefaults(true, false,false,true, false, false) )
+  tests.add( new Test "timeout+raw+cache",      -> setDefaults(true, false,false,true, false, true) )
+  tests.add( new Test "timeout+rollup+nocache", -> setDefaults(true, false,false,true, true,  false) )
+  tests.add( new Test "timeout+rollup+cache",   -> setDefaults(true, false,false,true, true,  true) )
   console.log "Test queue: #{tests.testQueue}"
   tests.runNextTestIfExists()
 
