@@ -4,6 +4,9 @@ config
 
 # animate ALL the things!
 @css_animation = true
+# TODO: figure out how to profile and either remove cached selectors or enable
+# http://jsperf.com/getelementbyid-vs-keeping-hash-updated/edit
+@use_cached_selectors = true
 # only one of the below css animation techniques may be set to true
 @replace_technique = false
 @reflow_technique  = false
@@ -104,10 +107,7 @@ incrementMultipleScores = (data) ->
 
 # increment the score of a single emoji char
 incrementScore = (id, incrby=1) ->
-  # TODO: figure out how to profile and either remove cached selectors or enable
-  # http://jsperf.com/getelementbyid-vs-keeping-hash-updated/edit
-  use_cached_selectors = true
-  if use_cached_selectors
+  if @use_cached_selectors
     [score_selector, container_selector] = get_cached_selectors(id)
   else
     score_selector = document.getElementById("score-#{id}")
