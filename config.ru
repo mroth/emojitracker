@@ -1,3 +1,4 @@
+require 'rack-cache'
 require 'dalli'
 require 'memcachier'
 
