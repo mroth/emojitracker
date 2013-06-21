@@ -157,7 +157,7 @@ class TestRunner
     if @testQueue.length > 0
       nextTest = @testQueue.pop()
       @resultsArray.push(nextTest)
-      setTimeout (=> nextTest.run(@runNextTestIfExists) ), 1000
+      setTimeout (=> nextTest.run(@runNextTestIfExists) ), 2500
     else
       console.log "...Test queue is exhausted!"
       testRunUIStop()
@@ -187,10 +187,10 @@ class TestRunner
   tests.add( new Test "replace+raw+cache",      -> setDefaults(true, true, false,false,false, true) )
   tests.add( new Test "replace+rollup+nocache", -> setDefaults(true, true, false,false,true,  false) )
   tests.add( new Test "replace+rollup+cache",   -> setDefaults(true, true, false,false,true,  true) )
-  tests.add( new Test "reflow+raw+nocache",     -> setDefaults(true, false,true, false,false, false) )
-  tests.add( new Test "reflow+raw+cache",       -> setDefaults(true, false,true, false,false, true) )
-  tests.add( new Test "reflow+rollup+nocache",  -> setDefaults(true, false,true, false,true,  false) )
-  tests.add( new Test "reflow+rollup+cache",    -> setDefaults(true, false,true, false,true,  true) )
+  tests.add( new Test "reflow+raw+nocache",     -> setDefaults(true, false,true, false,false, false) ) unless iOS
+  tests.add( new Test "reflow+raw+cache",       -> setDefaults(true, false,true, false,false, true) ) unless iOS
+  tests.add( new Test "reflow+rollup+nocache",  -> setDefaults(true, false,true, false,true,  false) ) unless iOS
+  tests.add( new Test "reflow+rollup+cache",    -> setDefaults(true, false,true, false,true,  true) ) unless iOS
   tests.add( new Test "timeout+raw+nocache",    -> setDefaults(true, false,false,true, false, false) )
   tests.add( new Test "timeout+raw+cache",      -> setDefaults(true, false,false,true, false, true) )
   tests.add( new Test "timeout+rollup+nocache", -> setDefaults(true, false,false,true, true,  false) )
