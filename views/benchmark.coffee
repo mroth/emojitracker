@@ -93,7 +93,9 @@ class Test
   deinitFPSHandler: ->
     document.removeEventListener 'fps', @fpsHandler
 
-  fpsAvg: -> @fpsLog.reduce( (x,y) -> x+y ) / @fpsLog.length
+  fpsAvg: ->
+    return null if @fpsLog.length < 1
+    @fpsLog.reduce( (x,y) -> x+y ) / @fpsLog.length
   fpsMin: -> Math.min @fpsLog...
   fpsMax: -> Math.max @fpsLog...
 
