@@ -30,6 +30,8 @@ div#detailview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myMo
         a#jsonbtn.btn.btn-mini href="#" target="new"
           li.icon-code &nbsp;get details as json
 
+javascript:
+  var benchmark_mode = #{@benchmark_mode};
 coffee:
   @popDetails = (char_id) ->
     $.get("/api/details/#{char_id}", (response) ->
@@ -96,6 +98,5 @@ coffee:
       $('#detailview').on 'hide', ->
         stopDetailStreaming()
 
-- unless @benchmark_mode
-  coffee:
-    startScoreStreaming()
+      # let's go crazy
+      startScoreStreaming() unless benchmark_mode
