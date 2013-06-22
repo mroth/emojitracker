@@ -16,7 +16,7 @@ config
 @use_css_sheets = true
 
 # use the 60 events per second capped rollup stream instead of raw?
-@use_capped_stream = false
+@use_capped_stream = true
 
 # some urls
 emojistatic_img_path = 'http://emojistatic.github.io/images/32/'
