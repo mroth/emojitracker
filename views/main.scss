@@ -100,6 +100,12 @@ blockquote p {
 .icon-refresh {
   color: lightgray;
 }
+/* fuck it lets just force proper alignment of the damn twitter button */
+.twitter-count-horizontal {
+  position: relative;
+  top: 6px;
+  left: 22px;
+}
 
 /* we want to stick the byline in a span and apply this so the text-indent in emoji-css works */
 #byline {
