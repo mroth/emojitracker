@@ -100,6 +100,7 @@ get '/application.js' do
 end
 
 get '/assets/main.css' do
+  cache_control :public, max_age: 600  # 10 mins.
   scss :main
 end
 
@@ -107,6 +108,7 @@ end
 # humanized regex: block of 'percent sign followed by two word chars, exactly four in a row'
 # either exactly one or two of the above in a row (to get doublebyte)
 get %r{\A/((?:(?:\%\w{2}){4}){1,2})\z} do |char|
+  cache_control :public, max_age: 6000  # 100 mins.
   unified_id = EmojiData.char_to_unified(char)
   redirect "/details/#{unified_id}"
 end
