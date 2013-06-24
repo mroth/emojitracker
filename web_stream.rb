@@ -1,6 +1,7 @@
 require_relative 'lib/config'
 require 'sinatra'
 require 'oj'
+require 'eventmachine'
 
 ################################################
 # streaming thread for score updates (main page)
@@ -114,4 +115,16 @@ Thread.new do
     end
   end
 
+end
+
+################################################
+# graphite logging for all the streams
+################################################
+@stream_graphite_log_rate = 2 #matches tasseo polling rate so why not
+EM.next_tick do
+  EM::PeriodicTimer.new(@stream_graphite_log_rate) do
+    graphite_dyno_log("stream.raw.clients", conns.count)
+    graphite_dyno_log("stream.eps.clients", eps_conns.count)
+    graphite_dyno_log("stream.detail.clients", detail_conns.count)
+  end
 end
