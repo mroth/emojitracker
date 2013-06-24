@@ -39,6 +39,5 @@ def graphite_dyno_log(metric,count)
     dyno = ENV['PS']
     metric_name = "#{dyno}.#{metric}"
     graphite_log metric_name, count
-    puts "logging metric name: #{metric_name}"
   end
 end

@@ -81,8 +81,7 @@ EM.run do
     tracked_period_rate = tracked_period / @stats_refresh_rate
 
     puts "Terms tracked: #{@tracked} (\u2191#{tracked_period}, +#{tracked_period_rate}/sec.), rate limited: #{@skipped} (+#{@skipped-@skipped_last})"
-    # graphite_log('feeder.updates.rate_per_second', tracked_period_rate)
-    graphite_dyno_log('updates.rate_per_second', tracked_period_rate)
+    graphite_log('feeder.updates.rate_per_second', tracked_period_rate)
 
     @tracked_last = @tracked
     @skipped_last = @skipped
@@ -92,8 +91,7 @@ EM.run do
   EM::PeriodicTimer.new(@redis_check_refresh_rate) do
     info = REDIS.info
     puts "REDIS - used memory: #{info['used_memory_human']}, iops: #{info['instantaneous_ops_per_sec']}"
-    # graphite_log('feeder.redis.used_memory', info['used_memory'])
-    graphite_dyno_log('redis.used_memory', info['used_memory'])
+    graphite_log('feeder.redis.used_memory', info['used_memory'])
     # graphite_log('feeder.redis.iops', info['instantaneous_ops_per_sec'])
   end
 end
