@@ -13,7 +13,6 @@ get '/subscribe' do
   stream(:keep_open) do |out|
     conns << out
     out.callback { conns.delete(out) }
-    out.errback  { conns.delete(out) }
   end
 end
 
@@ -44,8 +43,11 @@ get '/subscribe_60eps' do
   content_type 'text/event-stream'
   stream(:keep_open) do |conn|
     eps_conns << conn
-    conn.callback { eps_conns.delete(conn) }
-    conn.errback  { eps_conns.delete(conn) }
+    puts "STREAM: new eps_stream connection opened from #{request.ip}" if VERBOSE
+    conn.callback do
+      puts "STREAM: eps_stream connection closed from #{request.ip}" if VERBOSE
+      eps_conns.delete(conn)
+    end
   end
 end
 
@@ -99,8 +101,11 @@ get '/subscribe/details/:char' do
   stream(:keep_open) do |out|
     ts = TaggedStream.new(out, params[:char])
     detail_conns << ts
-    out.callback { detail_conns.delete(ts) }
-    out.errback  { detail_conns.delete(ts) }
+    puts "STREAM: new detailstream connection for #{ts.tag} from #{request.ip}" if VERBOSE
+    out.callback do
+      puts "STREAM: detailstream connection closed for #{ts.tag} from #{request.ip}" if VERBOSE
+      detail_conns.delete(ts)
+    end
   end
 end
 
