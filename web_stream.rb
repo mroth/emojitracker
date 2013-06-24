@@ -105,7 +105,12 @@ class WebDetailStreamer < Sinatra::Base
       settings.detail_conns << ts
       puts "STREAM: new detailstream connection for #{ts.tag} from #{request.ip}" if VERBOSE
       out.callback do
-        puts "STREAM: detailstream connection closed for #{ts.tag} from #{request.ip}" if VERBOSE
+        puts "STREAM: detailstream connection closed locally for #{ts.tag} from #{request.ip}" if VERBOSE
+        settings.detail_conns.delete(ts)
+      end
+      out.errback do
+        puts "STREAM: detailstream connection closed externally for #{ts.tag} from #{request.ip}" if VERBOSE
+        settings.detail_conns.close
         settings.detail_conns.delete(ts)
       end
     end
