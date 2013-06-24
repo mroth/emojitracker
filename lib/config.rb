@@ -2,6 +2,9 @@ require 'tweetstream'
 require 'redis'
 require 'uri'
 
+# verbose mode or no
+VERBOSE = ENV["VERBOSE"] || false
+
 # configure tweetstream instance
 TweetStream.configure do |config|
   config.consumer_key       = ENV['CONSUMER_KEY']
@@ -27,6 +30,7 @@ end
 # configure logging to graphite in production
 @hostedgraphite_apikey = ENV['HOSTEDGRAPHITE_APIKEY']
 def graphite_log(metric, count)
+  puts "Graphite log - #{metric}: #{count}" if VERBOSE
   if is_production?
     sock = UDPSocket.new
     sock.send @hostedgraphite_apikey + ".#{metric} #{count}\n", 0, "carbon.hostedgraphite.com", 2003
@@ -35,9 +39,7 @@ end
 
 # same as above but include heroku dyno hostname
 def graphite_dyno_log(metric,count)
-  if is_production?
-    dyno = ENV['PS']
-    metric_name = "#{dyno}.#{metric}"
-    graphite_log metric_name, count
-  end
+  dyno = ENV['PS'] || 'unknown-host'
+  metric_name = "#{dyno}.#{metric}"
+  graphite_log metric_name, count
 end

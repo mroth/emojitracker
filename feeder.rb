@@ -8,7 +8,7 @@ require 'socket'
 require 'eventmachine'
 
 # my options
-VERBOSE = ENV["VERBOSE"] || false
+
 puts "...starting in verbose mode!" if VERBOSE
 $stdout.sync = true
 
