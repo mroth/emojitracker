@@ -105,6 +105,6 @@ EM.run do
     info = REDIS.info
     puts "REDIS - used memory: #{info['used_memory_human']}, iops: #{info['instantaneous_ops_per_sec']}"
     graphite_log('feeder.redis.used_memory', info['used_memory'])
-    graphite_log('feeder.redis.iops', info['instantaneous_ops_per_sec'])
+    # graphite_log('feeder.redis.iops', info['instantaneous_ops_per_sec'])
   end
 end
