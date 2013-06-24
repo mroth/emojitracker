@@ -23,3 +23,22 @@ end
 def is_development?
   ENV["RACK_ENV"] == 'development'
 end
+
+# configure logging to graphite in production
+@hostedgraphite_apikey = ENV['HOSTEDGRAPHITE_APIKEY']
+def graphite_log(metric, count)
+  if is_production?
+    sock = UDPSocket.new
+    sock.send @hostedgraphite_apikey + ".#{metric} #{count}\n", 0, "carbon.hostedgraphite.com", 2003
+  end
+end
+
+# same as above but include heroku dyno hostname
+def graphite_dyno_log(metric,count)
+  if is_production?
+    dyno = ENV['PS']
+    metric_name = "#{dyno}.#{metric}"
+    graphite_log metric_name, count
+    puts "logging metric name: #{me}"
+  end
+end
