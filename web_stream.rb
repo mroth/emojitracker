@@ -1,6 +1,5 @@
 require_relative 'lib/config'
 require 'sinatra/base'
-require 'sinatra/streaming'
 require 'oj'
 require 'eventmachine'
 
@@ -110,7 +109,7 @@ class WebDetailStreamer < Sinatra::Base
       end
       out.errback do
         puts "STREAM: detailstream connection closed externally for #{ts.tag} from #{request.ip}" if VERBOSE
-        settings.detail_conns.close
+        out.close
         settings.detail_conns.delete(ts)
       end
     end
