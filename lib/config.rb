@@ -14,3 +14,12 @@ end
 # db setup
 REDIS_URI = URI.parse(ENV["REDISTOGO_URL"] || ENV["BOXEN_REDIS_URL"] || "redis://localhost:6379")
 REDIS = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password, :driver => :hiredis)
+
+# environment checks
+def is_production?
+  ENV["RACK_ENV"] == 'production'
+end
+
+def is_development?
+  ENV["RACK_ENV"] == 'development'
+end

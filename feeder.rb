@@ -11,10 +11,6 @@ VERBOSE = ENV["VERBOSE"] || false
 puts "...starting in verbose mode!" if VERBOSE
 $stdout.sync = true
 
-def is_production?
-  ENV["RACK_ENV"] == 'production'
-end
-
 # check for development mode with remote redis server, if so refuse to run
 if (REDIS_URI.to_s.match(/redistogo/) && !is_production?)
   Kernel::abort "You shouldn't be using the production redis server with a local version of feeder! Quitting..."
