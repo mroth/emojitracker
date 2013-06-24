@@ -1,5 +1,6 @@
 require_relative 'lib/config'
 require 'sinatra'
+require 'sinatra/streaming'
 require 'oj'
 require 'eventmachine'
 
