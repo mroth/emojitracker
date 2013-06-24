@@ -21,12 +21,12 @@ if (REDIS_URI.to_s.match(/redistogo/) && !is_production?)
 end
 
 # configure logging to graphite in production
-hostedgraphite_apikey = ENV['HOSTEDGRAPHITE_APIKEY']
+@hostedgraphite_apikey = ENV['HOSTEDGRAPHITE_APIKEY']
 def graphite_log(metric, count)
   if is_production?
     sock = UDPSocket.new
     # sock.send hostedgraphite_apikey + ".feeder.terms.tracked 1444\n", 0, "carbon.hostedgraphite.com", 2003
-    sock.send hostedgraphite_apikey + ".#{metric} #{count}\n", 0, "carbon.hostedgraphite.com", 2003
+    sock.send @hostedgraphite_apikey + ".#{metric} #{count}\n", 0, "carbon.hostedgraphite.com", 2003
   end
 end
 
