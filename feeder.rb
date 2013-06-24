@@ -4,15 +4,30 @@ require_relative 'lib/config'
 require 'emoji_data'
 require 'oj'
 require 'colored'
+require 'socket'
 
 # my options
 VERBOSE = ENV["VERBOSE"] || false
 puts "...starting in verbose mode!" if VERBOSE
 $stdout.sync = true
 
-# TODO: check for development mode with remote redis server, if so refuse to run
-if (REDIS_URI.to_s.match(/redistogo/) && ENV["RACK_ENV"] != 'production')
+def is_production?
+  ENV["RACK_ENV"] == 'production'
+end
+
+# check for development mode with remote redis server, if so refuse to run
+if (REDIS_URI.to_s.match(/redistogo/) && !is_production?)
   Kernel::abort "You shouldn't be using the production redis server with a local version of feeder! Quitting..."
+end
+
+# configure logging to graphite in production
+hostedgraphite_apikey = ENV['HOSTEDGRAPHITE_APIKEY']
+def graphite_log(metric, count)
+  if is_production?
+    sock = UDPSocket.new
+    # sock.send hostedgraphite_apikey + ".feeder.terms.tracked 1444\n", 0, "carbon.hostedgraphite.com", 2003
+    sock.send hostedgraphite_apikey + ".#{metric} #{count}\n", 0, "carbon.hostedgraphite.com", 2003
+  end
 end
 
 # SETUP
@@ -77,8 +92,19 @@ EM.run do
   EM::PeriodicTimer.new(@stats_refresh_rate) do
     tracked_period = @tracked-@tracked_last
     tracked_period_rate = tracked_period / @stats_refresh_rate
+
     puts "Terms tracked: #{@tracked} (\u2191#{tracked_period}, +#{tracked_period_rate}/sec.), rate limited: #{@skipped} (+#{@skipped-@skipped_last})"
+    graphite_log('feeder.updates.rate_per_second', tracked_period_rate)
+
     @tracked_last = @tracked
     @skipped_last = @skipped
+  end
+
+  @redis_check_refresh_rate = 60
+  EM::PeriodicTimer.new(@redis_check_refresh_rate) do
+    info = REDIS.info
+    puts "REDIS - used memory: #{info['used_memory_human']}, iops: #{info['instantaneous_ops_per_sec']}"
+    graphite_log('feeder.redis.used_memory', info['used_memory'])
+    graphite_log('feeder.redis.iops', info['instantaneous_ops_per_sec'])
   end
 end
