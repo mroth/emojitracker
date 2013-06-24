@@ -49,12 +49,12 @@ methods related to the streaming UI
 
 @startRawScoreStreaming = ->
   console.log "Subscribing to score stream (raw)"
-  @source = new EventSource('/subscribe')
+  @source = new EventSource('/subscribe/raw')
   @source.onmessage = (event) -> incrementScore(event.data)
 
 @startCappedScoreStreaming = ->
   console.log "Subscribing to score stream (60eps rollup)"
-  @source = new EventSource('/subscribe_60eps')
+  @source = new EventSource('/subscribe/eps')
   @source.onmessage = (event) -> incrementMultipleScores(event.data)
 
 @stopScoreStreaming = ->

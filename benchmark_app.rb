@@ -3,21 +3,23 @@ require 'coffee-script'
 require 'oj'
 require_relative 'lib/config'
 
-get '/benchmark.js' do
-  coffee :benchmark
-end
+class WebBenchmarkApp < Sinatra::Base
+  get '/benchmark.js' do
+    coffee :benchmark
+  end
 
-post '/benchmarks' do
-  if params['report'].nil?
-    puts "Received malformed benchmark submission without a report parameter!"
-    status 400
-    content_type :json
-    Oj.dump 'status' => 'ERROR'
-  else
-    puts "Received benchmark submission: #{params['report']}"
-    REDIS.LPUSH 'benchmark_reports', params['report']
-    status 200
-    content_type :json
-    Oj.dump 'status' => 'OK'
+  post '/benchmarks' do
+    if params['report'].nil?
+      puts "Received malformed benchmark submission without a report parameter!"
+      status 400
+      content_type :json
+      Oj.dump 'status' => 'ERROR'
+    else
+      puts "Received benchmark submission: #{params['report']}"
+      REDIS.LPUSH 'benchmark_reports', params['report']
+      status 200
+      content_type :json
+      Oj.dump 'status' => 'OK'
+    end
   end
 end

@@ -12,8 +12,10 @@ if memcache_servers = ENV["MEMCACHIER_SERVERS"]
 end
 
 require "./web"
-require "./benchmark_app"
+require "./web_stream"
 
 $stdout.sync = true
 use Rack::Deflater
-run Sinatra::Application
+
+map('/') { run WebApp }
+map('/subscribe') { run WebStreamer }
