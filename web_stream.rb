@@ -34,15 +34,15 @@ end
 # 60 events per second rollup streaming thread for score updates
 ################################################
 
-fps_conns = []
+eps_conns = []
 cached_scores = {}
 semaphore = Mutex.new
 
 get '/subscribe_60eps' do
   content_type 'text/event-stream'
   stream(:keep_open) do |conn|
-    fps_conns << conn
-    conn.callback { fps_conns.delete(conn) }
+    eps_conns << conn
+    conn.callback { eps_conns.delete(conn) }
   end
 end
 
@@ -54,7 +54,7 @@ Thread.new do
       cached_scores.clear
     end
 
-    fps_conns.each do |out|
+    eps_conns.each do |out|
       out << "data:#{Oj.dump scores}\n\n" unless scores.empty?
     end
 
