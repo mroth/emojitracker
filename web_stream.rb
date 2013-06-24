@@ -13,6 +13,7 @@ get '/subscribe' do
   stream(:keep_open) do |out|
     conns << out
     out.callback { conns.delete(out) }
+    out.errback  { conns.delete(out) }
   end
 end
 
@@ -44,6 +45,7 @@ get '/subscribe_60eps' do
   stream(:keep_open) do |conn|
     eps_conns << conn
     conn.callback { eps_conns.delete(conn) }
+    conn.errback  { eps_conns.delete(conn) }
   end
 end
 
@@ -98,6 +100,7 @@ get '/subscribe/details/:char' do
     ts = TaggedStream.new(out, params[:char])
     detail_conns << ts
     out.callback { detail_conns.delete(ts) }
+    out.errback  { detail_conns.delete(ts) }
   end
 end
 
