@@ -205,6 +205,10 @@ class WebStreamer < Sinatra::Base
   use WebScoreCachedStreamer
   use WebDetailStreamer
 
+  get '/admin' do
+    slim :stream_admin
+  end
+
   get '/admin/data.json' do
     content_type :json
     Oj.dump(
