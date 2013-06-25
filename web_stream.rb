@@ -4,6 +4,19 @@ require 'delegate'
 require 'oj'
 require 'eventmachine'
 
+##############################################################
+# configure defaults around forced SSE timeouts and the like
+##############################################################
+def to_boolean(s)
+  s and !!s.match(/^(true|t|yes|y|1)$/i)
+end
+
+SSE_FORCE_REFRESH = to_boolean(ENV['SSE_FORCE_REFRESH'] || 'true')
+SSE_SCORE_RETRY_MS        = ENV['SSE_SCORE_RETRY_MS']        || 100
+SSE_DETAIL_RETRY_MS       = ENV['SSE_DETAIL_RETRY_MS']       || 500
+SSE_SCORE_FORCECLOSE_SEC  = ENV['SSE_SCORE_FORCECLOSE_SEC']  || 60
+SSE_DETAIL_FORCECLOSE_SEC = ENV['SSE_DETAIL_FORCECLOSE_SEC'] || 120
+
 ################################################
 # stream object wrapper
 #
@@ -29,6 +42,10 @@ class WrappedStream < DelegateClass(Sinatra::Helpers::Stream)
   def age
     Time.now.to_i - @created_at
   end
+
+  def sse_set_retry(ms)
+    self << "retry:#{ms}\n\n"
+  end
 end
 
 ################################################
@@ -41,8 +58,10 @@ class WebScoreRawStreamer < Sinatra::Base
     content_type 'text/event-stream'
     stream(:keep_open) do |out|
       out = WrappedStream.new(out, request)
+      out.sse_set_retry(SSE_SCORE_RETRY_MS) if SSE_FORCE_REFRESH
       settings.raw_conns << out
       out.callback { settings.raw_conns.delete(out) }
+      if SSE_FORCE_REFRESH then EM.add_timer(SSE_SCORE_FORCECLOSE_SEC) { out.close } end
     end
   end
 
@@ -51,7 +70,6 @@ class WebScoreRawStreamer < Sinatra::Base
     t_redis.psubscribe('stream.score_updates') do |on|
       on.pmessage do |match, channel, message|
         raw_conns.each do |out|
-          # out << "event: #{channel}\n"
           out << "data:#{message}\n\n"
         end
       end
@@ -73,15 +91,14 @@ class WebScoreCachedStreamer < Sinatra::Base
     content_type 'text/event-stream'
     stream(:keep_open) do |conn|
       conn = WrappedStream.new(conn, request)
+      conn.sse_set_retry(SSE_SCORE_RETRY_MS) if SSE_FORCE_REFRESH
       settings.eps_conns << conn
       puts "STREAM: new eps_stream connection opened for #{request.ip}" if VERBOSE
       conn.callback do
         puts "STREAM: eps_stream connection closed for #{request.ip}" if VERBOSE
         settings.eps_conns.delete(conn)
       end
-      # EM.add_timer(30) do
-      #   conn.close
-      # end
+      if SSE_FORCE_REFRESH then EM.add_timer(SSE_SCORE_FORCECLOSE_SEC) { conn.close } end
     end
   end
 
@@ -134,6 +151,7 @@ class WebDetailStreamer < Sinatra::Base
     content_type 'text/event-stream'
     stream(:keep_open) do |out|
       out = WrappedStream.new(out, request)
+      out.sse_set_retry(SSE_DETAIL_RETRY_MS) if SSE_FORCE_REFRESH
       ts = TaggedStream.new(out, params[:char])
       settings.detail_conns << ts
       puts "STREAM: new detailstream connection for #{ts.tag} from #{request.ip}" if VERBOSE
@@ -141,6 +159,7 @@ class WebDetailStreamer < Sinatra::Base
         puts "STREAM: detailstream connection closed for #{ts.tag} from #{request.ip}" if VERBOSE
         settings.detail_conns.delete(ts)
       end
+      if SSE_FORCE_REFRESH then EM.add_timer(SSE_DETAIL_FORCECLOSE_SEC) { out.close } end
     end
   end
 
