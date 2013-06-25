@@ -36,12 +36,22 @@ class WrappedStream < DelegateClass(Sinatra::Helpers::Stream)
     unless request.nil?
       @client_ip = request.ip
       @client_user_agent = request.user_agent
+      @request_path = request.path
     end
   end
 
   # Returns age of stream in seconds as Integer.
   def age
     Time.now.to_i - @created_at
+  end
+
+  def to_hash
+    {
+      'request_path' => @request_path,
+      'created_at' => @created_at,
+      'age' => self.age,
+      'client_user_agent' => @client_user_agent
+    }
   end
 
   def sse_set_retry(ms)
@@ -194,6 +204,17 @@ class WebStreamer < Sinatra::Base
   use WebScoreRawStreamer
   use WebScoreCachedStreamer
   use WebDetailStreamer
+
+  get '/admin/data.json' do
+    content_type :json
+    Oj.dump(
+      {
+        'stream_raw_clients' => WebScoreRawStreamer.connections.map(&:to_hash),
+        'stream_eps_clients' => WebScoreCachedStreamer.connections.map(&:to_hash),
+        #'stream_detail_clients' => WebDetailStreamer.connections.map(&:to_hash)
+      }
+    )
+  end
 
   # graphite logging for all the streams
   @stream_graphite_log_rate = 10
