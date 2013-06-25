@@ -116,6 +116,7 @@ coffee:
 
   $ ->
     refreshData()
+    setInterval refreshData, 10000
     $('#refreshbtn').click ->
       refreshData()
 
