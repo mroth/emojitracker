@@ -1,7 +1,35 @@
 require_relative 'lib/config'
 require 'sinatra/base'
+require 'delegate'
 require 'oj'
 require 'eventmachine'
+
+################################################
+# stream object wrapper
+#
+# not used for much now, but this will make it easier to debug or add behavior
+################################################
+class WrappedStream < DelegateClass(Sinatra::Helpers::Stream)
+  def initialize(wrapped_stream, request=nil)
+    @created_at = Time.now.to_i
+
+    init_client_stats(request)
+
+    super(wrapped_stream)
+  end
+
+  def init_client_stats(request)
+    unless request.nil?
+      @client_ip = request.ip
+      @client_user_agent = request.user_agent
+    end
+  end
+
+  # Returns age of stream in seconds as Integer.
+  def age
+    Time.now.to_i - @created_at
+  end
+end
 
 ################################################
 # streaming thread for score updates (main page)
@@ -12,6 +40,7 @@ class WebScoreRawStreamer < Sinatra::Base
   get '/raw' do
     content_type 'text/event-stream'
     stream(:keep_open) do |out|
+      out = WrappedStream.new(out, request)
       settings.raw_conns << out
       out.callback { settings.raw_conns.delete(out) }
     end
@@ -43,12 +72,16 @@ class WebScoreCachedStreamer < Sinatra::Base
   get '/eps' do
     content_type 'text/event-stream'
     stream(:keep_open) do |conn|
+      conn = WrappedStream.new(conn, request)
       settings.eps_conns << conn
-      puts "STREAM: new eps_stream connection opened from #{request.ip}" if VERBOSE
+      puts "STREAM: new eps_stream connection opened for #{request.ip}" if VERBOSE
       conn.callback do
-        puts "STREAM: eps_stream connection closed from #{request.ip}" if VERBOSE
+        puts "STREAM: eps_stream connection closed for #{request.ip}" if VERBOSE
         settings.eps_conns.delete(conn)
       end
+      # EM.add_timer(30) do
+      #   conn.close
+      # end
     end
   end
 
@@ -100,16 +133,12 @@ class WebDetailStreamer < Sinatra::Base
   get '/details/:char' do
     content_type 'text/event-stream'
     stream(:keep_open) do |out|
+      out = WrappedStream.new(out, request)
       ts = TaggedStream.new(out, params[:char])
       settings.detail_conns << ts
       puts "STREAM: new detailstream connection for #{ts.tag} from #{request.ip}" if VERBOSE
       out.callback do
-        puts "STREAM: detailstream connection closed locally for #{ts.tag} from #{request.ip}" if VERBOSE
-        settings.detail_conns.delete(ts)
-      end
-      out.errback do
-        puts "STREAM: detailstream connection closed externally for #{ts.tag} from #{request.ip}" if VERBOSE
-        out.close
+        puts "STREAM: detailstream connection closed for #{ts.tag} from #{request.ip}" if VERBOSE
         settings.detail_conns.delete(ts)
       end
     end
@@ -140,7 +169,7 @@ class WebStreamer < Sinatra::Base
   use WebDetailStreamer
 
   # graphite logging for all the streams
-  @stream_graphite_log_rate = 2 #matches tasseo polling rate so why not
+  @stream_graphite_log_rate = 10
   EM.next_tick do
     EM::PeriodicTimer.new(@stream_graphite_log_rate) do
       graphite_dyno_log("stream.raw.clients", WebScoreRawStreamer.raw_conns.count)
