@@ -11,7 +11,7 @@ def to_boolean(s)
   s and !!s.match(/^(true|t|yes|y|1)$/i)
 end
 
-SSE_FORCE_REFRESH = to_boolean(ENV['SSE_FORCE_REFRESH'] || 'true')
+SSE_FORCE_REFRESH = to_boolean(ENV['SSE_FORCE_REFRESH'] || 'false')
 SSE_SCORE_RETRY_MS        = ENV['SSE_SCORE_RETRY_MS']        || 100
 SSE_DETAIL_RETRY_MS       = ENV['SSE_DETAIL_RETRY_MS']       || 500
 SSE_SCORE_FORCECLOSE_SEC  = ENV['SSE_SCORE_FORCECLOSE_SEC']  || 60
