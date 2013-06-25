@@ -24,11 +24,10 @@ SSE_DETAIL_FORCECLOSE_SEC = ENV['SSE_DETAIL_FORCECLOSE_SEC'] || 120
 # pass a request object to instantiate some metadata about the stream client
 ################################################
 class WrappedStream < DelegateClass(Sinatra::Helpers::Stream)
-  def initialize(wrapped_stream, request=nil)
+  def initialize(wrapped_stream, request=nil, tag=nil)
     @created_at = Time.now.to_i
-
     init_client_stats(request)
-
+    @tag = tag
     super(wrapped_stream)
   end
 
@@ -37,6 +36,7 @@ class WrappedStream < DelegateClass(Sinatra::Helpers::Stream)
       @client_ip = request.ip
       @client_user_agent = request.user_agent
       @request_path = request.path
+      # @tag = request['char']
     end
   end
 
@@ -45,9 +45,14 @@ class WrappedStream < DelegateClass(Sinatra::Helpers::Stream)
     Time.now.to_i - @created_at
   end
 
+  def match_tag?(tag)
+    @tag == tag
+  end
+
   def to_hash
     {
       'request_path' => @request_path,
+      'tag' => @tag,
       'created_at' => @created_at,
       'age' => self.age,
       'client_ip' => @client_ip,
@@ -158,26 +163,20 @@ end
 # streaming thread for tweet updates (detail pages)
 ################################################
 class WebDetailStreamer < Sinatra::Base
-  class TaggedStream
-    attr_reader :out, :tag
-    def initialize(out,tag=nil)
-      @out = out
-      @tag = tag
-    end
-  end
 
   set :connections, []
+
   get '/details/:char' do
     content_type 'text/event-stream'
     stream(:keep_open) do |out|
-      out = WrappedStream.new(out, request)
+      tag = params[:char]
+      out = WrappedStream.new(out, request, tag)
       out.sse_set_retry(SSE_DETAIL_RETRY_MS) if SSE_FORCE_REFRESH
-      ts = TaggedStream.new(out, params[:char])
-      settings.connections << ts
-      puts "STREAM: new detailstream connection for #{ts.tag} from #{request.ip}" if VERBOSE
+      settings.connections << out
+      puts "STREAM: new detailstream connection for #{tag} from #{request.ip}" if VERBOSE
       out.callback do
-        puts "STREAM: detailstream connection closed for #{ts.tag} from #{request.ip}" if VERBOSE
-        settings.connections.delete(ts)
+        puts "STREAM: detailstream connection closed for #{tag} from #{request.ip}" if VERBOSE
+        settings.connections.delete(out)
       end
       if SSE_FORCE_REFRESH then EM.add_timer(SSE_DETAIL_FORCECLOSE_SEC) { out.close } end
     end
@@ -188,8 +187,8 @@ class WebDetailStreamer < Sinatra::Base
     t_redis.psubscribe('stream.tweet_updates.*') do |on|
       on.pmessage do |match, channel, message|
         channel_id = channel.split('.')[2] #TODO: perf profile this versus a regex later
-        connections.select { |c| c.tag == channel_id}.each do |ts|
-          ts.out.sse_event_data(channel, message)
+        connections.select { |c| c.match_tag?(channel_id) }.each do |conn|
+          conn.sse_event_data(channel, message)
         end
       end
     end
@@ -212,7 +211,7 @@ class WebStreamer < Sinatra::Base
       {
         'stream_raw_clients' => WebScoreRawStreamer.connections.map(&:to_hash),
         'stream_eps_clients' => WebScoreCachedStreamer.connections.map(&:to_hash),
-        'stream_detail_clients' => WebDetailStreamer.connections.map(&:out).map(&:to_hash)
+        'stream_detail_clients' => WebDetailStreamer.connections.map(&:to_hash)
       }
     )
   end
