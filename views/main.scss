@@ -70,7 +70,7 @@
   opacity: 0.4;
   text-decoration: none;
 }
-.styled_tweet.new {
+.new {
   @include animation(highlight_content 0.75s ease-out)
 }
 .styled_tweet strong {

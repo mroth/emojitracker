@@ -1,0 +1,121 @@
+div.container
+  section#status
+    h2
+      | stream admin&nbsp;
+      button.btn.btn-small#refreshbtn force refresh
+
+    div.tabbable
+      ul.nav.nav-tabs
+        li.active
+          a href="#queue_status" data-toggle="tab" queue status
+        li
+          a href="#settings" data-toggle="tab" settings
+      div.tab-content
+        div.tab-pane.active#queue_status
+          div.row
+            div.span6#eps_score
+              h3
+                | eps score streamer&nbsp;
+                small
+                  strong.num N
+                  | &nbsp;total stream(s)
+              table.table.table-striped
+                thead
+                  tr
+                    th request_path
+                    th client
+                    th tag
+                    th age
+                tbody
+            div.span6#detail
+              h3
+                | detail streamer&nbsp;
+                small
+                  strong.num N
+                  | &nbsp;total stream(s)
+              table.table.table-striped
+                thead
+                  tr
+                    th request_path
+                    th client
+                    th tag
+                    th age
+                tbody
+          div.row
+            div.span6#raw
+              h3
+                | detail streamer&nbsp;
+                small
+                  strong.num N
+                  | &nbsp;total stream(s)
+              table.table.table-striped
+                thead
+                  tr
+                    th request_path
+                    th client
+                    th tag
+                    th age
+                tbody
+        div.tab-pane#settings
+          h3 settings
+          small
+            dl
+              dt SSE_FORCE_REFRESH
+              dd = if SSE_FORCE_REFRESH then "TRUE" else "FALSE" end
+              dt SSE_SCORE_RETRY_MS
+              dd = SSE_SCORE_RETRY_MS
+              dt SSE_DETAIL_RETRY_MS
+              dd = SSE_DETAIL_RETRY_MS
+              dt SSE_SCORE_FORCECLOSE_SEC
+              dd = SSE_SCORE_FORCECLOSE_SEC
+              dt SSE_DETAIL_FORCECLOSE_SEC
+              dd = SSE_DETAIL_FORCECLOSE_SEC
+
+
+
+
+coffee:
+  pickPlatformIcon = (agent) ->
+    return "apple" if agent.match(/Macintosh/)
+    return "mobile-phone" if agent.match(/iPhone/)
+    return "tablet" if agent.match(/iPad/)
+    return "linux" if agent.match(/Linux/)
+    return "windows" if agent.match(/Windows/)
+    return "android" if agent.match(/Android/)
+    "globe"
+
+  tagRender = (tag) ->
+    return "-" if tag == null
+    emoji_char = "&#x" + tag
+    "<span class='label label-info'>#{emoji_char} #{tag}</span>"
+
+  renderData = (response) ->
+    renderDataTable(response.stream_eps_clients, 'eps_score')
+    renderDataTable(response.stream_detail_clients, 'detail')
+    renderDataTable(response.stream_raw_clients, 'raw')
+
+  renderDataTable = (response, id) ->
+    id_selector = $("##{id}")
+    id_selector.find('.num').text response.length
+    tbody_selector = id_selector.find('tbody')
+    tbody_selector.empty()
+    for client in response
+      tbody_selector.append("
+        <tr>
+          <td><code class='new'>#{client.request_path}</code></td>
+          <td><i class='icon-#{pickPlatformIcon(client.client_user_agent)}' title='#{client.client_user_agent}'></i> <tt>#{client.client_ip}</tt></td>
+          <td>#{emoji.replace_unified tagRender(client.tag)}</td>
+          <td><span class='badge'><i class='icon-time'></i> #{client.age}</span></td>
+        </tr>
+      ")
+
+  @refreshData = ->
+    $.get("/subscribe/admin/data.json", (response) ->
+      renderData(response)
+    , "json")
+
+  $ ->
+    refreshData()
+    $('#refreshbtn').click ->
+      refreshData()
+
