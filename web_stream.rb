@@ -20,7 +20,8 @@ SSE_DETAIL_FORCECLOSE_SEC = ENV['SSE_DETAIL_FORCECLOSE_SEC'] || 120
 ################################################
 # stream object wrapper
 #
-# not used for much now, but this will make it easier to debug or add behavior
+# handles sending common SSE data, and keeps track of stream age
+# pass a request object to instantiate some metadata about the stream client
 ################################################
 class WrappedStream < DelegateClass(Sinatra::Helpers::Stream)
   def initialize(wrapped_stream, request=nil)
@@ -46,6 +47,14 @@ class WrappedStream < DelegateClass(Sinatra::Helpers::Stream)
   def sse_set_retry(ms)
     self << "retry:#{ms}\n\n"
   end
+
+  def sse_data(data)
+    self << "data:#{data}\n\n"
+  end
+
+  def sse_event_data(event,data)
+    self << "event:#{event}\ndata:#{data}\n\n"
+  end
 end
 
 ################################################
@@ -70,7 +79,7 @@ class WebScoreRawStreamer < Sinatra::Base
     t_redis.psubscribe('stream.score_updates') do |on|
       on.pmessage do |match, channel, message|
         raw_conns.each do |out|
-          out << "data:#{message}\n\n"
+          out.sse_data(message)
         end
       end
     end
@@ -111,7 +120,7 @@ class WebScoreCachedStreamer < Sinatra::Base
       end
 
       eps_conns.each do |out|
-        out << "data:#{Oj.dump scores}\n\n" unless scores.empty?
+        out.sse_data(Oj.dump scores) unless scores.empty?
       end
 
       sleep 0.017 #60fps
@@ -169,8 +178,7 @@ class WebDetailStreamer < Sinatra::Base
       on.pmessage do |match, channel, message|
         channel_id = channel.split('.')[2] #TODO: perf profile this versus a regex later
         detail_conns.select { |c| c.tag == channel_id}.each do |ts|
-          ts.out << "event:#{channel}\n"
-          ts.out << "data:#{message}\n\n"
+          ts.out.sse_event_data(channel, message)
         end
       end
     end
