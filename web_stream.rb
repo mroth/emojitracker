@@ -50,6 +50,7 @@ class WrappedStream < DelegateClass(Sinatra::Helpers::Stream)
       'request_path' => @request_path,
       'created_at' => @created_at,
       'age' => self.age,
+      'client_ip' => @client_ip,
       'client_user_agent' => @client_user_agent
     }
   end
@@ -211,7 +212,7 @@ class WebStreamer < Sinatra::Base
       {
         'stream_raw_clients' => WebScoreRawStreamer.connections.map(&:to_hash),
         'stream_eps_clients' => WebScoreCachedStreamer.connections.map(&:to_hash),
-        #'stream_detail_clients' => WebDetailStreamer.connections.map(&:to_hash)
+        'stream_detail_clients' => WebDetailStreamer.connections.map(&:out).map(&:to_hash)
       }
     )
   end
