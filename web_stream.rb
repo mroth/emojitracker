@@ -162,7 +162,7 @@ class WebDetailStreamer < Sinatra::Base
       out = WrappedStream.new(out, request)
       out.sse_set_retry(SSE_DETAIL_RETRY_MS) if SSE_FORCE_REFRESH
       ts = TaggedStream.new(out, params[:char])
-      settings.detail_conns << ts
+      settings.connections << ts
       puts "STREAM: new detailstream connection for #{ts.tag} from #{request.ip}" if VERBOSE
       out.callback do
         puts "STREAM: detailstream connection closed for #{ts.tag} from #{request.ip}" if VERBOSE
