@@ -3,8 +3,8 @@ emojitrack tracks realtime emoji usage on twitter!
 
 Note: many of the components emojitrack uses have been carved out into independent open-source projects, see the following:
 
- - emoji_data.rb
- - emojistatic
+ - [emoji_data.rb](http://github.com/mroth/emoji_data.rb)
+ - [emojistatic](http://github.com/mroth/emojistatic)
 
 ## Development Setup
 ### Full stack
@@ -33,6 +33,6 @@ Note, if you do this, **DO NOT RUN THE FEEDER PROCESS** as it will risk corrupti
 ## Production setup
 For heroku:
 
-    heroku create --stack cedar --addons redistogo:nano memcachier newrelic:standard
+    heroku create --stack cedar --addons redistogo:nano memcachier:dev newrelic:standard hostedgraphite
     heroku config:add RACK_ENV=production
     heroku config:add CONSUMER_KEY=xxx CONSUMER_SECRET=yyy OAUTH_TOKEN=aaa OAUTH_TOKEN_SECRET=bbb
