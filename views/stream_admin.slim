@@ -2,12 +2,14 @@ div.container
   section#status
     h2
       | stream admin&nbsp;
-      button.btn.btn-small#refreshbtn force refresh
+      
 
     div.tabbable
       ul.nav.nav-tabs
         li.active
           a href="#queue_status" data-toggle="tab" queue status
+        li
+          a href="#event_log" data-toggle="tab" event log
         li
           a href="#settings" data-toggle="tab" settings
       div.tab-content
@@ -56,6 +58,34 @@ div.container
                     th tag
                     th age
                 tbody
+            div.span6#admin
+              h3
+                | admin tool streamer&nbsp;
+                small
+                  strong.num N
+                  | &nbsp;total stream(s) - so meta!
+              table.table.table-striped
+                thead
+                  tr
+                    th request_path
+                    th client
+                    th tag
+                    th age
+                tbody
+          button.btn.btn-small#refreshbtn
+            li.icon-refresh
+            | &nbsp;force refresh
+        div.tab-pane#event_log
+          h3 event log
+          table.table
+            thead
+              tr
+                th event
+                th request_path
+                th client
+                th tag
+                th timestamp
+            tbody
         div.tab-pane#settings
           h3 settings
           small
@@ -111,6 +141,7 @@ coffee:
     renderDataTable(response.stream_eps_clients, 'eps_score')
     renderDataTable(response.stream_detail_clients, 'detail')
     renderDataTable(response.stream_raw_clients, 'raw')
+    renderDataTable(response.stream_admin_clients, 'admin')
 
   renderDataTable = (response, id) ->
     id_selector = $("##{id}")
@@ -127,14 +158,42 @@ coffee:
         </tr>
       ")
 
+  addEntryToEventLog = (client, eventType, eventStyle=null) ->
+    $('#event_log').find('tbody').prepend(
+      """
+      <tr class='new'>
+        <td><span class='label #{eventStyle}'>#{eventType}</span></td>
+        <td><code>#{client.request_path}</code></td>
+        <td>
+          <i class='icon-#{pickPlatformIcon(client.client_user_agent)}' title='#{client.client_user_agent}'></i>
+          <tt>#{client.client_ip}</tt>
+        </td>
+        <td>#{emoji.replace_unified tagRender(client.tag)}</td>
+        <td><span class='badge'><i class='icon-time'></i> #{client.created_at}</span></td>
+      </tr>
+      """
+    )
+
+  newAdminConnect = (event) ->
+    addEntryToEventLog $.parseJSON(event.data), 'CONNECT', 'label-success'
+
+  newAdminDisconnect = (event) ->
+    addEntryToEventLog $.parseJSON(event.data), 'DISCONNECT'
+
   @refreshData = ->
     $.get("/subscribe/admin/data.json", (response) ->
       renderData(response)
     , "json")
 
+  @startAdminStreaming = ->
+    console.log "Subscribing to admin stream"
+    @admin_source = new EventSource("/subscribe/admin/updates.sse")
+    @admin_source.addEventListener("connect", newAdminConnect, false)
+    @admin_source.addEventListener("disconnect", newAdminDisconnect, false)
+
   $ ->
-    refreshData()
+    $('#refreshbtn').click -> refreshData()
+    startAdminStreaming()
     setInterval refreshData, 10000
-    $('#refreshbtn').click ->
-      refreshData()
+    refreshData()
 

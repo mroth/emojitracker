@@ -24,6 +24,8 @@ SSE_DETAIL_FORCECLOSE_SEC = ENV['SSE_DETAIL_FORCECLOSE_SEC'] || 300
 # pass a request object to instantiate some metadata about the stream client
 ################################################
 class WrappedStream < DelegateClass(Sinatra::Helpers::Stream)
+  attr_reader :request_path, :tag, :age, :client_ip, :client_user_agent, :created_at
+
   def initialize(wrapped_stream, request=nil, tag=nil)
     @created_at = Time.now.to_i
     init_client_stats(request)
@@ -60,6 +62,10 @@ class WrappedStream < DelegateClass(Sinatra::Helpers::Stream)
     }
   end
 
+  def to_json
+    Oj.dump self.to_hash
+  end
+
   def sse_set_retry(ms)
     self << "retry:#{ms}\n\n"
   end
@@ -71,6 +77,19 @@ class WrappedStream < DelegateClass(Sinatra::Helpers::Stream)
   def sse_event_data(event,data)
     self << "event:#{event}\ndata:#{data}\n\n"
   end
+end
+
+################################################
+# convenience method for stream connect logging
+################################################
+def log_connect(stream_obj)
+  puts "STREAM: connect for #{stream_obj.request_path} from #{request.ip}" if VERBOSE
+  REDIS.PUBLISH 'stream.admin.connect', stream_obj.to_json
+end
+
+def log_disconnect(stream_obj)
+  puts "STREAM: disconnect for #{stream_obj.request_path} from #{request.ip}" if VERBOSE
+  REDIS.PUBLISH 'stream.admin.disconnect', stream_obj.to_json
 end
 
 ################################################
@@ -118,11 +137,14 @@ class WebScoreCachedStreamer < Sinatra::Base
       conn = WrappedStream.new(conn, request)
       conn.sse_set_retry(SSE_SCORE_RETRY_MS) if SSE_FORCE_REFRESH
       settings.connections << conn
-      puts "STREAM: new eps_stream connection opened for #{request.ip}" if VERBOSE
+      log_connect(conn)
+
       conn.callback do
-        puts "STREAM: eps_stream connection closed for #{request.ip}" if VERBOSE
+        # puts "STREAM: eps_stream connection closed for #{request.ip}" if VERBOSE
+        log_disconnect(conn)
         settings.connections.delete(conn)
       end
+
       if SSE_FORCE_REFRESH then EM.add_timer(SSE_SCORE_FORCECLOSE_SEC) { conn.close } end
     end
   end
@@ -196,14 +218,10 @@ class WebDetailStreamer < Sinatra::Base
 
 end
 
-
 ################################################
-# main master class for the app
+# admin stuff
 ################################################
-class WebStreamer < Sinatra::Base
-  use WebScoreRawStreamer
-  use WebScoreCachedStreamer
-  use WebDetailStreamer
+class WebStreamerAdmin < Sinatra::Base
 
   get '/admin' do
     slim :stream_admin
@@ -215,10 +233,50 @@ class WebStreamer < Sinatra::Base
       {
         'stream_raw_clients' => WebScoreRawStreamer.connections.map(&:to_hash),
         'stream_eps_clients' => WebScoreCachedStreamer.connections.map(&:to_hash),
-        'stream_detail_clients' => WebDetailStreamer.connections.map(&:to_hash)
+        'stream_detail_clients' => WebDetailStreamer.connections.map(&:to_hash),
+        'stream_admin_clients' => WebStreamerAdmin.connections.map(&:to_hash)
       }
     )
   end
+
+  set :connections, []
+  get '/admin/updates.sse' do
+    content_type 'text/event-stream'
+    stream(:keep_open) do |out|
+      out = WrappedStream.new(out, request)
+      settings.connections << out
+      out.callback { settings.connections.delete(out) }
+      if SSE_FORCE_REFRESH then EM.add_timer(300) { out.close } end
+    end
+  end
+
+  Thread.new do
+    t_redis = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password, :driver => :hiredis)
+    t_redis.psubscribe('stream.admin.*') do |on|
+      on.pmessage do |match, channel, message|
+        admin_event = channel.split('.')[2]
+        connections.each {|out| out.sse_event_data(admin_event, message)}
+      end
+    end
+  end
+
+end
+
+################################################
+# main master class for the app
+################################################
+class WebStreamer < Sinatra::Base
+  use WebScoreRawStreamer
+  use WebScoreCachedStreamer
+  use WebDetailStreamer
+  use WebStreamerAdmin
+
+  # post '/cleanup/score' do
+  #   WebScoreCachedStreamer.connections.find_all {|conn| conn.match_ip }
+  # end
+
+  # post '/cleanup/details' do
+  # end
 
   # graphite logging for all the streams
   @stream_graphite_log_rate = 10
