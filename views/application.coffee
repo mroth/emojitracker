@@ -4,9 +4,10 @@ config
 
 # animate ALL the things!
 @css_animation = true
-# TODO: figure out how to profile and either remove cached selectors or enable
-# http://jsperf.com/getelementbyid-vs-keeping-hash-updated/edit
+
+# cache selectors for great justice
 @use_cached_selectors = true
+
 # only one of the below css animation techniques may be set to true
 @replace_technique = false
 @reflow_technique  = false
@@ -17,6 +18,9 @@ config
 
 # use the 60 events per second capped rollup stream instead of raw?
 @use_capped_stream = true
+
+# send cleanup events when closing event streams for SUPER LAME servers like heroku :(
+@force_stream_close = true
 
 # some urls
 emojistatic_img_path = 'http://emojistatic.github.io/images/32/'
@@ -60,15 +64,30 @@ methods related to the streaming UI
 @stopScoreStreaming = ->
   console.log "Unsubscribing to score stream"
   @source.close()
+  forceCloseScoreStream() if @force_stream_close
 
 @startDetailStreaming = (id) ->
   console.log "Subscribing to detail stream for #{id}"
+  @detail_id = id
   @detail_source = new EventSource("/subscribe/details/#{id}")
   @detail_source.addEventListener("stream.tweet_updates.#{id}", processDetailTweetUpdate, false)
 
 @stopDetailStreaming = ->
-  console.log "Unsubscribing to detail stream"
+  console.log "Unsubscribing to detail stream #{@detail_id}"
   @detail_source.close()
+  forceCloseDetailStream(@detail_id) if @force_stream_close
+
+@forceCloseDetailStream = (id) ->
+  console.log "Forcing disconnect cleanup for #{id}..."
+  $.post "/subscribe/cleanup/details/#{id}", null, (data) ->
+    console.log(" ...Received #{JSON.stringify data} from server.")
+  true
+
+@forceCloseScoreStream =  ->
+  console.log "Forcing disconnect cleanup for score stream..."
+  $.post "/subscribe/cleanup/scores", null, (data) ->
+    console.log(" ...Received #{JSON.stringify data} from server.")
+  true
 
 processDetailTweetUpdate = (event) ->
   appendTweetList $.parseJSON(event.data), true
