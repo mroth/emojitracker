@@ -104,7 +104,8 @@ class WebScoreRawStreamer < Sinatra::Base
       out = WrappedStream.new(out, request)
       out.sse_set_retry(SSE_SCORE_RETRY_MS) if SSE_FORCE_REFRESH
       settings.connections << out
-      out.callback { settings.connections.delete(out) }
+      log_connect(out)
+      out.callback { log_disconnect(out); settings.connections.delete(out) }
       if SSE_FORCE_REFRESH then EM.add_timer(SSE_SCORE_FORCECLOSE_SEC) { out.close } end
     end
   end
@@ -138,9 +139,7 @@ class WebScoreCachedStreamer < Sinatra::Base
       conn.sse_set_retry(SSE_SCORE_RETRY_MS) if SSE_FORCE_REFRESH
       settings.connections << conn
       log_connect(conn)
-
       conn.callback do
-        # puts "STREAM: eps_stream connection closed for #{request.ip}" if VERBOSE
         log_disconnect(conn)
         settings.connections.delete(conn)
       end
@@ -195,9 +194,9 @@ class WebDetailStreamer < Sinatra::Base
       out = WrappedStream.new(out, request, tag)
       out.sse_set_retry(SSE_DETAIL_RETRY_MS) if SSE_FORCE_REFRESH
       settings.connections << out
-      puts "STREAM: new detailstream connection for #{tag} from #{request.ip}" if VERBOSE
+      log_connect(out)
       out.callback do
-        puts "STREAM: detailstream connection closed for #{tag} from #{request.ip}" if VERBOSE
+        log_disconnect(out)
         settings.connections.delete(out)
       end
       if SSE_FORCE_REFRESH then EM.add_timer(SSE_DETAIL_FORCECLOSE_SEC) { out.close } end
@@ -245,7 +244,8 @@ class WebStreamerAdmin < Sinatra::Base
     stream(:keep_open) do |out|
       out = WrappedStream.new(out, request)
       settings.connections << out
-      out.callback { settings.connections.delete(out) }
+      log_connect(out)
+      out.callback { log_disconnect(out); settings.connections.delete(out) }
       if SSE_FORCE_REFRESH then EM.add_timer(300) { out.close } end
     end
   end
