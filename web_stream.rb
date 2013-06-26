@@ -212,12 +212,23 @@ class WebStreamer < Sinatra::Base
   use WebDetailStreamer
   use WebStreamerAdmin
 
-  # post '/cleanup/score' do
-  #   WebScoreCachedStreamer.connections.find_all {|conn| conn.match_ip }
-  # end
+  # cleanup methods for force a stream disconnect on servers like heroku where server cant detect it :(
+  post '/cleanup/scores' do
+    puts "CLEANUP: force scores disconnect for #{request.ip}" if VERBOSE
+    matched_conns = WebScoreCachedStreamer.connections.select { |conn| conn.client_ip == request.ip }
+    matched_conns.each(&:close)
+    content_type :json
+    Oj.dump( { 'status' => 'OK', 'closed' => matched_conns.count } )
+  end
 
-  # post '/cleanup/details' do
-  # end
+  post '/cleanup/details/:id' do
+    id = params[:id]
+    puts "CLEANUP: force details #{id} disconnect for #{request.ip}" if VERBOSE
+    matched_conns = WebDetailStreamer.connections.select { |conn| conn.client_ip == request.ip  && conn.tag == id}
+    matched_conns.each(&:close)
+    content_type :json
+    Oj.dump( { 'status' => 'OK', 'closed' => matched_conns.count } )
+  end
 
   # graphite logging for all the streams
   @stream_graphite_log_rate = 10
