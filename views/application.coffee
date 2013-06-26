@@ -61,10 +61,10 @@ methods related to the streaming UI
   @source = new EventSource('/subscribe/eps')
   @source.onmessage = (event) -> incrementMultipleScores(event.data)
 
-@stopScoreStreaming = ->
+@stopScoreStreaming = (async=true) ->
   console.log "Unsubscribing to score stream"
   @source.close()
-  forceCloseScoreStream() if @force_stream_close
+  forceCloseScoreStream(async) if @force_stream_close
 
 @startDetailStreaming = (id) ->
   console.log "Subscribing to detail stream for #{id}"
@@ -72,21 +72,31 @@ methods related to the streaming UI
   @detail_source = new EventSource("/subscribe/details/#{id}")
   @detail_source.addEventListener("stream.tweet_updates.#{id}", processDetailTweetUpdate, false)
 
-@stopDetailStreaming = ->
+@stopDetailStreaming = (async=true) ->
   console.log "Unsubscribing to detail stream #{@detail_id}"
   @detail_source.close()
-  forceCloseDetailStream(@detail_id) if @force_stream_close
+  forceCloseDetailStream(@detail_id, async) if @force_stream_close
 
-@forceCloseDetailStream = (id) ->
+@forceCloseDetailStream = (id, async=true) ->
   console.log "Forcing disconnect cleanup for #{id}..."
-  $.post "/subscribe/cleanup/details/#{id}", null, (data) ->
-    console.log(" ...Received #{JSON.stringify data} from server.")
+  $.ajax({
+      type: 'POST'
+      url: "/subscribe/cleanup/details/#{id}"
+      success: (data) ->
+        console.log(" ...Received #{JSON.stringify data} from server.")
+      async: async
+    })
   true
 
-@forceCloseScoreStream =  ->
+@forceCloseScoreStream = (async=true) ->
   console.log "Forcing disconnect cleanup for score stream..."
-  $.post "/subscribe/cleanup/scores", null, (data) ->
-    console.log(" ...Received #{JSON.stringify data} from server.")
+  $.ajax({
+      type: 'POST'
+      url: "/subscribe/cleanup/scores"
+      success: (data) ->
+        console.log(" ...Received #{JSON.stringify data} from server.")
+      async: async
+    })
   true
 
 processDetailTweetUpdate = (event) ->

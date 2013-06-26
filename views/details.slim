@@ -41,5 +41,7 @@ coffee:
       startDetailStreaming(char_id)
     , "json")
 
+    $(window).unload ->
+      stopDetailStreaming(false)
     #history.replaceState(null,null,"/#{char_char}") if emoji.replace_mode == 'unified'
     #holdoff on above until we are sure it wont fuck with twitter buttons etc

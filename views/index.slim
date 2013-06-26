@@ -96,3 +96,5 @@ coffee:
 
       # let's go crazy
       startScoreStreaming() unless benchmark_mode
+      $(window).unload ->
+        stopScoreStreaming(false)
