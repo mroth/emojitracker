@@ -30,7 +30,7 @@ end
 # configure logging to graphite in production
 def graphite_log(metric, count)
   @hostedgraphite_apikey = ENV['HOSTEDGRAPHITE_APIKEY']
-  puts "Graphite log - #{metric}: #{count}" if VERBOSE
+  # puts "Graphite log - #{metric}: #{count}" if VERBOSE
   if is_production?
     sock = UDPSocket.new
     sock.send @hostedgraphite_apikey + ".#{metric} #{count}\n", 0, "carbon.hostedgraphite.com", 2003
