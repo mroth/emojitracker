@@ -185,6 +185,8 @@ class WebStreamerAdmin < Sinatra::Base
       settings.connections << out
       log_connect(out)
       out.callback { log_disconnect(out); settings.connections.delete(out) }
+
+      EM.add_periodic_timer(30) { out.sse_data('.') } #ghetto keepalive TODO: do me the right way
       if SSE_FORCE_REFRESH then EM.add_timer(300) { out.close } end
     end
   end
