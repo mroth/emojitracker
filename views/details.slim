@@ -20,8 +20,12 @@ div.container
             dt current popularity
             dd.badge.badge-info = "\##{@emoji_char_rank}"
 
-        a.btn.btn-mini href="/api/details/#{@emoji_char.unified}"
-          li.icon-code &nbsp;get details as json
+        div
+          a.twitter-share-button href="https://twitter.com/share" data-lang="en" data-count="horizontal" data-related="rocketws,mroth" data-hashtags="emojitracker" data-dnt="true" data-text="#{@emoji_char.name} #{@emoji_char.char}, ranked ##{@emoji_char_rank} out of 842" data-url="http://emojitracker.com/details/#{@emoji_char.unified}" Tweet
+        br
+        div
+          a.btn.btn-mini href="/api/details/#{@emoji_char.unified}"
+            li.icon-code &nbsp;get details as json
 
       section#tweets.span9
         h3
@@ -32,6 +36,9 @@ div.container
 javascript:
   var char_id = "#{@emoji_char.unified}";
   var char_char = "#{@emoji_char.char}";
+  var char_name = "#{@emoji_char.name}";
+  var char_rank = "#{@emoji_char_rank}";
+
 coffee:
   $ ->
     $('h2').html emoji.replace_unified( $('h2').text() ) #js-emojify the h2 for shit browsers
