@@ -34,7 +34,7 @@ inits
 
 @iOS = false
 p = navigator.platform
-@iOS = true if( p == 'iPad' || p == 'iPhone' || p == 'iPod' )
+@iOS = true if( p == 'iPad' || p == 'iPhone' || p == 'iPod' || p == 'iPhone Simulator' || p == 'iPad Simulator' )
 
 ###
 methods related to the polling UI

@@ -81,7 +81,7 @@ coffee:
       #$('.emoji_char').tooltip({'placement':'top', 'trigger':'hover'})
 
       # intercept clicks for popup modal instead
-      unless iOS
+      unless @iOS
         $('#data').click (event) ->
           $tgt = $ event.target
           $a = $tgt.closest('a')
