@@ -109,10 +109,16 @@ coffee:
       # let's go crazy
       #startScoreStreaming() unless benchmark_mode
       unless benchmark_mode
-        $('#disclaimer').modal({ keyboard: true, backdrop: 'static' })
-        $('#okbtn').click -> startScoreStreaming()
-        $('#disclaimer').keypress (event) ->
-          $('#okbtn').click() if (event.keyCode == 13)
+        if $.cookie("emojitracker_disclaimer") == "OK"
+          console.log "Disclaimer agreed to, starting automatically"
+          startScoreStreaming()
+        else
+          $('#disclaimer').modal({ keyboard: true, backdrop: 'static' })
+          $('#okbtn').click ->
+            $.cookie("emojitracker_disclaimer", "OK");
+            startScoreStreaming()
+          $('#disclaimer').keypress (event) ->
+            $('#okbtn').click() if (event.keyCode == 13)
 
       $(window).unload ->
         stopScoreStreaming(false)
