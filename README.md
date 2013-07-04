@@ -1,5 +1,5 @@
 # emojitrack
-emojitrack tracks realtime emoji usage on twitter!
+emojitrack tracks realtime emoji usage on twitter! it takes advantage of a number of technologies, notably the twitter streaming API, redis, SSE, and other good stuff.
 
 Note: many of the components emojitrack uses have been carved out into independent open-source projects, see the following:
 
