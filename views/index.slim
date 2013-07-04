@@ -30,6 +30,17 @@ div#detailview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myMo
         a#jsonbtn.btn.btn-mini href="#" target="new"
           li.icon-code &nbsp;get details as json
 
+div#disclaimer.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+  div.modal-header
+    / button.close type="button" data-dismiss="modal" aria-hidden="true" title="close" &times;
+    h3 Epilepsy Warning
+  div.modal-body
+    p emojitracker is an experiment in realtime visualization of all emoji symbols used on twitter.
+    p it updates at the speed of updates on twitter in realtime, and thus contains rapidly updating visuals that may possibly cause problems for those sensitive to such things?  I'm not sure, but I don't want to risk it, so here is a warning!
+  div.modal-footer
+    a#okbtn.btn.btn-primary href="#" data-dismiss="modal" Proceed
+    a.btn href="#" data-dismiss="modal" No thanks
+
 javascript:
   var benchmark_mode = #{@benchmark_mode};
 coffee:
@@ -95,6 +106,12 @@ coffee:
         stopDetailStreaming()
 
       # let's go crazy
-      startScoreStreaming() unless benchmark_mode
+      #startScoreStreaming() unless benchmark_mode
+      unless benchmark_mode
+        $('#disclaimer').modal({ keyboard: true, backdrop: 'static' })
+        $('#okbtn').click -> startScoreStreaming()
+        $('#disclaimer').keypress (event) ->
+          $('#okbtn').click() if (event.keyCode == 13)
+
       $(window).unload ->
         stopScoreStreaming(false)
