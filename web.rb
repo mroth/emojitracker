@@ -44,6 +44,11 @@ class WebApp < Sinatra::Base
     slim :index
   end
 
+  get '/d/:char' do
+    cache_control :public, max_age: 60000  # 1000 mins.
+    redirect "/details/#{params[:char]}"
+  end
+
   get '/details/:char' do
     cache_control :public, max_age: 600  # 10 mins.
 
