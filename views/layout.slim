@@ -3,7 +3,7 @@ html
   head
     meta charset="utf-8"
     title emojitracker: realtime emoji use on twitter
-    /link rel="icon" type="image/png" href="http://mroth.github.io/emojistatic/images/32/1f4a9.png"
+    link rel="icon" type="image/png" href="http://emojistatic.github.io/images/32/1f4ab.png"
     meta name="viewport" content="width=device-width, initial-scale=1.0"
 
     /external libraries loaded via CDN
@@ -37,7 +37,7 @@ html
   body
     div.navbar.navbar-static-top
       div.navbar-inner
-        a.brand href="/" emojitracker
+        a.brand.emojifont-restricted href="/" emojitracker
         ul.nav.pull-right
           li.dropdown
             a.dropdown-toggle data-toggle="dropdown"
@@ -69,5 +69,5 @@ html
 
       coffee:
         $ ->
-          $('a.brand').html emoji.replace_colons(':shit:') + ' emojitracker<small class="hidden-phone">: realtime emoji use on twitter</small>'
+          $('a.brand').html emoji.replace_colons(':dizzy:') + ' emojitracker<small class="hidden-phone">: realtime emoji use on twitter</small>'
           $('#aboutview #byline').html emoji.replace_colons( $('#aboutview #byline').html() )
