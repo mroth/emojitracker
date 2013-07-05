@@ -52,6 +52,8 @@ html
                   a href="/subscribe/admin" Admin: Stream Pool
                 li
                   a href="/benchmark" Admin: FPS Benchmark
+        / a.twitter-share-button.pull-right.visible-desktop href="https://twitter.com/share" data-lang="en" data-count="none" data-related="rocketws,mroth" data-dnt="true" data-text="emojitracker: visualizing realtime emoji use on twitter" data-url="http://emojitracker.com/" Tweet
+        / a.twitter-follow-button.pull-right.visible-desktop href="https://twitter.com/emojitracker" data-show-count="false" data-dnt="true" Follow @emojitracker
 
     == yield
 
@@ -61,9 +63,10 @@ html
         h3.emojifont-restricted about emojitracker
       div.modal-body
         p this is an experiment in realtime tracking of all emoji used on twitter.  it takes advantage of a number of technologies, notably the twitter streaming API, redis, SSE, and other good stuff.  If you're a nerd, you can <a href="http://github.com/mroth/emojitrack">check out the code on github</a> and make it better!
-        p so yeah, something else here!
-        h4 like it? spread the word
-        p tweet/like buttons and shit will go here
+        h4 like it? spread the word!
+        p
+          a.twitter-share-button href="https://twitter.com/share" data-lang="en" data-count="horizontal" data-related="rocketws,mroth" data-dnt="true" data-text="emojitracker: visualizing realtime emoji use on twitter" data-url="http://emojitracker.com/" Tweet
+          a.twitter-follow-button href="https://twitter.com/emojitracker" data-show-count="false" data-show-screen-name="true" data-dnt="true" Follow @emojitracker
       div.modal-footer
         span#byline.emojifont-restricted built with :heart: in nyc.  this is a <a href="http://rocketws.com" target="new">rocket workshop :rocket:</a> project.
 

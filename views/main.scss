@@ -106,7 +106,16 @@ blockquote p {
   top: 6px;
   left: 22px;
 }
-
+.navbar .twitter-share-button {
+  position: relative;
+  top: 10px;
+  // left: 32px;
+}
+.navbar .twitter-follow-button {
+  position: relative;
+  top: 10px;
+  margin-right: 4px;
+}
 /* we want to stick the byline in a span and apply this so the text-indent in emoji-css works */
 #byline {
   text-align: left;
