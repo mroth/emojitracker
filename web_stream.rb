@@ -17,6 +17,7 @@ SSE_DETAIL_RETRY_MS       = ENV['SSE_DETAIL_RETRY_MS']       || 500
 SSE_SCORE_FORCECLOSE_SEC  = ENV['SSE_SCORE_FORCECLOSE_SEC']  || 300
 SSE_DETAIL_FORCECLOSE_SEC = ENV['SSE_DETAIL_FORCECLOSE_SEC'] || 300
 
+ENABLE_RAW_STREAM = to_boolean(ENV['ENABLE_RAW_STREAM'] || 'true')
 
 ################################################
 # convenience method for stream connect logging
@@ -49,12 +50,15 @@ class WebScoreRawStreamer < Sinatra::Base
     end
   end
 
-  Thread.new do
-    t_redis = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password, :driver => :hiredis)
-    t_redis.psubscribe('stream.score_updates') do |on|
-      on.pmessage do |match, channel, message|
-        connections.each do |out|
-          out.sse_data(message)
+  #allow raw stream to be disabled since we arent using it for anything official now and will save on redis connections
+  if ENABLE_RAW_STREAM
+    Thread.new do
+      t_redis = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password, :driver => :hiredis)
+      t_redis.psubscribe('stream.score_updates') do |on|
+        on.pmessage do |match, channel, message|
+          connections.each do |out|
+            out.sse_data(message)
+          end
         end
       end
     end
