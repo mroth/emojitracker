@@ -250,15 +250,24 @@ Secret disco mode (easter egg)
 ###
 @enableDiscoMode = () ->
   @disco_time = true
+  console.log "woo disco time!!!!"
   $('body').append("<div id='discoball'></div>")
   $('#discoball').focus()
-  disco_embed = "
-  <audio autoplay='autoplay'>
-    <source src='http://mroth.info/disco/getlucky-64.mp3' type='audio/mpeg' />
-    <source src='http://mroth.info/disco/getlucky-64.ogg' type='audio/ogg' />
-  </audio>
-  "
-  $('#discoball').html(disco_embed)
+  
+  start_music = ->
+    @audio = new Audio();
+    canPlayOgg = !!audio.canPlayType && audio.canPlayType('audio/ogg; codecs="vorbis"') != ""
+    canPlayMP3 = !!audio.canPlayType && audio.canPlayType('audio/mpeg; codecs="mp3"') != ""
+    if canPlayMP3
+      console.log "can haz play mp3"
+      @audio.setAttribute("src","/disco/getlucky-64.mp3")
+    else if canPlayOgg
+      console.log "can haz play ogg"
+      @audio.setAttribute("src","/disco/getlucky-64.ogg")
+    @audio.load()
+    @audio.play()
+  setTimeout start_music, 2000
+
   $('body').addClass('disco')
   $('.emoji_char').addClass('disco')
   $('.navbar').addClass('navbar-inverse')
@@ -269,7 +278,8 @@ Secret disco mode (easter egg)
   $('#discoball').removeClass('in-position')
   $('.disco').removeClass('disco')
   $('.navbar').removeClass('navbar-inverse')
-  kill_music = -> $('#discoball').empty().remove()
+  
+  kill_music = -> @audio.pause()
   setTimeout kill_music, 2000
 
 initDiscoMode = () ->
