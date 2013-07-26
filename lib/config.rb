@@ -39,7 +39,7 @@ end
 
 # same as above but include heroku dyno hostname
 def graphite_dyno_log(metric,count)
-  dyno = ENV['PS'] || 'unknown-host'
+  dyno = ENV['DYNO'] || 'unknown-host'
   metric_name = "#{dyno}.#{metric}"
   graphite_log metric_name, count
 end
