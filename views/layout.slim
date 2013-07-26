@@ -57,6 +57,13 @@ html
 
     == yield
 
+    hr
+    div.container.hide#footer
+      p#footline
+        | :dizzy:<a href="http://twitter.com/emojitracker">emojitracker</a> is brought to you with :heart: by :man:<a href="http://twitter.com/mroth">mroth</a> and :rocket:<a href="http://twitter.com/rocketws">rocketws</a> &mdash; <a href="#aboutview" data-toggle="modal">more info</a>
+      br
+      br
+
     div#aboutview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
       div.modal-header
         button.close type="button" data-dismiss="modal" aria-hidden="true" &times;
@@ -74,3 +81,7 @@ html
         $ ->
           $('a.brand').html emoji.replace_colons(':dizzy:') + ' emojitracker<small class="hidden-phone">: realtime emoji use on twitter</small>'
           $('#aboutview #byline').html emoji.replace_colons( $('#aboutview #byline').html() )
+          $('#footline').html emoji.replace_colons( $('#footline').html() )
+          unhide_footer = -> $('#footer').show()
+          setTimeout unhide_footer, 1000
+
