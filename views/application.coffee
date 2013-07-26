@@ -107,6 +107,12 @@ processDetailTweetUpdate = (event) ->
 index page UI helpers
 ###
 
+formatNumberWithCommas = (n) ->
+  if n > 9999
+    return (n + "").replace(/\B(?=(\d\d\d)+(\.|$))/g, ",")
+  else
+    return (n + "")
+
 # redraw the entire emoji grid and scores based on data
 drawEmojiStats = (stats, callback) ->
   selector = $("#data")
@@ -118,7 +124,7 @@ drawEmojiStats = (stats, callback) ->
         <a href='/details/#{emoji_char.id}' title='#{emoji_char.name}' data-id='#{emoji_char.id}'>
         <li class='emoji_char' id='#{emoji_char.id}' data-title='#{emoji_char.name}'>
           <span class='char emojifont'>#{emoji.replace_unified(emoji_char.char)}</span>
-          <span class='score' id='score-#{emoji_char.id}'>#{emoji_char.score}</span>
+          <span class='score' id='score-#{emoji_char.id}'>#{formatNumberWithCommas(emoji_char.score)}</span>
         </li>
         </a>"
   callback() if (callback)
@@ -146,7 +152,7 @@ incrementScore = (id, incrby=1) ->
     score_selector = document.getElementById("score-#{id}")
     container_selector = document.getElementById(id)
 
-  score_selector.innerHTML = (@score_cache[id] += incrby);
+  score_selector.innerHTML = formatNumberWithCommas(@score_cache[id] += incrby);
   if css_animation
     # various ways to do this....
     # some discussion at http://stackoverflow.com/questions/12814612/css3-transition-to-highlight-new-elements-created-in-jquery
