@@ -35,6 +35,7 @@
 }
 .emoji_char > .score {
    padding-left: 10px;
+   font-size: 0.96em;
 }
 .emoji_char:hover {
   @include box-shadow(inset 0 0 30px pink);
