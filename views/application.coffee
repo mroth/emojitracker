@@ -20,7 +20,8 @@ config
 @use_capped_stream = true
 
 # send cleanup events when closing event streams for SUPER LAME servers like heroku :(
-@force_stream_close = true
+# heroku labs:enable websockets may now resolve this!
+@force_stream_close = false
 
 # some urls
 emojistatic_img_path = 'http://emojistatic.github.io/images/32/'
