@@ -47,7 +47,7 @@ GEM
       rack (>= 0.4)
     rack-protection (1.5.1)
       rack
-    redis (3.0.4)
+    redis (3.0.6)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -97,7 +97,7 @@ DEPENDENCIES
   newrelic_rpm
   oj (~> 2.2.3)
   rack-cache
-  redis (~> 3.0.4)
+  redis (~> 3.0.6)
   rspec (~> 2.13.0)
   sass
   sinatra (~> 1.4.4)

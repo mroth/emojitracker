@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby '2.0.0'
 
 group :web, :feeder do
-  gem 'redis', '~> 3.0.4'
+  gem 'redis', '~> 3.0.6'
   gem 'hiredis', '~> 0.4.5'
   gem 'oj', '~> 2.2.3'
   gem 'emoji_data', '~> 0.0.1'
