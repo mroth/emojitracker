@@ -1,17 +1,17 @@
 source 'https://rubygems.org'
-ruby '1.9.3'
+ruby '2.0.0'
 
 group :web, :feeder do
-  gem 'redis', '~> 3.0.4'
+  gem 'redis', '~> 3.0.6'
   gem 'hiredis', '~> 0.4.5'
-  gem 'oj', '~> 2.0.14'
+  gem 'oj', '~> 2.2.3'
   gem 'emoji_data', '~> 0.0.1'
   # gem 'emoji_data', :git => 'git@github.com:mroth/emoji_data.rb.git'
 end
 
 group :web do
-  gem 'sinatra', '~> 1.4.3'
-  gem 'slim', '~> 2.0.0'
+  gem 'sinatra', '~> 1.4.4'
+  gem 'slim', '~> 2.0.2'
   gem 'coffee-script'
   gem 'sass', :require => 'sass'
   gem 'thin', '~> 1.5'
@@ -21,7 +21,7 @@ group :web do
 end
 
 group :feeder do
-  gem 'tweetstream', '~> 2.5.0'
+  gem 'tweetstream', '~> 2.6.0'
   gem 'colored'
 end
 
