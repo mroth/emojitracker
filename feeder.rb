@@ -12,6 +12,9 @@ require 'eventmachine'
 puts "...starting in verbose mode!" if VERBOSE
 $stdout.sync = true
 
+# in production, load newrelic
+require 'newrelic_rpm' if is_production?
+
 # check for development mode with remote redis server, if so refuse to run
 if (REDIS_URI.to_s.match(/redistogo/) && !is_production?)
   Kernel::abort "You shouldn't be using the production redis server with a local version of feeder! Quitting..."
