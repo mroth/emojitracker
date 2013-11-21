@@ -10,8 +10,8 @@ group :web, :feeder do
 end
 
 group :web do
-  gem 'sinatra', '~> 1.4.3'
-  gem 'slim', '~> 2.0.0'
+  gem 'sinatra', '~> 1.4.4'
+  gem 'slim', '~> 2.0.2'
   gem 'coffee-script'
   gem 'sass', :require => 'sass'
   gem 'thin', '~> 1.5'
