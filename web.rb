@@ -35,12 +35,20 @@ class WebApp < Sinatra::Base
   get '/' do
     cache_control :public, max_age: 600  # 10 mins. #disable until password is gone
     # protected! if ENV['RACK_ENV'] == 'production'
+    @kiosk_mode = false
     @benchmark_mode = false
     slim :index
   end
 
   get '/benchmark' do
+    @kiosk_mode = false
     @benchmark_mode = true
+    slim :index
+  end
+
+  get '/kiosk' do
+    @kiosk_mode = true
+    @benchmark_mode = false
     slim :index
   end
 
@@ -109,6 +117,11 @@ class WebApp < Sinatra::Base
   get '/assets/main.css' do
     cache_control :public, max_age: 600  # 10 mins.
     scss :main
+  end
+
+  get '/assets/kiosk.css' do
+    cache_control :public, max_age: 600  # 10 mins.
+    scss :kiosk
   end
 
   # regex match for how sinatra sees unicode emoji chars in routing

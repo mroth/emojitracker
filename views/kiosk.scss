@@ -1,0 +1,36 @@
+/* lets just override the main.css with changes here */
+.navbar,#footer {
+  display: none;
+  opacity: 0;
+}
+#data {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* small mode */
+// .emoji_char {
+//   width: 72px;
+//   padding-right: 5px;
+//   white-space: nowrap;
+// }
+// .emoji_char > .char {
+//   font-size: 16px;
+// }
+// .emoji_char > .score {
+//    padding-left: 0px;
+//    padding-right: 0px;
+//    font-size: 0.7em;
+// }
+
+/* tile mode */
+.emoji_char {
+  width: 36px;
+  padding: 6px;
+}
+.emoji_char > .char {
+  font-size: 32px;
+}
+.emoji_char > .score {
+  display: none;
+}
