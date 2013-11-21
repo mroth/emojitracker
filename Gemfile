@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '1.9.3'
+ruby '2.0.0'
 
 group :web, :feeder do
   gem 'redis', '~> 3.0.4'
@@ -21,7 +21,7 @@ group :web do
 end
 
 group :feeder do
-  gem 'tweetstream', '~> 2.5.0'
+  gem 'tweetstream', '~> 2.6.0'
   gem 'colored'
 end
 
