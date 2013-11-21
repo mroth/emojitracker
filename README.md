@@ -8,7 +8,7 @@ Note: many of the components emojitrack uses have been carved out into independe
 
 ## Development Setup
 ### Full stack
- 1. Make sure you have Ruby 1.9.3 installed (preferably managed with RVM or rbenv so that the `.ruby-version` for this repository will be picked up).  We require 1.9.3 because TweetStream is not compatible with 2.0 yet.
+ 1. Make sure you have Ruby 2.0.0 installed (preferably managed with RVM or rbenv so that the `.ruby-version` for this repository will be picked up).
  1. Get the repository and basic dependencies going:
 
  		git clone mroth/emojitrack
