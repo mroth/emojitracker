@@ -195,6 +195,9 @@ String.prototype.linkifyUrls = () ->
   this.replace /(https?:\/\/t.co\/\w+)/g, "<a href='$1' target='_blank'>$1</a>"
 String.prototype.linkify = () ->
   this.linkifyUrls().linkifyUsernames().linkifyHashtags()
+String.prototype.endsWith = (suffix) ->
+  @indexOf(suffix, @length - suffix.length) isnt -1
+
 
 formattedTweet = (tweet, new_marker = false) ->
   tweet_url = "https://twitter.com/#{tweet.screen_name}/status/#{tweet.id}"
