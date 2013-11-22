@@ -1,47 +1,72 @@
+/* CSS hacks for a 1080p projector kiosk mode */
 /* lets just override the main.css with changes here */
-.navbar,#footer {
-  display: none;
-  opacity: 0;
-}
-#data {
-  margin-left: 10px;
-  margin-right: 10px;
-}
 
 /* small mode */
-// .emoji_char {
-//   width: 72px;
-//   padding-right: 5px;
-//   white-space: nowrap;
-// }
-// .emoji_char > .char {
-//   font-size: 16px;
-// }
-// .emoji_char > .score {
-//    padding-left: 0px;
-//    padding-right: 0px;
-//    font-size: 0.7em;
-// }
+body.kiosk.small {
+  .emoji_char {
+    width: 72px;
+    padding-right: 5px;
+    white-space: nowrap;
+  }
+  .emoji_char > .char {
+    font-size: 16px;
+  }
+  .emoji_char > .score {
+     padding-left: 0px;
+     padding-right: 0px;
+     font-size: 0.7em;
+  }
+}
 
 /* tile mode */
-.emoji_char {
-  width: 36px;
-  padding: 6px;
-}
-.emoji_char > .char {
-  font-size: 32px;
-}
-.emoji_char > .score {
-  display: none;
+body.kiosk.tiles {
+  .emoji_char {
+    width: 36px;
+    padding: 6px;
+  }
+  .emoji_char > .char {
+    font-size: 32px;
+  }
+  .emoji_char > .score {
+    display: none;
+  }
+
 }
 
-.modal {
-  width: 1560px;
-  margin-left: -780px;
-}
-.modal-body {
-  max-height: 600px;
-}
-blockquote p {
-  font-size: 32px;
+/* generic for all modes */
+body.kiosk {
+  // drop header and footer
+  .navbar,#footer {
+    display: none;
+    opacity: 0;
+  }
+  // adjust margins
+  #data {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  // make some big ass modals
+  .modal {
+    width: 1560px;
+    margin-left: -780px;
+  }
+  .modal-body {
+    max-height: 600px;
+  }
+  .modal-header h3 {
+    line-height: 32px;
+    font-size: 32px;
+  }
+  blockquote p {
+    font-size: 32px;
+  }
+  // get rid of modal footer buttons, lead offsite
+  .foot-buttons {
+    display: none;
+  }
+  // dont show modal new-tab
+  #openbtn {
+    display: none;
+  }
 }
