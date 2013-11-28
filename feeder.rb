@@ -16,7 +16,7 @@ $stdout.sync = true
 require 'newrelic_rpm' if is_production?
 
 # check for development mode with remote redis server, if so refuse to run
-if (REDIS_URI.to_s.match(/redistogo/) && !is_production?)
+if (REDIS_URI.to_s.match(/redis(?:togo|cloud)/) && !is_production?)
   Kernel::abort "You shouldn't be using the production redis server with a local version of feeder! Quitting..."
 end
 
