@@ -4,7 +4,7 @@
 /* small mode */
 body.kiosk.small {
   .emoji_char {
-    width: 72px;
+    width: 73px;
     padding-right: 5px;
     white-space: nowrap;
   }
@@ -15,6 +15,12 @@ body.kiosk.small {
      padding-left: 0px;
      padding-right: 0px;
      font-size: 0.7em;
+  }
+
+  // adjust margins
+  #data {
+    margin-left: 5px;
+    margin-right: 5px;
   }
 }
 
@@ -30,7 +36,11 @@ body.kiosk.tiles {
   .emoji_char > .score {
     display: none;
   }
-
+  // adjust margins
+  #data {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 }
 
 /* generic for all modes */
@@ -40,12 +50,6 @@ body.kiosk {
     display: none;
     opacity: 0;
   }
-  // adjust margins
-  #data {
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-
   // make some big ass modals
   .modal {
     width: 1560px;
