@@ -7,7 +7,7 @@ processKioskInteractiveRequest = (event) ->
   console.log "processed interactive request for ID #{request.char} from #{request.requester}"
   stopDetailStreaming() if detail_source?.readyState == 1 #force close connections left open
   popDetails(request.char)
-  # setTimeout 
+  setTimeout ( -> $('#detailview').modal('hide') ), 30000
 
 $ ->
   console.log "kiosk mode ENABLED!"
