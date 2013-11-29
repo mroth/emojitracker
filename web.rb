@@ -8,8 +8,8 @@ require 'oj'
 require 'emoji_data'
 
 require_relative 'lib/config'
-require_relative 'benchmark_app'
-require_relative 'web_kiosk_app'
+require_relative 'web_benchmark'
+require_relative 'web_kiosk'
 
 
 class WebApp < Sinatra::Base
