@@ -6,12 +6,16 @@ require 'dalli'
 require 'rack-cache'
 require 'oj'
 require 'emoji_data'
+
 require_relative 'lib/config'
 require_relative 'benchmark_app'
+require_relative 'web_kiosk_app'
 
 
 class WebApp < Sinatra::Base
   use WebBenchmarkApp
+  use WebKioskApp
+
   configure :production do
     require 'newrelic_rpm'
   end
@@ -43,12 +47,6 @@ class WebApp < Sinatra::Base
   get '/benchmark' do
     @kiosk_mode = false
     @benchmark_mode = true
-    slim :index
-  end
-
-  get '/kiosk' do
-    @kiosk_mode = true
-    @benchmark_mode = false
     slim :index
   end
 
@@ -117,11 +115,6 @@ class WebApp < Sinatra::Base
   get '/assets/main.css' do
     cache_control :public, max_age: 600  # 10 mins.
     scss :main
-  end
-
-  get '/assets/kiosk.css' do
-    cache_control :public, max_age: 600  # 10 mins.
-    scss :kiosk
   end
 
   # regex match for how sinatra sees unicode emoji chars in routing
