@@ -17,7 +17,8 @@ SSE_DETAIL_RETRY_MS       = ENV['SSE_DETAIL_RETRY_MS']       || 500
 SSE_SCORE_FORCECLOSE_SEC  = ENV['SSE_SCORE_FORCECLOSE_SEC']  || 300
 SSE_DETAIL_FORCECLOSE_SEC = ENV['SSE_DETAIL_FORCECLOSE_SEC'] || 300
 
-ENABLE_RAW_STREAM = to_boolean(ENV['ENABLE_RAW_STREAM'] || 'true')
+ENABLE_RAW_STREAM               = to_boolean(ENV['ENABLE_RAW_STREAM']               || 'true')
+ENABLE_KIOSK_INTERACTION_STREAM = to_boolean(ENV['ENABLE_KIOSK_INTERACTION_STREAM'] || 'false')
 
 ################################################
 # convenience method for stream connect logging
@@ -161,6 +162,40 @@ class WebDetailStreamer < Sinatra::Base
 end
 
 ################################################
+# streaming thread for kiosk interaction
+################################################
+class WebKioskInteractionStreamer < Sinatra::Base
+
+  set :connections, []
+
+  get '/kiosk_interaction' do
+    content_type 'text/event-stream'
+    stream(:keep_open) do |out|
+      out = WrappedStream.new(out, request)
+      settings.connections << out
+      log_connect(out)
+      out.callback { log_disconnect(out); settings.connections.delete(out) }
+    end
+  end
+
+  if ENABLE_KIOSK_INTERACTION_STREAM
+    Thread.new do
+      puts "SUBSCRIBING TO KIOSK INTERACTIVE STREAM YO"
+      t_redis = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password, :driver => :hiredis)
+      t_redis.psubscribe('stream.interaction.*') do |on|
+        on.pmessage do |match, channel, message|
+          puts "DEBUG: streamer received interaction request from redis" #TODO: REMOVE ME******
+          connections.each do |out|
+            out.sse_event_data(channel, message)
+          end
+        end
+      end
+    end
+  end
+
+end
+
+################################################
 # admin stuff
 ################################################
 class WebStreamerAdmin < Sinatra::Base
@@ -211,7 +246,8 @@ end
 # main master class for the app
 ################################################
 class WebStreamer < Sinatra::Base
-  use WebScoreRawStreamer
+  use WebKioskInteractionStreamer if ENABLE_KIOSK_INTERACTION_STREAM
+  use WebScoreRawStreamer         if ENABLE_RAW_STREAM
   use WebScoreCachedStreamer
   use WebDetailStreamer
   use WebStreamerAdmin

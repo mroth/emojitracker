@@ -30,6 +30,9 @@ else
   TERMS = EmojiData.chars
 end
 
+#track references to us
+TERMS << '@emojitracker'
+
 EM.run do
   puts "Setting up a stream to track #{TERMS.size} terms '#{TERMS}'..."
   @tracked,@skipped,@tracked_last,@skipped_last = 0,0,0,0
@@ -45,10 +48,28 @@ EM.run do
   end
   @client.track(TERMS) do |status|
     @tracked += 1
-    # puts " ** @#{status.user.screen_name}: ".green + status.text.white if VERBOSE
+
+    # disregard retweets
     is_retweet = status.text.start_with? "RT"
     next if is_retweet
 
+    # find all matching emoji characters
+    matches = EmojiData.chars.select { |c| status.text.include? c  }
+
+    # for interactive kiosk mode, allow users to request a specific character for display
+    # send the interaction notice but DONT LOG THE TWEET since its artificial
+    is_interaction = status.text.start_with?("@emojitracker")
+    if is_interaction && matches.length > 0
+      puts "user #{status.user.screen_name} requests info on #{matches.first} (#{EmojiData.char_to_unified(matches.first)})"
+      REDIS.PUBLISH "stream.interaction.request", Oj.dump(
+        {
+          'char' => EmojiData.char_to_unified(matches.first),
+          'requester' => status.user.screen_name
+        } )
+    end
+    next if is_interaction #dont keep processing
+
+    # prepared a trimmed version of the JSON blob
     status_small = {
       'id' => status.id.to_s,
       'text' => status.text,
@@ -58,7 +79,7 @@ EM.run do
     }
     status_json = Oj.dump(status_small)
 
-    matches = EmojiData.chars.select { |c| status.text.include? c  }
+    # update redis for each matched char
     matches.each do |matched_emoji_char|
       cp = EmojiData.char_to_unified(matched_emoji_char)
       REDIS.pipelined do
