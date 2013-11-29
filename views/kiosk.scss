@@ -44,13 +44,14 @@ body.kiosk.tiles {
   }
 }
 
-/* generic for all modes */
-body.kiosk {
+/* generic for both small and tile 1080p modes */
+body.kiosk.small, body.kiosk.tiles {
   // drop header and footer
   .navbar,#footer {
     display: none;
     opacity: 0;
   }
+
   // make some big ass modals
   .modal {
     width: 1560px;
@@ -66,6 +67,29 @@ body.kiosk {
   blockquote p {
     font-size: 32px;
   }
+
+  // darken highlight a bit for projecot
+  .highlight_score_update_trans {
+    background-color: darken(lightgreen, 10%);
+  }
+}
+
+/* generic for all modes */
+body.kiosk {
+  // drop footer only
+  #footer {
+    display: none;
+    opacity: 0;
+  }
+  hr {
+    display: none;
+  }
+
+  //get rid of dropdown in header
+  .navbar .dropdown {
+    display: none;
+  }
+
   // get rid of modal footer buttons, lead offsite
   .foot-buttons {
     display: none;
@@ -75,7 +99,4 @@ body.kiosk {
     display: none;
   }
 
-  .highlight_score_update_trans {
-    background-color: darken(lightgreen, 10%);
-  }
 }
