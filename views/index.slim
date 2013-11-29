@@ -44,6 +44,7 @@ div#disclaimer.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myMo
 
 javascript:
   var benchmark_mode = #{@benchmark_mode};
+  var kiosk_mode  = #{@kiosk_mode};
 coffee:
   @popDetails = (char_id) ->
     $.get("/api/details/#{char_id}", (response) ->
@@ -108,7 +109,7 @@ coffee:
 
       # let's go crazy
       #startScoreStreaming() unless benchmark_mode
-      unless benchmark_mode
+      unless benchmark_mode or kiosk_mode
         if $.cookie("emojitracker_disclaimer") == "OK"
           console.log "Disclaimer agreed to, starting automatically"
           startScoreStreaming()
