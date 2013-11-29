@@ -72,6 +72,13 @@ body.kiosk.small, body.kiosk.tiles {
   .highlight_score_update_trans {
     background-color: darken(lightgreen, 10%);
   }
+
+  // show requester information!
+  #detailview #requester {
+    float: right;
+    font-size: xx-large;
+    line-height: 180%;
+  }
 }
 
 /* generic for all modes */
