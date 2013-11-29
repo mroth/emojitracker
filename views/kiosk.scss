@@ -74,4 +74,8 @@ body.kiosk {
   #openbtn {
     display: none;
   }
+
+  .highlight_score_update_trans {
+    background-color: darken(lightgreen, 10%);
+  }
 }
