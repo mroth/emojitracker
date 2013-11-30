@@ -42,6 +42,9 @@ EM.run do
     # Log your error message somewhere
     puts "ERROR: #{message}"
   end
+  @client.on_enhance_your_calm do
+    puts "TWITTER SAYZ ENHANCE UR CALM"
+  end
   @client.on_limit do |skip_count|
     @skipped = skip_count
     # puts "RATE LIMITED LOL"
