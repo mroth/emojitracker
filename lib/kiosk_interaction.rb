@@ -13,6 +13,10 @@ module KioskInteraction
     :oauth_token_secret => ENV['KIOSK_OAUTH_TOKEN_SECRET']
   )
 
+  def self.enabled?
+    @enabled ||= to_boolean(ENV['ENABLE_KIOSK_INTERACTION'] || 'false')
+  end
+
   class InteractionRequest
     def initialize(status)
       @request_status = status
@@ -27,7 +31,7 @@ module KioskInteraction
       else
         puts "INTERACTION: user #{@requester.screen_name} requesting info on #{@target} (#{@target.unified})"
         self.publish()
-        self.post_reply()
+        self.post_reply() if self.replies_enabled?
       end
     end
 
@@ -51,6 +55,10 @@ module KioskInteraction
 
     def format_response
       "@#{@requester.screen_name} okay, putting #{@target.name} up on the BIG SCREEN at \#emojishow! http://emojitracker.com/details/#{@target.unified}"
+    end
+
+    def replies_enabled?
+      to_boolean(ENV['ENABLE_KIOSK_INTERACTION_REPLIES'] || 'false')
     end
   end
 
