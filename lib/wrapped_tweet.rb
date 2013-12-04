@@ -20,12 +20,12 @@ module WrappedTweet
 
   # return all the emoji chars contained in the tweet
   def emoji_chars
-    @emoji_chars ||= EmojiData.chars.select { |c| self.text.include? c  }
+    @emoji_chars ||= self.emojis.map { |e| e.char }
   end
 
   # return all the emoji chars contained in the tweet, as EmojiData::EmojiChar objects
-  # def emojis
-  #   @emojis ||= self.emoji_chars.map { |char| EmojiData.find_by_str(char) }
-  # end
+  def emojis
+    @emojis ||= EmojiData.find_by_str(self.text)
+  end
 
 end
