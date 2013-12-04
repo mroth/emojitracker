@@ -4,10 +4,12 @@
 # handles common methods for dealing with tweet status we get back from tweetstream
 ################################################
 require 'emoji_data'
+require 'oj'
 
 module WrappedTweet
 
-  # what? it's a perfectly cromulent word.
+  # return a hash of the tweet with absolutely everything we dont to broadcast need ripped out
+  # (what? it's a perfectly cromulent word.)
   def ensmallen
     {
       'id'          => self.id.to_s,
@@ -16,6 +18,11 @@ module WrappedTweet
       'name'        => self.user.name
       #'avatar' => status.user.profile_image_url
     }
+  end
+
+  # memoized cache of ensmallenified json
+  def tiny_json
+    @small_json ||= Oj.dump(self.ensmallen)
   end
 
   # return all the emoji chars contained in the tweet

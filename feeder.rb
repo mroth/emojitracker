@@ -72,9 +72,6 @@ EM.run do
     end
     next if is_interaction #dont keep processing
 
-    # prepared a trimmed version of the JSON blob
-    status_json = Oj.dump(status.ensmallen)
-
     # update redis for each matched char
     status.emojis.each do |matched_emoji|
       cp = matched_emoji.unified
@@ -86,11 +83,11 @@ EM.run do
         REDIS.PUBLISH 'stream.score_updates', cp
 
         # for each emoji char, store the most recent 10 tweets in a list
-        REDIS.LPUSH "emojitrack_tweets_#{cp}", status_json
+        REDIS.LPUSH "emojitrack_tweets_#{cp}", status.tiny_json
         REDIS.LTRIM "emojitrack_tweets_#{cp}",0,9
 
         # also stream all tweet updates to named streams by char
-        REDIS.PUBLISH "stream.tweet_updates.#{cp}", status_json
+        REDIS.PUBLISH "stream.tweet_updates.#{cp}", status.tiny_json
       end
     end
   end
