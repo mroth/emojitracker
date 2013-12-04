@@ -22,6 +22,7 @@ end
 
 group :feeder do
   gem 'tweetstream', '~> 2.6.0'
+  gem 'twitter', '~> 4.8.1'
   gem 'colored'
 end
 

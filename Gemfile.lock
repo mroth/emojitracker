@@ -101,3 +101,4 @@ DEPENDENCIES
   slim (~> 2.0.2)
   thin (~> 1.5)
   tweetstream (~> 2.6.0)
+  twitter (~> 4.8.1)
