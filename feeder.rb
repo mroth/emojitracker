@@ -61,11 +61,12 @@ EM.run do
     # for interactive kiosk mode, allow users to request a specific character for display
     # send the interaction notice but DONT LOG THE TWEET since its artificial
     is_interaction = status.text.start_with?("@emojitracker")
-    if is_interaction && status.emoji_chars.length > 0
-      puts "user #{status.user.screen_name} requests info on #{status.emoji_chars.first} (#{EmojiData.char_to_unified(status.emoji_chars.first)})"
+    if is_interaction && status.emojis.length > 0
+      target = status.emojis.first
+      puts "INTERACTION: user #{status.user.screen_name} requests info on #{target} (#{target.unified})"
       REDIS.PUBLISH "stream.interaction.request", Oj.dump(
         {
-          'char' => EmojiData.char_to_unified(status.emoji_chars.first),
+          'char' => target.unified,
           'requester' => status.user.screen_name
         } )
     end
@@ -75,8 +76,8 @@ EM.run do
     status_json = Oj.dump(status.ensmallen)
 
     # update redis for each matched char
-    status.emoji_chars.each do |matched_emoji_char|
-      cp = EmojiData.char_to_unified(matched_emoji_char)
+    status.emojis.each do |matched_emoji|
+      cp = matched_emoji.unified
       REDIS.pipelined do
         # increment the score in a sorted set
         REDIS.ZINCRBY 'emojitrack_score', 1, cp
