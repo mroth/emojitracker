@@ -2,6 +2,7 @@
 
 require_relative 'lib/config'
 require_relative 'lib/wrapped_tweet'
+require_relative 'lib/kiosk_interaction'
 require 'emoji_data'
 require 'oj'
 require 'colored'
@@ -61,16 +62,10 @@ EM.run do
     # for interactive kiosk mode, allow users to request a specific character for display
     # send the interaction notice but DONT LOG THE TWEET since its artificial
     is_interaction = status.text.start_with?("@emojitracker")
-    if is_interaction && status.emojis.length > 0
-      target = status.emojis.first
-      puts "INTERACTION: user #{status.user.screen_name} requests info on #{target} (#{target.unified})"
-      REDIS.PUBLISH "stream.interaction.request", Oj.dump(
-        {
-          'char' => target.unified,
-          'requester' => status.user.screen_name
-        } )
+    if is_interaction
+      KioskInteraction::InteractionRequest.new(status).handle() if status.emojis.length > 0
+      next # halt further tweet processing
     end
-    next if is_interaction #dont keep processing
 
     # update redis for each matched char
     status.emojis.each do |matched_emoji|
