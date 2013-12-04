@@ -6,7 +6,7 @@ processKioskInteractiveRequest = (event) ->
   request = $.parseJSON(event.data)
   console.log "processed interactive request for ID #{request.char} from #{request.requester}"
   stopDetailStreaming() if detail_source?.readyState == 1 #force close connections left open
-  popDetails(request.char, request.requester)
+  popDetails(request.char, request.requester, request.requester_profile_url)
   setTimeout ( -> $('#detailview').modal('hide') ), 30000
 
 $ ->

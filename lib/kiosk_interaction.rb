@@ -36,7 +36,8 @@ module KioskInteraction
       REDIS.PUBLISH "stream.interaction.request", Oj.dump(
         {
           'char' => @target.unified,
-          'requester' => @requester.screen_name
+          'requester' => @requester.screen_name,
+          'requester_profile_url' => @requester.profile_image_url
         }
       )
     end

@@ -47,7 +47,7 @@ javascript:
   var benchmark_mode = #{@benchmark_mode};
   var kiosk_mode  = #{@kiosk_mode};
 coffee:
-  @popDetails = (char_id, requester = undefined) ->
+  @popDetails = (char_id, requester = undefined, requester_profile_url = undefined) ->
     $.get("/api/details/#{char_id}", (response) ->
       #populate details for template
       $('#detailview h3').html "#{emoji.replace_unified(response.char)} #{response.char_details.name}"
@@ -62,7 +62,7 @@ coffee:
 
       #only show requester in kiosk mode
       if requester?
-        $('#detailview #requester').html("Display requested by <strong>@#{requester}</strong>. <img width='48' height='48' src='http://avatars.io/twitter/#{requester}'>")
+        $('#detailview #requester').html("Display requested by <strong>@#{requester}</strong>. <img width='48' height='48' src='#{requester_profile_url}'>")
         $('#detailview #requester').removeClass('hidden')
         $('#detailview #requester').show()
       else
