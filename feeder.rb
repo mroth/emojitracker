@@ -2,7 +2,7 @@
 
 require_relative 'lib/config'
 require_relative 'lib/wrapped_tweet'
-require_relative 'lib/kiosk_interaction' if ENV['ENABLE_KIOSK_MODE']
+require_relative 'lib/kiosk_interaction' if ENV['ENABLE_KIOSK_INTERACTION']
 require 'emoji_data'
 require 'oj'
 require 'colored'
@@ -61,7 +61,7 @@ EM.run do
 
     # for interactive kiosk mode at #emojishow, allow users to request a specific character for display
     # send the interaction notice but DONT LOG THE TWEET since its artificial
-    if ENV['ENABLE_KIOSK_MODE']
+    if ENV['ENABLE_KIOSK_INTERACTION']
       is_interaction = status.text.start_with?("@emojitracker")
       if is_interaction
         KioskInteraction::InteractionRequest.new(status).handle() if status.emojis.length > 0
