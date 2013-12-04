@@ -40,7 +40,6 @@ EM.run do
 
   @client = TweetStream::Client.new
   @client.on_error do |message|
-    # Log your error message somewhere
     puts "ERROR: #{message}"
   end
   @client.on_enhance_your_calm do
@@ -59,17 +58,14 @@ EM.run do
     # disregard retweets
     next if status.retweet?
 
-    # find all matching emoji characters
-    matches = EmojiData.chars.select { |c| status.text.include? c  }
-
     # for interactive kiosk mode, allow users to request a specific character for display
     # send the interaction notice but DONT LOG THE TWEET since its artificial
     is_interaction = status.text.start_with?("@emojitracker")
-    if is_interaction && matches.length > 0
-      puts "user #{status.user.screen_name} requests info on #{matches.first} (#{EmojiData.char_to_unified(matches.first)})"
+    if is_interaction && status.emoji_chars.length > 0
+      puts "user #{status.user.screen_name} requests info on #{status.emoji_chars.first} (#{EmojiData.char_to_unified(status.emoji_chars.first)})"
       REDIS.PUBLISH "stream.interaction.request", Oj.dump(
         {
-          'char' => EmojiData.char_to_unified(matches.first),
+          'char' => EmojiData.char_to_unified(status.emoji_chars.first),
           'requester' => status.user.screen_name
         } )
     end
@@ -79,7 +75,7 @@ EM.run do
     status_json = Oj.dump(status.ensmallen)
 
     # update redis for each matched char
-    matches.each do |matched_emoji_char|
+    status.emoji_chars.each do |matched_emoji_char|
       cp = EmojiData.char_to_unified(matched_emoji_char)
       REDIS.pipelined do
         # increment the score in a sorted set
