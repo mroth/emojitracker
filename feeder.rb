@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require_relative 'lib/config'
+require_relative 'lib/wrapped_tweet'
 require 'emoji_data'
 require 'oj'
 require 'colored'
@@ -30,7 +31,7 @@ else
   TERMS = EmojiData.chars
 end
 
-#track references to us
+#track references to us too
 TERMS << '@emojitracker'
 
 EM.run do
@@ -52,9 +53,11 @@ EM.run do
   @client.track(TERMS) do |status|
     @tracked += 1
 
+    # extend the tweet object with our convenience mixins
+    status.extend(WrappedTweet)
+
     # disregard retweets
-    is_retweet = status.text.start_with? "RT"
-    next if is_retweet
+    next if status.retweet?
 
     # find all matching emoji characters
     matches = EmojiData.chars.select { |c| status.text.include? c  }
@@ -73,14 +76,7 @@ EM.run do
     next if is_interaction #dont keep processing
 
     # prepared a trimmed version of the JSON blob
-    status_small = {
-      'id' => status.id.to_s,
-      'text' => status.text,
-      'screen_name' => status.user.screen_name,
-      'name' => status.user.name
-      #'avatar' => status.user.profile_image_url
-    }
-    status_json = Oj.dump(status_small)
+    status_json = Oj.dump(status.ensmallen)
 
     # update redis for each matched char
     matches.each do |matched_emoji_char|
