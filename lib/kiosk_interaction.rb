@@ -50,7 +50,7 @@ module KioskInteraction
     end
 
     def format_response
-      "@#{@requester.screen_name} okay, putting #{@target.name} up on the BIG SCREEN at \#emojishow!"
+      "@#{@requester.screen_name} okay, putting #{@target.name} up on the BIG SCREEN at \#emojishow! http://emojitracker.com/details/#{@target.unified}"
     end
   end
 
