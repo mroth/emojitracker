@@ -123,6 +123,79 @@ blockquote p {
 }
 
 /***************************************
+ * some hacks for iphone display
+ ***************************************/
+@media only screen and (min-device-width : 320px) and (max-device-width: 1024px) {
+  body {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+  #data {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: -7px;
+  }
+  .emoji_char {
+    padding-right: 4px;
+    width: 70px; /* override for specific phones to be perfect! */
+  }
+  .emoji_char > .char {
+    line-height: 16px;
+  }
+  .emoji_char > .score {
+    font-size: 0.6em;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
+// iphone portrait
+@media only screen
+  and (min-device-width: 320px)
+  and (max-device-width: 568px)
+  and (orientation: portrait) {
+    .emoji_char {
+      width: 70px !important;
+    }
+}
+// iphone 5 landscape √
+@media only screen
+  and (min-device-width: 320px)
+  and (max-device-width: 568px)
+  and (orientation: landscape) {
+    .emoji_char {
+      width: 71px !important;
+    }
+}
+// iphone 3-4s landscape √
+@media only screen
+  and (min-device-width: 320px)
+  and (max-device-width: 480px)
+  and (orientation: landscape) {
+    .emoji_char {
+      width: 70px !important;
+    }
+}
+// ipad portrait √
+@media only screen
+  and (min-device-width: 768px)
+  and (max-device-width: 1024px)
+  and (orientation: portrait) {
+    .emoji_char {
+      width: 67px !important;
+    }
+}
+// ipad landscape √
+@media only screen
+  and (min-device-width: 768px)
+  and (max-device-width: 1024px)
+  and (orientation: landscape) {
+    .emoji_char {
+      width: 76px !important;
+    }
+}
+
+
+/***************************************
  * secret disco mode!
  ***************************************/
 #discoball {
