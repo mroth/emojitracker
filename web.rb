@@ -85,7 +85,6 @@ class WebApp < Sinatra::Base
     raw_scores = REDIS.zrevrange('emojitrack_score', 0, -1, { withscores: true } )
     @scores = raw_scores.map do |score|
       emo_obj = EmojiData.find_by_unified(score[0])
-      # yield "FUCK" if emo_obj.nil?
       {
         "char"  => EmojiData.unified_to_char(score[0]),
         "id"    => emo_obj.unified,

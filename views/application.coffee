@@ -257,7 +257,7 @@ Secret disco mode (easter egg)
   console.log "woo disco time!!!!"
   $('body').append("<div id='discoball'></div>")
   $('#discoball').focus()
-  
+
   start_music = ->
     @audio = new Audio();
     canPlayOgg = !!audio.canPlayType && audio.canPlayType('audio/ogg; codecs="vorbis"') != ""
@@ -282,7 +282,7 @@ Secret disco mode (easter egg)
   $('#discoball').removeClass('in-position')
   $('.disco').removeClass('disco')
   $('.navbar').removeClass('navbar-inverse')
-  
+
   kill_music = -> @audio.pause()
   setTimeout kill_music, 2000
 

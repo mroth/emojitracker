@@ -270,9 +270,9 @@ class WebStreamer < Sinatra::Base
   @stream_graphite_log_rate = 10
   EM.next_tick do
     EM::PeriodicTimer.new(@stream_graphite_log_rate) do
-      graphite_dyno_log("stream.raw.clients", WebScoreRawStreamer.connections.count)
-      graphite_dyno_log("stream.eps.clients", WebScoreCachedStreamer.connections.count)
-      graphite_dyno_log("stream.detail.clients", WebDetailStreamer.connections.count)
+      graphite_dyno_log("stream.raw.clients",     WebScoreRawStreamer.connections.count)
+      graphite_dyno_log("stream.eps.clients",     WebScoreCachedStreamer.connections.count)
+      graphite_dyno_log("stream.detail.clients",  WebDetailStreamer.connections.count)
     end
   end
 

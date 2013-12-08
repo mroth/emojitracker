@@ -33,7 +33,6 @@ div#detailview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myMo
 
 div#disclaimer.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
   div.modal-header
-    / button.close type="button" data-dismiss="modal" aria-hidden="true" title="close" &times;
     h3 Epilepsy Warning
   div.modal-body
     p
@@ -87,7 +86,7 @@ coffee:
       emptyTweetList()
       for tweet in response.recent_tweets
         appendTweetList tweet
-      
+
       #popup the modal
       $('#detailview').modal({ keyboard: true })
 
@@ -117,7 +116,6 @@ coffee:
         stopDetailStreaming()
 
       # let's go crazy
-      #startScoreStreaming() unless benchmark_mode
       unless benchmark_mode or kiosk_mode
         if $.cookie("emojitracker_disclaimer") == "OK"
           console.log "Disclaimer agreed to, starting automatically"
