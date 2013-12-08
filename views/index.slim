@@ -125,7 +125,7 @@ coffee:
         else
           $('#disclaimer').modal({ keyboard: true, backdrop: 'static' })
           $('#okbtn').click ->
-            $.cookie("emojitracker_disclaimer", "OK");
+            $.cookie("emojitracker_disclaimer", "OK", { expires: 365 })
             startScoreStreaming()
           $('#disclaimer').keypress (event) ->
             $('#okbtn').click() if (event.keyCode == 13)
