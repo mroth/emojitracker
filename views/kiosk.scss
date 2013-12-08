@@ -44,6 +44,29 @@ body.kiosk.tiles {
   }
 }
 
+/* word tile mode */
+body.kiosk.numtiles {
+  .emoji_char {
+    height: 32px
+  }
+  .emoji_char > .score {
+    display: block;
+    position: relative;
+    bottom: 2px;
+    right: -2px;
+
+    padding-left: 0;
+    padding-right: 0;
+
+    word-wrap: break-word;
+    text-align: right;
+    font-size: 0.5em;
+    line-height: 1.0;
+    opacity: 0.8;
+  }
+}
+
+
 /* generic for both small and tile 1080p modes */
 body.kiosk.small, body.kiosk.tiles {
   // drop header and footer
