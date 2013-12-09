@@ -15,7 +15,7 @@ module WrappedTweet
       'id'          => self.id.to_s,
       'text'        => self.text,
       'screen_name' => self.user.screen_name,
-      'name'        => self.user.name
+      'name'        => self.safe_user_name()
       #'avatar' => status.user.profile_image_url
     }
   end
@@ -33,6 +33,13 @@ module WrappedTweet
   # return all the emoji chars contained in the tweet, as EmojiData::EmojiChar objects
   def emojis
     @emojis ||= EmojiData.find_by_str(self.text)
+  end
+
+  protected
+  # twitter seems to have a bug where user names can get null bytes set in their string
+  # this strips them out so we dont cause string parse errors
+  def safe_user_name
+    @safe_name ||= self.user.name.gsub(/\0/, '')
   end
 
 end
