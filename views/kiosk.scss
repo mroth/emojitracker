@@ -93,10 +93,10 @@ body.kiosk.small, body.kiosk.tiles {
     font-size: 32px;
   }
 
-  // darken highlight a bit for projecot
-  .highlight_score_update_trans {
-    background-color: darken(lightgreen, 10%);
-  }
+  // darken highlight a bit for projector -- dont bother for eyebeam projector
+  // .highlight_score_update_trans {
+  //   background-color: darken(lightgreen, 10%);
+  // }
 
   // show requester information!
   #detailview #requester {
