@@ -24,8 +24,7 @@ GEM
       eventmachine (~> 1.0)
       http_parser.rb (>= 0.6.0.beta.2, < 0.7)
       simple_oauth (~> 0.2)
-    emoji_data (0.0.1)
-      json
+    emoji_data (0.0.2)
     eventmachine (1.0.3)
     execjs (2.0.2)
     faraday (0.8.8)
@@ -35,7 +34,6 @@ GEM
       thor (>= 0.13.6)
     hiredis (0.4.5)
     http_parser.rb (0.6.0.beta.2)
-    json (1.8.1)
     memcachier (0.0.2)
     multi_json (1.8.2)
     multipart-post (1.2.0)
@@ -89,7 +87,7 @@ DEPENDENCIES
   coffee-script
   colored
   dalli (~> 2.6)
-  emoji_data (~> 0.0.1)
+  emoji_data (~> 0.0.2)
   foreman
   hiredis (~> 0.4.5)
   memcachier
@@ -103,3 +101,4 @@ DEPENDENCIES
   slim (~> 2.0.2)
   thin (~> 1.5)
   tweetstream (~> 2.6.0)
+  twitter (~> 4.8.1)

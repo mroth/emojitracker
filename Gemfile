@@ -5,7 +5,7 @@ group :web, :feeder do
   gem 'redis', '~> 3.0.6'
   gem 'hiredis', '~> 0.4.5'
   gem 'oj', '~> 2.2.3'
-  gem 'emoji_data', '~> 0.0.1'
+  gem 'emoji_data', '~> 0.0.2'
   # gem 'emoji_data', :git => 'git@github.com:mroth/emoji_data.rb.git'
 end
 
@@ -22,6 +22,7 @@ end
 
 group :feeder do
   gem 'tweetstream', '~> 2.6.0'
+  gem 'twitter', '~> 4.8.1'
   gem 'colored'
 end
 

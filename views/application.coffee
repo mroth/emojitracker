@@ -195,6 +195,9 @@ String.prototype.linkifyUrls = () ->
   this.replace /(https?:\/\/t.co\/\w+)/g, "<a href='$1' target='_blank'>$1</a>"
 String.prototype.linkify = () ->
   this.linkifyUrls().linkifyUsernames().linkifyHashtags()
+String.prototype.endsWith = (suffix) ->
+  @indexOf(suffix, @length - suffix.length) isnt -1
+
 
 formattedTweet = (tweet, new_marker = false) ->
   tweet_url = "https://twitter.com/#{tweet.screen_name}/status/#{tweet.id}"
@@ -254,7 +257,7 @@ Secret disco mode (easter egg)
   console.log "woo disco time!!!!"
   $('body').append("<div id='discoball'></div>")
   $('#discoball').focus()
-  
+
   start_music = ->
     @audio = new Audio();
     canPlayOgg = !!audio.canPlayType && audio.canPlayType('audio/ogg; codecs="vorbis"') != ""
@@ -279,7 +282,7 @@ Secret disco mode (easter egg)
   $('#discoball').removeClass('in-position')
   $('.disco').removeClass('disco')
   $('.navbar').removeClass('navbar-inverse')
-  
+
   kill_music = -> @audio.pause()
   setTimeout kill_music, 2000
 

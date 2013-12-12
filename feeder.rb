@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 require_relative 'lib/config'
+require_relative 'lib/wrapped_tweet'
+require_relative 'lib/kiosk_interaction'
 require 'emoji_data'
 require 'oj'
 require 'colored'
@@ -30,14 +32,19 @@ else
   TERMS = EmojiData.chars
 end
 
+#track references to us too
+TERMS << '@emojitracker'
+
 EM.run do
   puts "Setting up a stream to track #{TERMS.size} terms '#{TERMS}'..."
   @tracked,@skipped,@tracked_last,@skipped_last = 0,0,0,0
 
   @client = TweetStream::Client.new
   @client.on_error do |message|
-    # Log your error message somewhere
     puts "ERROR: #{message}"
+  end
+  @client.on_enhance_your_calm do
+    puts "TWITTER SAYZ ENHANCE UR CALM"
   end
   @client.on_limit do |skip_count|
     @skipped = skip_count
@@ -45,22 +52,26 @@ EM.run do
   end
   @client.track(TERMS) do |status|
     @tracked += 1
-    # puts " ** @#{status.user.screen_name}: ".green + status.text.white if VERBOSE
-    is_retweet = status.text.start_with? "RT"
-    next if is_retweet
 
-    status_small = {
-      'id' => status.id.to_s,
-      'text' => status.text,
-      'screen_name' => status.user.screen_name,
-      'name' => status.user.name
-      #'avatar' => status.user.profile_image_url
-    }
-    status_json = Oj.dump(status_small)
+    # extend the tweet object with our convenience mixins
+    status.extend(WrappedTweet)
 
-    matches = EmojiData.chars.select { |c| status.text.include? c  }
-    matches.each do |matched_emoji_char|
-      cp = EmojiData.char_to_unified(matched_emoji_char)
+    # disregard retweets
+    next if status.retweet?
+
+    # for interactive kiosk mode at #emojishow, allow users to request a specific character for display
+    # send the interaction notice but DONT LOG THE TWEET since its artificial
+    if KioskInteraction.enabled?
+      is_interaction = status.text.start_with?("@emojitracker")
+      if is_interaction
+        KioskInteraction::InteractionRequest.new(status).handle() if status.emojis.length > 0
+        next # halt further tweet processing
+      end
+    end
+
+    # update redis for each matched char
+    status.emojis.each do |matched_emoji|
+      cp = matched_emoji.unified
       REDIS.pipelined do
         # increment the score in a sorted set
         REDIS.ZINCRBY 'emojitrack_score', 1, cp
@@ -69,11 +80,11 @@ EM.run do
         REDIS.PUBLISH 'stream.score_updates', cp
 
         # for each emoji char, store the most recent 10 tweets in a list
-        REDIS.LPUSH "emojitrack_tweets_#{cp}", status_json
+        REDIS.LPUSH "emojitrack_tweets_#{cp}", status.tiny_json
         REDIS.LTRIM "emojitrack_tweets_#{cp}",0,9
 
         # also stream all tweet updates to named streams by char
-        REDIS.PUBLISH "stream.tweet_updates.#{cp}", status_json
+        REDIS.PUBLISH "stream.tweet_updates.#{cp}", status.tiny_json
       end
     end
   end

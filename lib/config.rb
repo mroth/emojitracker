@@ -43,3 +43,8 @@ def graphite_dyno_log(metric,count)
   metric_name = "#{dyno}.#{metric}"
   graphite_log metric_name, count
 end
+
+#convenience method for reading booleans from env vars
+def to_boolean(s)
+  s and !!s.match(/^(true|t|yes|y|1)$/i)
+end

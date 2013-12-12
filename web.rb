@@ -6,12 +6,16 @@ require 'dalli'
 require 'rack-cache'
 require 'oj'
 require 'emoji_data'
+
 require_relative 'lib/config'
-require_relative 'benchmark_app'
+require_relative 'web_benchmark'
+require_relative 'web_kiosk'
 
 
 class WebApp < Sinatra::Base
   use WebBenchmarkApp
+  use WebKioskApp
+
   configure :production do
     require 'newrelic_rpm'
   end
@@ -35,11 +39,13 @@ class WebApp < Sinatra::Base
   get '/' do
     cache_control :public, max_age: 600  # 10 mins. #disable until password is gone
     # protected! if ENV['RACK_ENV'] == 'production'
+    @kiosk_mode = false
     @benchmark_mode = false
     slim :index
   end
 
   get '/benchmark' do
+    @kiosk_mode = false
     @benchmark_mode = true
     slim :index
   end
@@ -79,7 +85,6 @@ class WebApp < Sinatra::Base
     raw_scores = REDIS.zrevrange('emojitrack_score', 0, -1, { withscores: true } )
     @scores = raw_scores.map do |score|
       emo_obj = EmojiData.find_by_unified(score[0])
-      # yield "FUCK" if emo_obj.nil?
       {
         "char"  => EmojiData.unified_to_char(score[0]),
         "id"    => emo_obj.unified,

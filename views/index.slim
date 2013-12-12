@@ -8,6 +8,7 @@ div#detailview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myMo
     a#openbtn.close title="open in new tab"
       i.icon-external-link.fake-close
     h3.emojifont-restricted EMOJI NAME
+    div#requester.alert.alert-info.hidden nobody
     dl
       dt unified id
       dd#uid
@@ -32,7 +33,6 @@ div#detailview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myMo
 
 div#disclaimer.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
   div.modal-header
-    / button.close type="button" data-dismiss="modal" aria-hidden="true" title="close" &times;
     h3 Epilepsy Warning
   div.modal-body
     p
@@ -44,8 +44,9 @@ div#disclaimer.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myMo
 
 javascript:
   var benchmark_mode = #{@benchmark_mode};
+  var kiosk_mode  = #{@kiosk_mode};
 coffee:
-  @popDetails = (char_id) ->
+  @popDetails = (char_id, requester = undefined, requester_profile_url = undefined) ->
     $.get("/api/details/#{char_id}", (response) ->
       #populate details for template
       $('#detailview h3').html "#{emoji.replace_unified(response.char)} #{response.char_details.name}"
@@ -57,6 +58,14 @@ coffee:
 
       #construct permalink url
       permalink = "http://emojitracker.com/details/#{char_id}" #document.URL + "details/#{char_id}"
+
+      #only show requester in kiosk mode
+      if requester?
+        $('#detailview #requester').html("Display requested by <strong>@#{requester}</strong>. <img width='48' height='48' src='#{requester_profile_url}'>")
+        $('#detailview #requester').removeClass('hidden')
+        $('#detailview #requester').show()
+      else
+        $('#detailview #requester').hide()
 
       #replace tweet button with new one
       $('#tweetbtn').empty()
@@ -77,7 +86,7 @@ coffee:
       emptyTweetList()
       for tweet in response.recent_tweets
         appendTweetList tweet
-      
+
       #popup the modal
       $('#detailview').modal({ keyboard: true })
 
@@ -107,15 +116,14 @@ coffee:
         stopDetailStreaming()
 
       # let's go crazy
-      #startScoreStreaming() unless benchmark_mode
-      unless benchmark_mode
+      unless benchmark_mode or kiosk_mode
         if $.cookie("emojitracker_disclaimer") == "OK"
           console.log "Disclaimer agreed to, starting automatically"
           startScoreStreaming()
         else
           $('#disclaimer').modal({ keyboard: true, backdrop: 'static' })
           $('#okbtn').click ->
-            $.cookie("emojitracker_disclaimer", "OK");
+            $.cookie("emojitracker_disclaimer", "OK", { expires: 365 })
             startScoreStreaming()
           $('#disclaimer').keypress (event) ->
             $('#okbtn').click() if (event.keyCode == 13)
