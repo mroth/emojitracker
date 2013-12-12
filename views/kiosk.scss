@@ -24,6 +24,7 @@ body.kiosk.small {
     margin-top: -5px;
     margin-left: 5px;
     margin-right: 5px;
+    width: 1910px; //FORCE WIDTH FOR NOW TO AVOID REFLOW BUG?
   }
 }
 
