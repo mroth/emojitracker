@@ -84,6 +84,13 @@
   font-size: smaller;
   color: #999;
 }
+a.combo_name:hover {
+  text-decoration: none;
+}
+a.combo_name:hover .name {
+  color: #0088cc;
+  text-decoration: underline;
+}
 /* override default bootstrap blockquote to make slightly smaller */
 blockquote p {
   font-size: 16px;

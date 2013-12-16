@@ -212,10 +212,10 @@ formattedTweet = (tweet, new_marker = false) ->
       #{emoji.replace_unified prepared_tweet}
     </p>
    &mdash;
-    <a href='https://twitter.com/#{tweet.screen_name}' target='_blank'>
-      <strong class='emojifont-restricted'>#{emoji.replace_unified tweet.name}</strong>
+    <a class='combo_name' href='https://twitter.com/#{tweet.screen_name}' target='_blank'>
+      <strong class='name emojifont-restricted'>#{emoji.replace_unified tweet.name}</strong>
+      <span class='screen_name'>@#{tweet.screen_name}</span>
     </a>
-    <span class='screen_name'>@#{tweet.screen_name}</span>
     <span class='intents'>
       <a class='icon' href='https://twitter.com/intent/tweet?in_reply_to=#{tweet.id}'><i class='icon-reply'></i></a>
       <a class='icon' href='https://twitter.com/intent/retweet?tweet_id=#{tweet.id}'><i class='icon-retweet'></i></a>
