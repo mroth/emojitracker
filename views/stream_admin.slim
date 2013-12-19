@@ -1,7 +1,7 @@
 div.container
   section#status
     h2
-      | stream admin&nbsp;#{ENV['DYNO']}
+      | stream admin
       
 
     div.tabbable
@@ -17,7 +17,7 @@ div.container
           div.row
             div.span6#eps_score
               h3
-                | eps score streamer&nbsp;
+                | eps score streams&nbsp;
                 small
                   strong.num N
                   | &nbsp;open stream(s)
@@ -28,10 +28,11 @@ div.container
                     th client
                     th tag
                     th age
+                    th node
                 tbody
             div.span6#detail
               h3
-                | detail streamer&nbsp;
+                | detail streams&nbsp;
                 small
                   strong.num N
                   | &nbsp;open stream(s)
@@ -42,11 +43,12 @@ div.container
                     th client
                     th tag
                     th age
+                    th node
                 tbody
           div.row
             div.span6#raw
               h3
-                | raw score streamer&nbsp;
+                | raw score streams&nbsp;
                 small
                   strong.num N
                   | &nbsp;open stream(s)
@@ -57,10 +59,11 @@ div.container
                     th client
                     th tag
                     th age
+                    th node
                 tbody
             div.span6#admin
               h3
-                | admin tool streamer&nbsp;
+                | admin tool streams&nbsp;
                 small
                   strong.num N
                   | &nbsp;open stream(s) - so meta!
@@ -71,6 +74,7 @@ div.container
                     th client
                     th tag
                     th age
+                    th node
                 tbody
           button.btn.btn-small#refreshbtn
             li.icon-refresh
@@ -139,24 +143,32 @@ coffee:
     emoji_char = String.fromCodePoint parseInt(tag, 16)
     "<span class='label label-info'>#{emoji_char} #{tag}</span>"
 
-  renderData = (response) ->
-    renderDataTable(response.connections.stream_eps, 'eps_score')
-    renderDataTable(response.connections.stream_detail, 'detail')
-    renderDataTable(response.connections.stream_raw, 'raw')
-    renderDataTable(response.connections.stream_admin, 'admin')
+  renderMultiData = (response) ->
+    emptyAllTables()
+    renderData(node) for node in response
 
-  renderDataTable = (response, id) ->
+  renderData = (response) ->
+    renderDataTable(response.connections.stream_eps, 'eps_score', response.node)
+    renderDataTable(response.connections.stream_detail, 'detail', response.node)
+    renderDataTable(response.connections.stream_raw, 'raw', response.node)
+    renderDataTable(response.connections.stream_admin, 'admin', response.node)
+
+  emptyAllTables = () ->
+    $('tbody').empty()
+
+  renderDataTable = (response, id, node) ->
     id_selector = $("##{id}")
     id_selector.find('.num').text response.length
     tbody_selector = id_selector.find('tbody')
-    tbody_selector.empty()
+    #tbody_selector.empty() # we clear once at beginning now
     for client in response
       tbody_selector.append("
         <tr>
           <td><code class='new'>#{client.request_path}</code></td>
-          <td><i class='icon-#{pickPlatformIcon(client.client_user_agent)}' title='#{client.client_user_agent}'></i> <tt>#{client.client_ip}</tt></td>
+          <td style='white-space: nowrap'><i class='icon-#{pickPlatformIcon(client.client_user_agent)}' title='#{client.client_user_agent}'></i> <tt>#{client.client_ip}</tt></td>
           <td>#{emoji.replace_unified tagRender(client.tag)}</td>
           <td><span class='badge'><i class='icon-time'></i> #{client.age}</span></td>
+          <td><span class='badge badge-success'>#{node}</span></td>
         </tr>
       ")
 
@@ -183,8 +195,11 @@ coffee:
     addEntryToEventLog $.parseJSON(event.data), 'DISCONNECT'
 
   @refreshData = ->
-    $.get("/subscribe/admin/node.json", (response) ->
-      renderData(response)
+    #$.get("/subscribe/admin/node.json", (response) ->
+    #  renderData(response)
+    #, "json")
+    $.get("/subscribe/admin/status.json", (response) ->
+      renderMultiData(response)
     , "json")
 
   @startAdminStreaming = ->
