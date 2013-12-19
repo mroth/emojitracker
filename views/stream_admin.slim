@@ -156,6 +156,11 @@ coffee:
   emptyAllTables = () ->
     $('tbody').empty()
 
+  prettyAge = (age) ->
+    return "#{age}s" if age < 60
+    return "#{parseInt(age/60)}m" if age < 60*120
+    "#{parseInt(age/(60*60))}h"
+
   renderDataTable = (response, id, node) ->
     id_selector = $("##{id}")
     tbody_selector = id_selector.find('tbody')
@@ -166,7 +171,7 @@ coffee:
           <td><code class='new'>#{client.request_path}</code></td>
           <td style='white-space: nowrap'><i class='icon-#{pickPlatformIcon(client.client_user_agent)}' title='#{client.client_user_agent}'></i> <tt>#{client.client_ip}</tt></td>
           <td>#{emoji.replace_unified tagRender(client.tag)}</td>
-          <td><span class='badge'><i class='icon-time'></i> #{client.age}</span></td>
+          <td><span class='badge'><i class='icon-time'></i> #{prettyAge(client.age)}</span></td>
           <td><span class='badge badge-success'>#{node}</span></td>
         </tr>
       ")
