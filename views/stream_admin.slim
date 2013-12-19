@@ -158,7 +158,6 @@ coffee:
 
   renderDataTable = (response, id, node) ->
     id_selector = $("##{id}")
-    id_selector.find('.num').text response.length
     tbody_selector = id_selector.find('tbody')
     #tbody_selector.empty() # we clear once at beginning now
     for client in response
@@ -171,6 +170,7 @@ coffee:
           <td><span class='badge badge-success'>#{node}</span></td>
         </tr>
       ")
+    id_selector.find('.num').text tbody_selector.find('tr').length
 
   addEntryToEventLog = (client, eventType, eventStyle=null) ->
     $('#event_log').find('tbody').prepend(
