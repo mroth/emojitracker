@@ -232,6 +232,8 @@ class WebStreamerAdmin < Sinatra::Base
       #consider values stale if greater than 10x report period
       nodes.reject! {|n| Time.now.to_i - n['reported_at'] > STREAM_STATUS_UPDATE_RATE*10 } if filter
       #TODO: potentially clear these from REDIS entirely when we detect?
+
+      return nodes
     end
   end
 
