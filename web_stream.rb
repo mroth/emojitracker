@@ -237,7 +237,7 @@ class WebStreamerAdmin < Sinatra::Base
 
   helpers AdminUtils
 
-  get '/admin' do
+  get '/admin/?' do
     slim :stream_admin
   end
 
