@@ -140,10 +140,10 @@ coffee:
     "<span class='label label-info'>#{emoji_char} #{tag}</span>"
 
   renderData = (response) ->
-    renderDataTable(response.stream_eps_clients, 'eps_score')
-    renderDataTable(response.stream_detail_clients, 'detail')
-    renderDataTable(response.stream_raw_clients, 'raw')
-    renderDataTable(response.stream_admin_clients, 'admin')
+    renderDataTable(response.connections.stream_eps, 'eps_score')
+    renderDataTable(response.connections.stream_detail, 'detail')
+    renderDataTable(response.connections.stream_raw, 'raw')
+    renderDataTable(response.connections.stream_admin, 'admin')
 
   renderDataTable = (response, id) ->
     id_selector = $("##{id}")
@@ -183,7 +183,7 @@ coffee:
     addEntryToEventLog $.parseJSON(event.data), 'DISCONNECT'
 
   @refreshData = ->
-    $.get("/subscribe/admin/data.json", (response) ->
+    $.get("/subscribe/admin/node.json", (response) ->
       renderData(response)
     , "json")
 
