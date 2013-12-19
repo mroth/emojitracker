@@ -222,9 +222,16 @@ class WebStreamerAdmin < Sinatra::Base
       REDIS.HSET STREAM_STATUS_REDIS_KEY, self.node_name, Oj.dump(self.current_status)
     end
 
-    def self.rollup_status
-      vals = REDIS.HVALS STREAM_STATUS_REDIS_KEY
-      vals.map {|n| Oj.load(n)}
+    def self.rollup_status(filter=true)
+      #get vals from redis
+      nodes = REDIS.HVALS STREAM_STATUS_REDIS_KEY
+
+      #deserialize from JSON
+      nodes.map! {|n| Oj.load(n)}
+
+      #consider values stale if greater than 10x report period
+      nodes.reject! {|n| Time.now.to_i - n['reported_at'] > STREAM_STATUS_UPDATE_RATE*10 } if filter
+      #TODO: potentially clear these from REDIS entirely when we detect?
     end
   end
 
