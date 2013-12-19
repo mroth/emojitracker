@@ -194,22 +194,70 @@ end
 ################################################
 # admin stuff
 ################################################
+
 class WebStreamerAdmin < Sinatra::Base
 
-  get '/admin' do
+  module AdminUtils
+    STREAM_STATUS_REDIS_KEY = 'admin_stream_status'
+    STREAM_STATUS_UPDATE_RATE = 5
+
+    def self.current_status
+      {
+        'node'        => self.node_name,
+        'reported_at' => Time.now.to_i,
+        'connections' => {
+          'stream_raw'    => WebScoreRawStreamer.connections.map(&:to_hash),
+          'stream_eps'    => WebScoreCachedStreamer.connections.map(&:to_hash),
+          'stream_detail' => WebDetailStreamer.connections.map(&:to_hash),
+          'stream_admin'  => WebStreamerAdmin.connections.map(&:to_hash)
+        }
+      }
+    end
+
+    def self.node_name
+      @node_name ||= (ENV['DYNO'] || 'unknown')
+    end
+
+    def self.push_node_status_to_redis
+      REDIS.HSET STREAM_STATUS_REDIS_KEY, self.node_name, Oj.dump(self.current_status)
+    end
+
+    def self.rollup_status(filter=true)
+      #get vals from redis
+      nodes = REDIS.HVALS STREAM_STATUS_REDIS_KEY
+
+      #deserialize from JSON
+      nodes.map! {|n| Oj.load(n)}
+
+      #consider values stale if greater than 10x report period
+      nodes.reject! {|n| Time.now.to_i - n['reported_at'] > STREAM_STATUS_UPDATE_RATE*10 } if filter
+      #TODO: potentially clear these from REDIS entirely when we detect?
+
+      return nodes
+    end
+  end
+
+  # periodically log the updates
+  EM.next_tick do
+    EM.add_periodic_timer(AdminUtils::STREAM_STATUS_UPDATE_RATE) do
+      AdminUtils.push_node_status_to_redis
+    end
+  end
+
+  helpers AdminUtils
+
+  get '/admin/?' do
     slim :stream_admin
   end
 
-  get '/admin/data.json' do
+  get '/admin/node.json' do
     content_type :json
-    Oj.dump(
-      {
-        'stream_raw_clients' => WebScoreRawStreamer.connections.map(&:to_hash),
-        'stream_eps_clients' => WebScoreCachedStreamer.connections.map(&:to_hash),
-        'stream_detail_clients' => WebDetailStreamer.connections.map(&:to_hash),
-        'stream_admin_clients' => WebStreamerAdmin.connections.map(&:to_hash)
-      }
-    )
+    Oj.dump AdminUtils.current_status
+  end
+
+  get '/admin/status.json' do
+    content_type :json
+    Oj.dump AdminUtils.rollup_status
   end
 
   set :connections, []
@@ -266,9 +314,9 @@ class WebStreamer < Sinatra::Base
     Oj.dump( { 'status' => 'OK', 'closed' => matched_conns.count } )
   end
 
-  # graphite logging for all the streams
   @stream_graphite_log_rate = 10
   EM.next_tick do
+    # graphite logging for all the streams
     EM::PeriodicTimer.new(@stream_graphite_log_rate) do
       graphite_dyno_log("stream.raw.clients",     WebScoreRawStreamer.connections.count)
       graphite_dyno_log("stream.eps.clients",     WebScoreCachedStreamer.connections.count)
