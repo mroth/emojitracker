@@ -194,7 +194,7 @@ String.prototype.linkifyUrls = () ->
   # this.replace /(https?:\/\/[^\s]+)/g, "<a href='$1' target='_blank'>$1</a>"
   this.replace /(https?:\/\/t.co\/\w+)/g, "<a href='$1' target='_blank'>$1</a>"
 String.prototype.linkify = () ->
-  this.linkifyUrls().linkifyUsernames().linkifyHashtags()
+  this.linkifyUsernames().linkifyHashtags()
 String.prototype.endsWith = (suffix) ->
   @indexOf(suffix, @length - suffix.length) isnt -1
 
