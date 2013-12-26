@@ -190,19 +190,35 @@ String.prototype.linkifyHashtags = () ->
   this.replace /#(\w+)/g, "<a href='https://twitter.com/search?q=%23$1&src=hash' target='_blank'>#$1</a>"
 String.prototype.linkifyUsernames = () ->
   this.replace /@(\w+)/g, "<a href='https://twitter.com/$1' target='_blank'>@$1</a>"
-String.prototype.linkifyUrls = () ->
-  # this.replace /(https?:\/\/[^\s]+)/g, "<a href='$1' target='_blank'>$1</a>"
-  this.replace /(https?:\/\/t.co\/\w+)/g, "<a href='$1' target='_blank'>$1</a>"
-String.prototype.linkify = () ->
-  this.linkifyUsernames().linkifyHashtags()
+# String.prototype.linkifyUrls = () ->
+#   # this.replace /(https?:\/\/[^\s]+)/g, "<a href='$1' target='_blank'>$1</a>"
+#   this.replace /(https?:\/\/t.co\/\w+)/g, "<a href='$1' target='_blank'>$1</a>"
+# String.prototype.linkify = () ->
+#   this.linkifyUsernames().linkifyHashtags()
 String.prototype.endsWith = (suffix) ->
   @indexOf(suffix, @length - suffix.length) isnt -1
+String.prototype.replaceBetween = (start,end,replacement_text) ->
+  @substring(0,start) +  replacement_text + @substring(end)
 
+formatTweetText = (tweet) ->
+  unwrapTweetLinks(tweet).linkifyUsernames().linkifyHashtags()
+
+unwrapTweetLinks = (tweet) ->
+  if not tweet.links?
+    return tweet.text
+  else
+    replaced_text = tweet.text
+    for link in tweet.links.reverse()
+      replaced_text = replaced_text.replaceBetween( link.indices[0], link.indices[1], htmlLink(link.display_url, link.url) )
+    return replaced_text
+
+htmlLink = (text,url) ->
+  "<a href='#{url}' target='_blank'>#{text}</a>"
 
 formattedTweet = (tweet, new_marker = false) ->
   tweet_url = "https://twitter.com/#{tweet.screen_name}/status/#{tweet.id}"
   #mini_profile_url = tweet.avatar.replace('_normal','_mini')
-  prepared_tweet = tweet.text.linkify()
+  prepared_tweet = formatTweetText(tweet)
   class_to_be = "styled_tweet"
   class_to_be += " new" if new_marker && css_animation
   "<li class='#{class_to_be}'>

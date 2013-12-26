@@ -13,12 +13,24 @@ module WrappedTweet
   def ensmallen
     {
       'id'          => self.id.to_s,
-      'raw_text'    => self.text,
-      'text'        => self.expanded_links_text,
+      'text'        => self.text,
       'screen_name' => self.user.screen_name,
-      'name'        => self.safe_user_name()
+      'name'        => self.safe_user_name(),
+      'links'       => self.ensmallen_links()
       #'avatar' => status.user.profile_image_url
     }
+  end
+
+  # combine URL and Media entities, and return only minimum we need
+  # this means we don't pass expanded_url, and none of the media object junk beyond the url stuff
+  def ensmallen_links
+    links = []
+    (self.urls + self.media).each do |link|
+      links << {'url' => link.url, 'display_url' => link.display_url, 'indices' => link.indices}
+    end
+
+    #always sort results, so clients can easily reverse to loop and s//
+    links.sort { |x,y| x['indices'][0] <=> y['indices'][0] }
   end
 
   # memoized cache of ensmallenified json
@@ -34,20 +46,6 @@ module WrappedTweet
   # return all the emoji chars contained in the tweet, as EmojiData::EmojiChar objects
   def emojis
     @emojis ||= EmojiData.find_by_str(self.text)
-  end
-
-  # try to make Twitter Inc. happy by using display URLs
-  # this is going to return HTML instead of raw text, sigh...
-  def expanded_links_text
-    return self.text if (self.urls.length < 1 && self.media.length < 1)
-    expanded_text = self.text.dup()
-
-    (self.urls + self.media).each do |link|
-      url_start, url_stop = link.indices
-      expanded_text[url_start..url_stop]= self.html_link(link.display_url, link.url)
-    end
-
-    return expanded_text
   end
 
   protected
