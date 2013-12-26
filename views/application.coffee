@@ -186,39 +186,46 @@ detail page/view UI helpers
 ###
 general purpose UI helpers
 ###
-String.prototype.linkifyHashtags = () ->
-  this.replace /#(\w+)/g, "<a href='https://twitter.com/search?q=%23$1&src=hash' target='_blank'>#$1</a>"
-String.prototype.linkifyUsernames = () ->
-  this.replace /@(\w+)/g, "<a href='https://twitter.com/$1' target='_blank'>@$1</a>"
-# String.prototype.linkifyUrls = () ->
-#   # this.replace /(https?:\/\/[^\s]+)/g, "<a href='$1' target='_blank'>$1</a>"
-#   this.replace /(https?:\/\/t.co\/\w+)/g, "<a href='$1' target='_blank'>$1</a>"
-# String.prototype.linkify = () ->
-#   this.linkifyUsernames().linkifyHashtags()
+
 String.prototype.endsWith = (suffix) ->
   @indexOf(suffix, @length - suffix.length) isnt -1
 String.prototype.replaceBetween = (start,end,replacement_text) ->
   @substring(0,start) +  replacement_text + @substring(end)
 
-formatTweetText = (tweet) ->
-  unwrapTweetLinks(tweet).linkifyUsernames().linkifyHashtags()
+###
+tweet clientside helper and formatting
+###
+class Tweet
+  constructor: (@status) ->
 
-unwrapTweetLinks = (tweet) ->
-  if not tweet.links?
-    return tweet.text
-  else
-    replaced_text = tweet.text
-    for link in tweet.links.reverse()
-      replaced_text = replaced_text.replaceBetween( link.indices[0], link.indices[1], htmlLink(link.display_url, link.url) )
-    return replaced_text
+  text: ->
+    @unwrappedTweetLinks().linkifyUsernames().linkifyHashtags()
 
-htmlLink = (text,url) ->
-  "<a href='#{url}' target='_blank'>#{text}</a>"
+  url: ->
+    "https://twitter.com/#{@status.screen_name}/status/#{@status.id}"
+
+  unwrappedTweetLinks: ->
+    if not @status.links?
+      return @status.text
+    else
+      replaced_text = @status.text
+      for link in @status.links.reverse()
+        replaced_text = replaced_text.replaceBetween( link.indices[0], link.indices[1], @htmlLink(link.display_url, link.url) )
+      return replaced_text
+
+  String::linkifyHashtags = ->
+    @replace /#(\w+)/g, "<a href='https://twitter.com/search?q=%23$1&src=hash' target='_blank'>#$1</a>"
+  String::linkifyUsernames = ->
+    @replace /@(\w+)/g, "<a href='https://twitter.com/$1' target='_blank'>@$1</a>"
+  htmlLink: (text, url) ->
+    "<a href='#{url}' target='_blank'>#{text}</a>"
+
 
 formattedTweet = (tweet, new_marker = false) ->
-  tweet_url = "https://twitter.com/#{tweet.screen_name}/status/#{tweet.id}"
+  wrappedTweet = new Tweet tweet
+
   #mini_profile_url = tweet.avatar.replace('_normal','_mini')
-  prepared_tweet = formatTweetText(tweet)
+  prepared_tweet = wrappedTweet.text() #formatTweetText(tweet)
   class_to_be = "styled_tweet"
   class_to_be += " new" if new_marker && css_animation
   "<li class='#{class_to_be}'>
@@ -236,7 +243,7 @@ formattedTweet = (tweet, new_marker = false) ->
       <a class='icon' href='https://twitter.com/intent/tweet?in_reply_to=#{tweet.id}'><i class='icon-reply'></i></a>
       <a class='icon' href='https://twitter.com/intent/retweet?tweet_id=#{tweet.id}'><i class='icon-retweet'></i></a>
       <a class='icon' href='https://twitter.com/intent/favorite?tweet_id=#{tweet.id}'><i class='icon-star'></i></a>
-      <a class='icon' href='#{tweet_url}'><i class='icon-external-link'></i></a>
+      <a class='icon' href='#{wrappedTweet.url()}'><i class='icon-external-link'></i></a>
     </span>
   </blockquote>
   </li>"
