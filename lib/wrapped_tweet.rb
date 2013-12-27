@@ -12,12 +12,12 @@ module WrappedTweet
   # (what? it's a perfectly cromulent word.)
   def ensmallen
     {
-      'id'          => self.id.to_s,
-      'text'        => self.text,
-      'screen_name' => self.user.screen_name,
-      'name'        => self.safe_user_name(),
-      'links'       => self.ensmallen_links()
-      #'avatar' => status.user.profile_image_url
+      'id'                  => self.id.to_s,
+      'text'                => self.text,
+      'screen_name'         => self.user.screen_name,
+      'name'                => self.safe_user_name(),
+      'links'               => self.ensmallen_links(),
+      'profile_image_url'   => self.user.profile_image_url
     }
   end
 
