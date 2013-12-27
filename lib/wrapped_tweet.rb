@@ -5,6 +5,7 @@
 ################################################
 require 'emoji_data'
 require 'oj'
+require 'time'
 
 module WrappedTweet
 
@@ -17,7 +18,8 @@ module WrappedTweet
       'screen_name'         => self.user.screen_name,
       'name'                => self.safe_user_name(),
       'links'               => self.ensmallen_links(),
-      'profile_image_url'   => self.user.profile_image_url
+      'profile_image_url'   => self.user.profile_image_url,
+      'created_at'          => self.created_at.iso8601
     }
   end
 

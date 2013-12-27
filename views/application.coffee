@@ -178,6 +178,7 @@ detail page/view UI helpers
   tweet_list_elements = $("#tweet_list li")
   tweet_list_elements.last().remove() if tweet_list_elements.size() >= 20
   new_entry = $(formattedTweet(tweet, new_marker))
+  new_entry.find('time.timeago').timeago()
   tweet_list.prepend( new_entry )
   if css_animation
     new_entry.focus()
@@ -207,6 +208,10 @@ class Tweet
     return "http://a0.twimg.com/sticky/default_profile_images/default_profile_4_mini.png" unless @status.profile_image_url?
     @status.profile_image_url.replace('_normal','_mini')
 
+  created_at: ->
+    return "#" unless @status.created_at?
+    @status.created_at
+
 formattedTweet = (tweet, new_marker = false) ->
   wrappedTweet = new Tweet tweet
 
@@ -232,6 +237,9 @@ formattedTweet = (tweet, new_marker = false) ->
         <a class='icon' href='https://twitter.com/intent/retweet?tweet_id=#{tweet.id}'><i class='icon-retweet'></i></a>
         <a class='icon' href='https://twitter.com/intent/favorite?tweet_id=#{tweet.id}'><i class='icon-star'></i></a>
         <a class='icon' href='#{wrappedTweet.url()}'><i class='icon-external-link'></i></a>
+      </span>
+      <span class='timestamp'>
+        <a href='#{wrappedTweet.url()}'><time class='timeago' datetime='#{wrappedTweet.created_at()}'>#{wrappedTweet.created_at()}</time></a>
       </span>
     </span>
   </blockquote>

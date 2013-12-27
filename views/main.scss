@@ -115,6 +115,16 @@
   font-size: smaller;
   color: #999;
 }
+.timeago {
+  font-size: smaller;
+  color: #999;
+}
+.timestamp {
+  float: right;
+}
+.timestamp > a {
+  text-decoration: none;
+}
 a.combo_name:hover {
   text-decoration: none;
 }
