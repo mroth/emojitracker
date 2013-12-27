@@ -232,14 +232,14 @@ formattedTweet = (tweet, new_marker = false) ->
         <strong class='name emojifont-restricted'>#{emoji.replace_unified tweet.name}</strong>
         <span class='screen_name'>@#{tweet.screen_name}</span>
       </a>
+      <span class='timestamp'>
+        <a href='#{wrappedTweet.url()}'><time class='timeago' datetime='#{wrappedTweet.created_at()}'>#{wrappedTweet.created_at()}</time></a>
+      </span>
       <span class='intents'>
         <a class='icon' href='https://twitter.com/intent/tweet?in_reply_to=#{tweet.id}'><i class='icon-reply'></i></a>
         <a class='icon' href='https://twitter.com/intent/retweet?tweet_id=#{tweet.id}'><i class='icon-retweet'></i></a>
         <a class='icon' href='https://twitter.com/intent/favorite?tweet_id=#{tweet.id}'><i class='icon-star'></i></a>
-        <a class='icon' href='#{wrappedTweet.url()}'><i class='icon-external-link'></i></a>
-      </span>
-      <span class='timestamp'>
-        <a href='#{wrappedTweet.url()}'><time class='timeago' datetime='#{wrappedTweet.created_at()}'>#{wrappedTweet.created_at()}</time></a>
+        <!-- <a class='icon' href='#{wrappedTweet.url()}'><i class='icon-external-link'></i></a> -->
       </span>
     </span>
   </blockquote>

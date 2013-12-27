@@ -111,6 +111,15 @@
     opacity: 0;
   }
 }
+.intents {
+  float: right;
+  margin-right: 0.3em;
+  opacity: 0;
+}
+li.styled_tweet:hover .intents {
+  opacity: 1;
+}
+
 .screen_name {
   font-size: smaller;
   color: #999;
@@ -121,9 +130,13 @@
 }
 .timestamp {
   float: right;
+  opacity: 0;
 }
 .timestamp > a {
   text-decoration: none;
+}
+li.styled_tweet:hover .timestamp {
+  opacity: 1;
 }
 a.combo_name:hover {
   text-decoration: none;
