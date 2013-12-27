@@ -86,7 +86,7 @@ coffee:
 
       #populate the list of historic  tweets
       emptyTweetList()
-      for tweet in response.recent_tweets
+      for tweet in response.recent_tweets.reverse()
         appendTweetList tweet
 
       #popup the modal

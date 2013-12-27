@@ -45,7 +45,7 @@ coffee:
   $ ->
     $('h2').html emoji.replace_unified( $('h2').text() ) #js-emojify the h2 for shit browsers
     $.get("/api/details/#{char_id}", (response) ->
-      for tweet in response.recent_tweets
+      for tweet in response.recent_tweets.reverse()
         appendTweetList tweet
       startDetailStreaming(char_id)
     , "json")
