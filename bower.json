@@ -2,6 +2,7 @@
   "name": "emojitracker",
   "version": "2013.12.0",
   "dependencies": {
-    "twitter-text": "~1.7.0"
+    "twitter-text": "~1.7.0",
+    "jquery-timeago": "~1.3.1"
   }
 }

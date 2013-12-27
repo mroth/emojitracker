@@ -7,3 +7,7 @@
 public/vendor/twitter-text/lib
 public/vendor/twitter-text/test
 public/vendor/twitter-text/pkg/twitter-text-1.[0-6].*
+public/vendor/jquery-timeago/vendor
+public/vendor/jquery-timeago/test
+public/vendor/jquery-timeago/locales/*
+!public/vendor/jquery-timeago/locales/jquery.timeago.en-short.js
