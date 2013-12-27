@@ -22,11 +22,11 @@ module WrappedTweet
   end
 
   # combine URL and Media entities, and return only minimum we need
-  # this means we don't pass expanded_url, and none of the media object junk beyond the url stuff
+  # this means we pass none of the media object junk beyond the url stuff
   def ensmallen_links
     links = []
     (self.urls + self.media).each do |link|
-      links << {'url' => link.url, 'display_url' => link.display_url, 'indices' => link.indices}
+      links << {'url' => link.url, 'display_url' => link.display_url, 'expanded_url' => link.expanded_url, 'indices' => link.indices}
     end
 
     #always sort results, so clients can easily reverse to loop and s//

@@ -2,3 +2,8 @@
 .env
 .ruby-version
 .sass-cache
+
+#ignore a bunch of twitter-text crap, including all the pkg old versions
+public/vendor/twitter-text/lib
+public/vendor/twitter-text/test
+public/vendor/twitter-text/pkg/twitter-text-1.[0-6].*

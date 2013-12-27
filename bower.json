@@ -1,0 +1,7 @@
+{
+  "name": "emojitracker",
+  "version": "2013.12.0",
+  "dependencies": {
+    "twitter-text": "~1.7.0"
+  }
+}

@@ -189,43 +189,25 @@ general purpose UI helpers
 
 String.prototype.endsWith = (suffix) ->
   @indexOf(suffix, @length - suffix.length) isnt -1
-String.prototype.replaceBetween = (start,end,replacement_text) ->
-  @substring(0,start) +  replacement_text + @substring(end)
 
 ###
 tweet clientside helper and formatting
+BE SURE TWITTER-TEXT-JS is loaded before this!! (TODO: investigate require.js)
 ###
 class Tweet
   constructor: (@status) ->
 
   text: ->
-    @unwrappedTweetLinks().linkifyUsernames().linkifyHashtags()
+    twttr.txt.autoLink(@status.text, {urlEntities: @status.links})
 
   url: ->
     "https://twitter.com/#{@status.screen_name}/status/#{@status.id}"
-
-  unwrappedTweetLinks: ->
-    if not @status.links?
-      return @status.text
-    else
-      replaced_text = @status.text
-      for link in @status.links.reverse()
-        replaced_text = replaced_text.replaceBetween( link.indices[0], link.indices[1], @htmlLink(link.display_url, link.url) )
-      return replaced_text
-
-  String::linkifyHashtags = ->
-    @replace /#(\w+)/g, "<a href='https://twitter.com/search?q=%23$1&src=hash' target='_blank'>#$1</a>"
-  String::linkifyUsernames = ->
-    @replace /@(\w+)/g, "<a href='https://twitter.com/$1' target='_blank'>@$1</a>"
-  htmlLink: (text, url) ->
-    "<a href='#{url}' target='_blank'>#{text}</a>"
-
 
 formattedTweet = (tweet, new_marker = false) ->
   wrappedTweet = new Tweet tweet
 
   #mini_profile_url = tweet.avatar.replace('_normal','_mini')
-  prepared_tweet = wrappedTweet.text() #formatTweetText(tweet)
+  prepared_tweet = wrappedTweet.text()
   class_to_be = "styled_tweet"
   class_to_be += " new" if new_marker && css_animation
   "<li class='#{class_to_be}'>
