@@ -198,7 +198,7 @@ class Tweet
   constructor: (@status) ->
 
   text: ->
-    twttr.txt.autoLink(@status.text, {urlEntities: @status.links})
+    twttr.txt.autoLink(@status.text, {urlEntities: @status.links, usernameIncludeSymbol: true})
 
   url: ->
     "https://twitter.com/#{@status.screen_name}/status/#{@status.id}"
