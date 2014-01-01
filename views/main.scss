@@ -88,11 +88,13 @@
   background-repeat: no-repeat;
   background-color: lightgrey;
   vertical-align: middle;
-
-  //use below to turn these off for now since bandwidth of loading images is too extreme!
-  // background-image: none !important;
-  // display: none;
 }
+//use below to turn these off for now since bandwidth of loading images is too extreme!
+.disable-avatars .avatar {
+  background-image: none !important;
+  display: none !important;
+}
+
 // use media queries to ensure the avatars dont load on mobile
 // need to set background-image to none !important otherwise browser loads in background anyhow
 @media (min-width:768px) and (max-width:979px) {

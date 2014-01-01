@@ -270,6 +270,12 @@ Shit to dynamically load css-sheets only on browsers that don't properly support
     head.appendChild(link)
 
 ###
+A quick way to toggle avatar display for demos
+###
+@toggleAvatars = () ->
+  $('#detailview, #tweets').toggleClass('disable-avatars')
+
+###
 Secret disco mode (easter egg)
 ###
 @enableDiscoMode = () ->
