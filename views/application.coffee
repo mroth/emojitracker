@@ -225,7 +225,7 @@ formattedTweet = (tweet, new_marker = false) ->
     <p class='emojifont-restricted'>
       #{emoji.replace_unified prepared_tweet}
     </p>
-    <span class='tweet-details fadein'>
+    <span class='tweet-details'>
       &mdash;
       <span class='avatar img-circle' style='background-image:url(#{wrappedTweet.profile_image_url()});'></span>
       <a class='combo_name' href='https://twitter.com/#{tweet.screen_name}' target='_blank'>
