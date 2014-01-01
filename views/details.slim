@@ -27,8 +27,10 @@ div.container
           a.btn.btn-mini href="/api/details/#{@emoji_char.unified}"
             li.icon-code &nbsp;get details as json
 
-      section#tweets.span9
+      section#tweets.span9.disable-avatars
         h3
+          a href="http://twitter.com" target="_blank"
+            i.icon-twitter
           | live tweets&nbsp;
           i.icon-refresh.icon-spin title="tweets are streaming live from twitter, no need to refresh"
         ul#tweet_list.icons-ul
@@ -43,7 +45,7 @@ coffee:
   $ ->
     $('h2').html emoji.replace_unified( $('h2').text() ) #js-emojify the h2 for shit browsers
     $.get("/api/details/#{char_id}", (response) ->
-      for tweet in response.recent_tweets
+      for tweet in response.recent_tweets.reverse()
         appendTweetList tweet
       startDetailStreaming(char_id)
     , "json")

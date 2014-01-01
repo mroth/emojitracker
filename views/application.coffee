@@ -178,6 +178,7 @@ detail page/view UI helpers
   tweet_list_elements = $("#tweet_list li")
   tweet_list_elements.last().remove() if tweet_list_elements.size() >= 20
   new_entry = $(formattedTweet(tweet, new_marker))
+  new_entry.find('time.timeago').timeago()
   tweet_list.prepend( new_entry )
   if css_animation
     new_entry.focus()
@@ -186,41 +187,60 @@ detail page/view UI helpers
 ###
 general purpose UI helpers
 ###
-String.prototype.linkifyHashtags = () ->
-  this.replace /#(\w+)/g, "<a href='https://twitter.com/search?q=%23$1&src=hash' target='_blank'>#$1</a>"
-String.prototype.linkifyUsernames = () ->
-  this.replace /@(\w+)/g, "<a href='https://twitter.com/$1' target='_blank'>@$1</a>"
-String.prototype.linkifyUrls = () ->
-  # this.replace /(https?:\/\/[^\s]+)/g, "<a href='$1' target='_blank'>$1</a>"
-  this.replace /(https?:\/\/t.co\/\w+)/g, "<a href='$1' target='_blank'>$1</a>"
-String.prototype.linkify = () ->
-  this.linkifyUrls().linkifyUsernames().linkifyHashtags()
+
 String.prototype.endsWith = (suffix) ->
   @indexOf(suffix, @length - suffix.length) isnt -1
 
+###
+tweet clientside helper and formatting
+BE SURE TWITTER-TEXT-JS is loaded before this!! (TODO: investigate require.js)
+###
+class Tweet
+  constructor: (@status) ->
+
+  text: ->
+    twttr.txt.autoLink(@status.text, {urlEntities: @status.links, usernameIncludeSymbol: true, targetBlank: true})
+
+  url: ->
+    "https://twitter.com/#{@status.screen_name}/status/#{@status.id}"
+
+  profile_image_url: ->
+    return "http://a0.twimg.com/sticky/default_profile_images/default_profile_4_mini.png" unless @status.profile_image_url?
+    @status.profile_image_url.replace('_normal','_mini')
+
+  created_at: ->
+    return "#" unless @status.created_at?
+    @status.created_at
 
 formattedTweet = (tweet, new_marker = false) ->
-  tweet_url = "https://twitter.com/#{tweet.screen_name}/status/#{tweet.id}"
+  wrappedTweet = new Tweet tweet
+
   #mini_profile_url = tweet.avatar.replace('_normal','_mini')
-  prepared_tweet = tweet.text.linkify()
+  prepared_tweet = wrappedTweet.text()
   class_to_be = "styled_tweet"
   class_to_be += " new" if new_marker && css_animation
   "<li class='#{class_to_be}'>
   <i class='icon-li icon-angle-right'></i>
   <blockquote class='twitter-tweet'>
-   <p class='emojifont-restricted'>
+    <p class='emojifont-restricted'>
       #{emoji.replace_unified prepared_tweet}
     </p>
-   &mdash;
-    <a href='https://twitter.com/#{tweet.screen_name}' target='_blank'>
-      <strong class='emojifont-restricted'>#{emoji.replace_unified tweet.name}</strong>
-    </a>
-    <span class='screen_name'>@#{tweet.screen_name}</span>
-    <span class='intents'>
-      <a class='icon' href='https://twitter.com/intent/tweet?in_reply_to=#{tweet.id}'><i class='icon-reply'></i></a>
-      <a class='icon' href='https://twitter.com/intent/retweet?tweet_id=#{tweet.id}'><i class='icon-retweet'></i></a>
-      <a class='icon' href='https://twitter.com/intent/favorite?tweet_id=#{tweet.id}'><i class='icon-star'></i></a>
-      <a class='icon' href='#{tweet_url}'><i class='icon-external-link'></i></a>
+    <span class='tweet-details'>
+      &mdash;
+      <span class='avatar img-circle' style='background-image:url(#{wrappedTweet.profile_image_url()});'></span>
+      <a class='combo_name' href='https://twitter.com/#{tweet.screen_name}' target='_blank'>
+        <strong class='name emojifont-restricted'>#{emoji.replace_unified tweet.name}</strong>
+        <span class='screen_name'>@#{tweet.screen_name}</span>
+      </a>
+      <span class='timestamp'>
+        <a href='#{wrappedTweet.url()}'><time class='timeago' datetime='#{wrappedTweet.created_at()}'>#{wrappedTweet.created_at()}</time></a>
+      </span>
+      <span class='intents'>
+        <a class='icon' href='https://twitter.com/intent/tweet?in_reply_to=#{tweet.id}'><i class='icon-reply'></i></a>
+        <a class='icon' href='https://twitter.com/intent/retweet?tweet_id=#{tweet.id}'><i class='icon-retweet'></i></a>
+        <a class='icon' href='https://twitter.com/intent/favorite?tweet_id=#{tweet.id}'><i class='icon-star'></i></a>
+        <!-- <a class='icon' href='#{wrappedTweet.url()}'><i class='icon-external-link'></i></a> -->
+      </span>
     </span>
   </blockquote>
   </li>"
@@ -248,6 +268,12 @@ Shit to dynamically load css-sheets only on browsers that don't properly support
     link.href = css_url
     link.media = 'all'
     head.appendChild(link)
+
+###
+A quick way to toggle avatar display for demos
+###
+@toggleAvatars = () ->
+  $('#detailview, #tweets').toggleClass('disable-avatars')
 
 ###
 Secret disco mode (easter egg)

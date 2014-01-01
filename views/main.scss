@@ -1,3 +1,6 @@
+/***************************************
+ * convenience mixins to avoid browser prefixing mess
+ ***************************************/
 @mixin animation($animation) {
   -webkit-animation: $animation;
   -moz-animation: $animation;
@@ -19,6 +22,19 @@
   @keyframes $name { @content };
 }
 
+/***************************************
+ * generic transition keyframes
+ ***************************************/
+@include keyframes(fadein) {
+  from { opacity: 0; }
+}
+@include keyframes(highlight_content) {
+  from { background-color: #ffc; }
+}
+
+/***************************************
+ * related to the main display grid
+ ***************************************/
 .emoji_char {
   width: 100px;
   background-color: #eee;
@@ -56,6 +72,9 @@
   }
 }
 
+/***************************************
+ * stuff for how tweets appear in the detail views
+ ***************************************/
 .styled_tweet {
   color: gray;
   background-color: transparent;
@@ -71,27 +90,82 @@
   opacity: 0.4;
   text-decoration: none;
 }
-.new {
-  @include animation(highlight_content 0.75s ease-out)
-}
 .styled_tweet strong {
   color: #555;
 }
 .styled_tweet .intents {
   // margin-left: 20px;
 }
+
+.styled_tweet.new {
+  @include animation(highlight_content 0.75s ease-out);
+}
+#detailview:not(.disable-avatars) .styled_tweet.new .tweet-details,
+    #tweets:not(.disable-avatars) .styled_tweet.new .tweet-details {
+  opacity: 1;
+  @include animation(fadein 0.75s);
+}
+
+.avatar {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin: 0 auto;
+  background-repeat: no-repeat;
+  background-color: lightgrey;
+  vertical-align: middle;
+}
+//use below to turn these off for now since bandwidth of loading images is too extreme!
+.disable-avatars .avatar {
+  background-image: none !important;
+  display: none !important;
+}
+// use media queries to ensure the avatars dont load on mobile phones no matter what
+// need to set background-image to none !important otherwise browser loads in background anyhow
+@media (min-width:768px) and (max-width:979px) {
+  .avatar {
+    background-image: none !important;
+    display: none;
+  }
+}
+
+.intents {
+  float: right;
+  margin-right: 0.3em;
+  opacity: 0;
+}
+li.styled_tweet:hover .intents {
+  opacity: 1;
+}
+
 .screen_name {
   font-size: smaller;
   color: #999;
 }
+.timeago {
+  font-size: smaller;
+  color: #999;
+}
+.timestamp {
+  float: right;
+  opacity: 0;
+}
+.timestamp > a {
+  text-decoration: none;
+}
+li.styled_tweet:hover .timestamp {
+  opacity: 1;
+}
+a.combo_name:hover {
+  text-decoration: none;
+}
+a.combo_name:hover .name {
+  color: #0088cc;
+  text-decoration: underline;
+}
 /* override default bootstrap blockquote to make slightly smaller */
 blockquote p {
   font-size: 16px;
-}
-@include keyframes(highlight_content) {
-  from {
-    background-color: #ffc;
-  }
 }
 
 .fake-close {
@@ -100,6 +174,13 @@ blockquote p {
 }
 .icon-refresh {
   color: lightgray;
+}
+.icon-twitter {
+  color: #49f;
+  margin-right: .2em;
+}
+a:hover .icon-twitter {
+  text-decoration: none;
 }
 /* fuck it lets just force proper alignment of the damn twitter button */
 .modal-footer .twitter-count-horizontal {
