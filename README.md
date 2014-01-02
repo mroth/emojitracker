@@ -36,3 +36,7 @@ For heroku:
     heroku create --stack cedar --addons redistogo:nano memcachier:dev newrelic:standard hostedgraphite
     heroku config:add RACK_ENV=production
     heroku config:add CONSUMER_KEY=xxx CONSUMER_SECRET=yyy OAUTH_TOKEN=aaa OAUTH_TOKEN_SECRET=bbb
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/mroth/emojitrack/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
