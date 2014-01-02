@@ -204,6 +204,9 @@ class Tweet
   url: ->
     "https://twitter.com/#{@status.screen_name}/status/#{@status.id}"
 
+  profile_url: ->
+    "https://twitter.com/#{@status.screen_name}"
+
   profile_image_url: ->
     return "http://a0.twimg.com/sticky/default_profile_images/default_profile_4_mini.png" unless @status.profile_image_url?
     @status.profile_image_url.replace('_normal','_mini')
@@ -212,38 +215,25 @@ class Tweet
     return "#" unless @status.created_at?
     @status.created_at
 
-formattedTweet = (tweet, new_marker = false) ->
-  wrappedTweet = new Tweet tweet
+@Handlebars.templates = {}
+$ -> Handlebars.templates.styled_tweet = Handlebars.compile $('#styled-tweet-template').html()
 
-  #mini_profile_url = tweet.avatar.replace('_normal','_mini')
-  prepared_tweet = wrappedTweet.text()
-  class_to_be = "styled_tweet"
-  class_to_be += " new" if new_marker && css_animation
-  "<li class='#{class_to_be}'>
-  <i class='icon-li icon-angle-right'></i>
-  <blockquote class='twitter-tweet'>
-    <p class='emojifont-restricted'>
-      #{emoji.replace_unified prepared_tweet}
-    </p>
-    <span class='tweet-details'>
-      &mdash;
-      <span class='avatar img-circle' style='background-image:url(#{wrappedTweet.profile_image_url()});'></span>
-      <a class='combo_name' href='https://twitter.com/#{tweet.screen_name}' target='_blank'>
-        <strong class='name emojifont-restricted'>#{emoji.replace_unified tweet.name}</strong>
-        <span class='screen_name'>@#{tweet.screen_name}</span>
-      </a>
-      <span class='timestamp'>
-        <a href='#{wrappedTweet.url()}'><time class='timeago' datetime='#{wrappedTweet.created_at()}'>#{wrappedTweet.created_at()}</time></a>
-      </span>
-      <span class='intents'>
-        <a class='icon' href='https://twitter.com/intent/tweet?in_reply_to=#{tweet.id}'><i class='icon-reply'></i></a>
-        <a class='icon' href='https://twitter.com/intent/retweet?tweet_id=#{tweet.id}'><i class='icon-retweet'></i></a>
-        <a class='icon' href='https://twitter.com/intent/favorite?tweet_id=#{tweet.id}'><i class='icon-star'></i></a>
-        <!-- <a class='icon' href='#{wrappedTweet.url()}'><i class='icon-external-link'></i></a> -->
-      </span>
-    </span>
-  </blockquote>
-  </li>"
+formattedTweet = (tweet, new_marker = false) ->
+  styled_tweet_template = Handlebars.compile $('#styled-tweet-template').html()
+  wrappedTweet = new Tweet tweet
+  context = {
+    is_new: if new_marker && css_animation then 'new' else ''
+    prepared_tweet_text: emoji.replace_unified( wrappedTweet.text() )
+    profile_image_url: wrappedTweet.profile_image_url()
+    profile_url: wrappedTweet.profile_url()
+    name: emoji.replace_unified( tweet.name )
+    screen_name: tweet.screen_name
+    created_at: wrappedTweet.created_at()
+    url: wrappedTweet.url()
+    id: tweet.id
+  }
+  Handlebars.templates.styled_tweet(context)
+
 
 ###
 Polling
