@@ -147,7 +147,7 @@ coffee:
     addEntryToEventLog $.parseJSON(event.data), 'DISCONNECT'
 
   @refreshData = ->
-    $.get("streamers/status.json", (response) ->
+    $.get("/admin/streamers/status.json", (response) ->
       renderMultiData(response)
     , "json")
 
