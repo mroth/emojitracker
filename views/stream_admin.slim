@@ -7,10 +7,7 @@ div.container
       ul.nav.nav-tabs
         li.active
           a href="#queue_status" data-toggle="tab" queue status
-        / li
-        /   a href="#event_log" data-toggle="tab" event log
-        / li
-        /   a href="#settings" data-toggle="tab" settings
+
       div.tab-content
         div.tab-pane.active#queue_status
           div.row
@@ -44,37 +41,7 @@ div.container
                     th age
                     th node
                 tbody
-          / div.row
-          /   div.span6#raw
-          /     h3
-          /       | raw score streams&nbsp;
-          /       small
-          /         strong.num N
-          /         | &nbsp;open stream(s)
-          /     table.table.table-striped
-          /       thead
-          /         tr
-          /           th request_path
-          /           th client
-          /           th tag
-          /           th age
-          /           th node
-          /       tbody
-          /   div.span6#admin
-          /     h3
-          /       | admin tool streams&nbsp;
-          /       small
-          /         strong.num N
-          /         | &nbsp;open stream(s) - so meta!
-          /     table.table.table-striped
-          /       thead
-          /         tr
-          /           th request_path
-          /           th client
-          /           th tag
-          /           th age
-          /           th node
-          /       tbody
+
           button.btn.btn-small#refreshbtn
             li.icon-refresh
             | &nbsp;force refresh
@@ -149,8 +116,6 @@ coffee:
   renderData = (response) ->
     renderDataTable(response.connections.stream_eps, 'eps_score', response.node)
     renderDataTable(response.connections.stream_detail, 'detail', response.node)
-    #renderDataTable(response.connections.stream_raw, 'raw', response.node)
-    #renderDataTable(response.connections.stream_admin, 'admin', response.node)
 
   emptyAllTables = () ->
     $('tbody').empty()
@@ -175,22 +140,6 @@ coffee:
       ")
     id_selector.find('.num').text tbody_selector.find('tr').length
 
-  #addEntryToEventLog = (client, eventType, eventStyle=null) ->
-  #  $('#event_log').find('tbody').prepend(
-  #    """
-  #    <tr class='new'>
-  #      <td><span class='label #{eventStyle}'>#{eventType}</span></td>
-  #      <td><code>#{client.request_path}</code></td>
-  #      <td>
-  #        <i class='icon-#{pickPlatformIcon(client.client_user_agent)}' title='#{client.client_user_agent}'></i>
-  #        <tt>#{client.client_ip}</tt>
-  #      </td>
-  #      <td>#{emoji.replace_unified tagRender(client.tag)}</td>
-  #      <td><span class='badge'><i class='icon-time'></i> #{client.created_at}</span></td>
-  #    </tr>
-  #    """
-  #  )
-
   newAdminConnect = (event) ->
     addEntryToEventLog $.parseJSON(event.data), 'CONNECT', 'label-success'
 
@@ -202,14 +151,7 @@ coffee:
       renderMultiData(response)
     , "json")
 
-  #@startAdminStreaming = ->
-  #  console.log "Subscribing to admin stream"
-  #  @admin_source = new EventSource("/subscribe/admin/updates.sse")
-  #  @admin_source.addEventListener("connect", newAdminConnect, false)
-  #  @admin_source.addEventListener("disconnect", newAdminDisconnect, false)
-
   $ ->
     $('#refreshbtn').click -> refreshData()
-    #startAdminStreaming()
     setInterval refreshData, 10000
     refreshData()

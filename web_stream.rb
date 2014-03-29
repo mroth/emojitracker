@@ -209,7 +209,6 @@ class WebStreamerReporting < Sinatra::Base
           'stream_raw'    => WebScoreRawStreamer.connections.map(&:to_hash),
           'stream_eps'    => WebScoreCachedStreamer.connections.map(&:to_hash),
           'stream_detail' => WebDetailStreamer.connections.map(&:to_hash)
-          # 'stream_admin'  => WebStreamerAdmin.connections.map(&:to_hash)
         }
       }
     end
@@ -222,19 +221,6 @@ class WebStreamerReporting < Sinatra::Base
       REDIS.HSET STREAM_STATUS_REDIS_KEY, self.node_name, Oj.dump(self.current_status)
     end
 
-    # def self.rollup_status(filter=true)
-    #   #get vals from redis
-    #   nodes = REDIS.HVALS STREAM_STATUS_REDIS_KEY
-    #
-    #   #deserialize from JSON
-    #   nodes.map! {|n| Oj.load(n)}
-    #
-    #   #consider values stale if greater than 10x report period
-    #   nodes.reject! {|n| Time.now.to_i - n['reported_at'] > STREAM_STATUS_UPDATE_RATE*10 } if filter
-    #   #TODO: potentially clear these from REDIS entirely when we detect?
-    #
-    #   return nodes
-    # end
   end
 
   # periodically log the updates
@@ -247,7 +233,6 @@ class WebStreamerReporting < Sinatra::Base
   helpers ReportingUtils
 
   get '/admin/?' do
-    # slim :stream_admin
     redirect '/admin/', 301
   end
 
@@ -255,35 +240,6 @@ class WebStreamerReporting < Sinatra::Base
     content_type :json
     Oj.dump ReportingUtils.current_status
   end
-
-  # get '/admin/status.json' do
-  #   content_type :json
-  #   Oj.dump ReportingUtils.rollup_status
-  # end
-
-  # set :connections, []
-  # get '/admin/updates.sse' do
-  #   content_type 'text/event-stream'
-  #   stream(:keep_open) do |out|
-  #     out = WrappedStream.new(out, request)
-  #     settings.connections << out
-  #     log_connect(out)
-  #     out.callback { log_disconnect(out); settings.connections.delete(out) }
-  #
-  #     EM.add_periodic_timer(30) { out.sse_data('.') } #ghetto keepalive TODO: do me the right way
-  #     if SSE_FORCE_REFRESH then EM.add_timer(300) { out.close } end
-  #   end
-  # end
-  #
-  # Thread.new do
-  #   t_redis = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password, :driver => :hiredis)
-  #   t_redis.psubscribe('stream.admin.*') do |on|
-  #     on.pmessage do |match, channel, message|
-  #       admin_event = channel.split('.')[2]
-  #       connections.each {|out| out.sse_event_data(admin_event, message)}
-  #     end
-  #   end
-  # end
 
 end
 
