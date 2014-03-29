@@ -84,19 +84,19 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  coffee-script
-  colored
+  coffee-script (~> 2.2.0)
+  colored (~> 1.2)
   dalli (~> 2.6)
   emoji_data (~> 0.0.2)
-  foreman
+  foreman (~> 0.63.0)
   hiredis (~> 0.4.5)
-  memcachier
+  memcachier (~> 0.0.2)
   newrelic_rpm
   oj (~> 2.2.3)
-  rack-cache
+  rack-cache (~> 1.2)
   redis (~> 3.0.6)
   rspec (~> 2.13.0)
-  sass
+  sass (~> 3.2.12)
   sinatra (~> 1.4.4)
   slim (~> 2.0.2)
   thin (~> 1.5)
