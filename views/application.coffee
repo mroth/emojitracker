@@ -42,7 +42,7 @@ methods related to the polling UI
 ###
 # grab the initial data and scores and pass along to draw the grid
 @refreshUIFromServer = (callback) ->
-  $.get('/data', (response) ->
+  $.get('/api/rankings', (response) ->
     drawEmojiStats(response, callback)
   , "json")
 

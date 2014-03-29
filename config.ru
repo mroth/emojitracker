@@ -12,10 +12,12 @@ if memcache_servers = ENV["MEMCACHIER_SERVERS"]
 end
 
 require "./web"
+require "./web_api"
 require "./web_stream"
 
 $stdout.sync = true
 use Rack::Deflater
 
-map('/') { run WebApp }
-map('/subscribe') { run WebStreamer }
+map('/')            { run WebApp }
+map('/api')         { run WebAPI }
+map('/subscribe')   { run WebStreamer }
