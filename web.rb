@@ -44,12 +44,6 @@ class WebApp < Sinatra::Base
     slim :index
   end
 
-  get '/benchmark' do
-    @kiosk_mode = false
-    @benchmark_mode = true
-    slim :index
-  end
-
   get '/d/:char' do
     cache_control :public, max_age: 60000  # 1000 mins.
     redirect "/details/#{params[:char]}"

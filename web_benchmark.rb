@@ -4,6 +4,12 @@ require 'oj'
 require_relative 'lib/config'
 
 class WebBenchmarkApp < Sinatra::Base
+  get '/benchmark' do
+    @kiosk_mode = false
+    @benchmark_mode = true
+    slim :index
+  end
+
   get '/benchmark.js' do
     coffee :benchmark
   end
