@@ -21,11 +21,15 @@ config
 
 # send cleanup events when closing event streams for SUPER LAME servers like heroku :(
 # heroku labs:enable websockets may now resolve this!
-@force_stream_close = true
+@force_stream_close = false
 
 # some urls
 emojistatic_img_path = 'http://emojistatic.github.io/images/32/'
 emojistatic_css_uri  = 'http://emojistatic.github.io/css-sheets/emoji-32px.min.css'
+
+# what server to use for streaming? omit trailing slash
+# STREAMER = '' #blank for our own server
+STREAMER = 'http://emojitrack-streamer.herokuapp.com'
 
 ###
 inits
@@ -54,12 +58,12 @@ methods related to the streaming UI
 
 @startRawScoreStreaming = ->
   console.log "Subscribing to score stream (raw)"
-  @source = new EventSource('/subscribe/raw')
+  @source = new EventSource("#{STREAMER}/subscribe/raw")
   @source.onmessage = (event) -> incrementScore(event.data)
 
 @startCappedScoreStreaming = ->
   console.log "Subscribing to score stream (60eps rollup)"
-  @source = new EventSource('/subscribe/eps')
+  @source = new EventSource("#{STREAMER}/subscribe/eps")
   @source.onmessage = (event) -> incrementMultipleScores(event.data)
 
 @stopScoreStreaming = (async=true) ->
@@ -70,7 +74,7 @@ methods related to the streaming UI
 @startDetailStreaming = (id) ->
   console.log "Subscribing to detail stream for #{id}"
   @detail_id = id
-  @detail_source = new EventSource("/subscribe/details/#{id}")
+  @detail_source = new EventSource("#{STREAMER}/subscribe/details/#{id}")
   @detail_source.addEventListener("stream.tweet_updates.#{id}", processDetailTweetUpdate, false)
 
 @stopDetailStreaming = (async=true) ->
