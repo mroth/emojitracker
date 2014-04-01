@@ -22,4 +22,3 @@ use Rack::Deflater
 map('/')            { run WebApp }
 map('/api')         { run WebAPI }
 map('/admin')       { run WebAdmin }
-map('/subscribe')   { run WebStreamer }
