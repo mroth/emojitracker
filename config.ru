@@ -14,7 +14,6 @@ end
 require "./web"
 require "./web_api"
 require "./web_admin"
-require "./web_stream"
 
 $stdout.sync = true
 use Rack::Deflater
