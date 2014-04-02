@@ -6,7 +6,6 @@ require_relative 'lib/kiosk_interaction'
 require 'emoji_data'
 require 'oj'
 require 'colored'
-require 'socket'
 require 'eventmachine'
 
 # my options
