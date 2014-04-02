@@ -3,7 +3,7 @@ emojitrack tracks realtime emoji usage on twitter!
 
 Components of this project:
 
- - emojitrack-web (you are here!)
+ - emojitrack-web {you are here!}
  - emojitrack-streamer
     * ruby version (current)
     * node version (experimental)
@@ -13,6 +13,11 @@ Many of the libraries emojitrack uses have also been carved out into independent
 
  - [emoji_data.rb](http://github.com/mroth/emoji_data.rb)
  - [emojistatic](http://github.com/mroth/emojistatic)
+
+## emojitrack-web
+This is the main web application for emojitracker and its APIs.  
+
+This used to contain everything, but things are moving out to other repos.
 
 ## Development Setup
 ### Full stack
