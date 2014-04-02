@@ -1,5 +1,5 @@
 doctype html
-html
+html data-stream-server="#{@override_stream_server}"
   head
     meta charset="utf-8"
     title emojitracker: realtime emoji use on twitter
@@ -123,4 +123,3 @@ html
         $('#footline').html emoji.replace_colons( $('#footline').html() )
         unhide_footer = -> $('#footer').show()
         setTimeout unhide_footer, 1000
-

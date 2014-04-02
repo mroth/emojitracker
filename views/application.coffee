@@ -27,9 +27,6 @@ config
 emojistatic_img_path = 'http://emojistatic.github.io/images/32/'
 emojistatic_css_uri  = 'http://emojistatic.github.io/css-sheets/emoji-32px.min.css'
 
-# what server to use for streaming? omit trailing slash
-# STREAMER = '' #blank for our own server
-STREAMER = 'http://emojitrack-streamer.herokuapp.com'
 
 ###
 inits
@@ -53,6 +50,16 @@ methods related to the polling UI
 ###
 methods related to the streaming UI
 ###
+
+# what server to use for streaming? omit trailing slash
+STREAMER = '' #blank for our own server
+
+# override the template exposed a different server to us
+@setStreamServerFromEnvironment = () ->
+  server = $('html').data('stream-server')
+  console.log "Environment is setting stream server to #{server}"
+  STREAMER = if (server isnt '/') then server else ''
+
 @startScoreStreaming = ->
   if use_capped_stream then startCappedScoreStreaming() else startRawScoreStreaming()
 
@@ -333,5 +340,7 @@ $ ->
     console.log "In a browser that supports CSS fanciness but not emoji characters, dynamically injecting css-sheet!"
     emoji.use_css_imgs = true
     loadEmojiSheet(emojistatic_css_uri)
+
+  setStreamServerFromEnvironment()
 
   initDiscoMode()

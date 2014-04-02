@@ -39,8 +39,14 @@ class WebApp < Sinatra::Base
   get '/' do
     cache_control :public, max_age: 600  # 10 mins. #disable until password is gone
     # protected! if ENV['RACK_ENV'] == 'production'
+
+    # some default mode settings to be passed to JS
     @kiosk_mode = false
     @benchmark_mode = false
+
+    # get streaming server URL from environment if it differs
+    @override_stream_server = ENV['STREAM_SERVER'] || '/'
+
     slim :index
   end
 
