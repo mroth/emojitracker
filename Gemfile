@@ -22,12 +22,6 @@ group :web do
   gem 'memcachier', '~> 0.0.2'
 end
 
-group :feeder do
-  gem 'tweetstream', '~> 2.6.0'
-  gem 'twitter', '~> 4.8.1'
-  gem 'colored', '~> 1.2'
-end
-
 group :development do
   gem 'foreman', '~> 0.63.0'
   gem 'rspec', '~> 2.14.1'
