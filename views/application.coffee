@@ -93,7 +93,7 @@ STREAMER = '' #blank for our own server
   console.log "Forcing disconnect cleanup for #{id}..."
   $.ajax({
       type: 'POST'
-      url: "/subscribe/cleanup/details/#{id}"
+      url: "#{STREAMER}/subscribe/cleanup/details/#{id}"
       success: (data) ->
         console.log(" ...Received #{JSON.stringify data} from server.")
       async: async
@@ -104,7 +104,7 @@ STREAMER = '' #blank for our own server
   console.log "Forcing disconnect cleanup for score stream..."
   $.ajax({
       type: 'POST'
-      url: "/subscribe/cleanup/scores"
+      url: "#{STREAMER}/subscribe/cleanup/scores"
       success: (data) ->
         console.log(" ...Received #{JSON.stringify data} from server.")
       async: async
