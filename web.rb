@@ -16,7 +16,7 @@ class WebApp < Sinatra::Base
   use WebBenchmarkApp
   use WebKioskApp
 
-  configure :production do
+  configure :production, :staging do
     require 'newrelic_rpm'
   end
 
