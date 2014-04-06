@@ -3,6 +3,10 @@ require_relative 'wrapped_tweet'
 require 'oj'
 require 'twitter'
 
+#####
+# kiosk interaction library, used by feeder
+#####
+
 module KioskInteraction
 
   # configure twitter instance

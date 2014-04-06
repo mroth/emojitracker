@@ -27,6 +27,7 @@ config
 emojistatic_img_path = 'http://emojistatic.github.io/images/32/'
 emojistatic_css_uri  = 'http://emojistatic.github.io/css-sheets/emoji-32px.min.css'
 
+
 ###
 inits
 ###
@@ -49,17 +50,27 @@ methods related to the polling UI
 ###
 methods related to the streaming UI
 ###
+
+# what server to use for streaming? omit trailing slash
+STREAMER = '' #blank for our own server
+
+# override the template exposed a different server to us
+@setStreamServerFromEnvironment = () ->
+  server = $('html').data('stream-server')
+  console.log "Environment is setting stream server to #{server}"
+  STREAMER = if (server isnt '/') then server else ''
+
 @startScoreStreaming = ->
   if use_capped_stream then startCappedScoreStreaming() else startRawScoreStreaming()
 
 @startRawScoreStreaming = ->
   console.log "Subscribing to score stream (raw)"
-  @source = new EventSource('/subscribe/raw')
+  @source = new EventSource("#{STREAMER}/subscribe/raw")
   @source.onmessage = (event) -> incrementScore(event.data)
 
 @startCappedScoreStreaming = ->
   console.log "Subscribing to score stream (60eps rollup)"
-  @source = new EventSource('/subscribe/eps')
+  @source = new EventSource("#{STREAMER}/subscribe/eps")
   @source.onmessage = (event) -> incrementMultipleScores(event.data)
 
 @stopScoreStreaming = (async=true) ->
@@ -70,7 +81,7 @@ methods related to the streaming UI
 @startDetailStreaming = (id) ->
   console.log "Subscribing to detail stream for #{id}"
   @detail_id = id
-  @detail_source = new EventSource("/subscribe/details/#{id}")
+  @detail_source = new EventSource("#{STREAMER}/subscribe/details/#{id}")
   @detail_source.addEventListener("stream.tweet_updates.#{id}", processDetailTweetUpdate, false)
 
 @stopDetailStreaming = (async=true) ->
@@ -82,7 +93,7 @@ methods related to the streaming UI
   console.log "Forcing disconnect cleanup for #{id}..."
   $.ajax({
       type: 'POST'
-      url: "/subscribe/cleanup/details/#{id}"
+      url: "#{STREAMER}/subscribe/cleanup/details/#{id}"
       success: (data) ->
         console.log(" ...Received #{JSON.stringify data} from server.")
       async: async
@@ -93,7 +104,7 @@ methods related to the streaming UI
   console.log "Forcing disconnect cleanup for score stream..."
   $.ajax({
       type: 'POST'
-      url: "/subscribe/cleanup/scores"
+      url: "#{STREAMER}/subscribe/cleanup/scores"
       success: (data) ->
         console.log(" ...Received #{JSON.stringify data} from server.")
       async: async
@@ -329,5 +340,7 @@ $ ->
     console.log "In a browser that supports CSS fanciness but not emoji characters, dynamically injecting css-sheet!"
     emoji.use_css_imgs = true
     loadEmojiSheet(emojistatic_css_uri)
+
+  setStreamServerFromEnvironment()
 
   initDiscoMode()

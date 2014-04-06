@@ -14,7 +14,6 @@ end
 require "./web"
 require "./web_api"
 require "./web_admin"
-require "./web_stream"
 
 $stdout.sync = true
 use Rack::Deflater
@@ -22,4 +21,3 @@ use Rack::Deflater
 map('/')            { run WebApp }
 map('/api')         { run WebAPI }
 map('/admin')       { run WebAdmin }
-map('/subscribe')   { run WebStreamer }

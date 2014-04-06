@@ -62,16 +62,18 @@ div.container
           h3 settings
           small
             dl
-              dt SSE_FORCE_REFRESH
-              dd = if SSE_FORCE_REFRESH then "TRUE" else "FALSE" end
-              dt SSE_SCORE_RETRY_MS
-              dd = SSE_SCORE_RETRY_MS
-              dt SSE_DETAIL_RETRY_MS
-              dd = SSE_DETAIL_RETRY_MS
-              dt SSE_SCORE_FORCECLOSE_SEC
-              dd = SSE_SCORE_FORCECLOSE_SEC
-              dt SSE_DETAIL_FORCECLOSE_SEC
-              dd = SSE_DETAIL_FORCECLOSE_SEC
+              // we can no longer see these since they are on a different server!
+              // and may vary as well.  get rid of entirely or find better way to monitor.
+              / dt SSE_FORCE_REFRESH
+              / dd = if SSE_FORCE_REFRESH then "TRUE" else "FALSE" end
+              / dt SSE_SCORE_RETRY_MS
+              / dd = SSE_SCORE_RETRY_MS
+              / dt SSE_DETAIL_RETRY_MS
+              / dd = SSE_DETAIL_RETRY_MS
+              / dt SSE_SCORE_FORCECLOSE_SEC
+              / dd = SSE_SCORE_FORCECLOSE_SEC
+              / dt SSE_DETAIL_FORCECLOSE_SEC
+              / dd = SSE_DETAIL_FORCECLOSE_SEC
 
 
 

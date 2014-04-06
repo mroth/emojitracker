@@ -1,9 +1,15 @@
 require 'tweetstream'
 require 'redis'
 require 'uri'
+require 'socket'
+
+#convenience method for reading booleans from env vars
+def to_boolean(s)
+  s and !!s.match(/^(true|t|yes|y|1)$/i)
+end
 
 # verbose mode or no
-VERBOSE = ENV["VERBOSE"] || false
+VERBOSE = to_boolean(ENV["VERBOSE"]) || false
 
 # configure tweetstream instance
 TweetStream.configure do |config|
@@ -15,7 +21,7 @@ TweetStream.configure do |config|
 end
 
 # db setup
-REDIS_URI = URI.parse(ENV["REDISCLOUD_URL"] || ENV["REDISTOGO_URL"] || ENV["BOXEN_REDIS_URL"] || "redis://localhost:6379")
+REDIS_URI = URI.parse(ENV["REDIS_URL"] || ENV["REDISCLOUD_URL"] || ENV["REDISTOGO_URL"] || ENV["BOXEN_REDIS_URL"] || "redis://localhost:6379")
 REDIS = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password, :driver => :hiredis)
 
 # environment checks
@@ -42,9 +48,4 @@ def graphite_dyno_log(metric,count)
   dyno = ENV['DYNO'] || 'unknown-host'
   metric_name = "#{dyno}.#{metric}"
   graphite_log metric_name, count
-end
-
-#convenience method for reading booleans from env vars
-def to_boolean(s)
-  s and !!s.match(/^(true|t|yes|y|1)$/i)
 end

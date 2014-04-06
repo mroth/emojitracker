@@ -47,6 +47,7 @@ div#disclaimer.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myMo
 javascript:
   var benchmark_mode = #{@benchmark_mode};
   var kiosk_mode  = #{@kiosk_mode};
+  // TODO: replace the above with HTML data-attributes instead of passing in this ghetto way
 coffee:
   @popDetails = (char_id, requester = undefined, requester_profile_url = undefined) ->
     $.get("/api/details/#{char_id}", (response) ->
