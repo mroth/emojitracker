@@ -29,7 +29,7 @@ class WebAPI < Sinatra::Base
     @scores = raw_scores.map do |score|
       emo_obj = EmojiData.find_by_unified(score[0])
       {
-        "char"  => EmojiData.unified_to_char(score[0]),
+        "char"  => emo_obj.char,
         "id"    => emo_obj.unified,
         "name"  => emo_obj.name,
         "score" => score[1].to_i
