@@ -8,8 +8,19 @@ before_fork do |server, worker|
     Process.kill 'QUIT', Process.pid
   end
 
-  # defined?(ActiveRecord::Base) and
-  #   ActiveRecord::Base.connection.disconnect!
+  # *** Rediscloud documentation claims we don't need to do anything special...
+  #  "No special setup is required when using Redis Cloud with a Unicorn server.
+  # Users running Rails apps on Unicorn should follow the instructions in the
+  # Configuring Redis from Rails section and users running Sinatra apps on
+  # Unicorn should follow the instructions in the Configuring Redis on Sinatra
+  # section."
+  # - https://devcenter.heroku.com/articles/rediscloud#configuring-redis-on-sinatra
+
+  # # If you are using Redis but not Resque, change this
+  # if defined?(Resque)
+  #   Resque.redis.quit
+  #   Rails.logger.info('Disconnected from Redis')
+  # end
 end
 
 after_fork do |server, worker|
@@ -17,6 +28,9 @@ after_fork do |server, worker|
     puts 'Unicorn worker intercepting TERM and doing nothing. Wait for master to send QUIT'
   end
 
-  # defined?(ActiveRecord::Base) and
-  #   ActiveRecord::Base.establish_connection
+  # # If you are using Redis but not Resque, change this
+  # if defined?(Resque)
+  #   Resque.redis = ENV['<REDIS_URI>']
+  #   Rails.logger.info('Connected to Redis')
+  # end
 end
