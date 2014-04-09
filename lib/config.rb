@@ -14,6 +14,9 @@ VERBOSE = to_boolean(ENV["VERBOSE"]) || false
 REDIS_URI = URI.parse(ENV["REDIS_URL"] || ENV["REDISCLOUD_URL"] || ENV["REDISTOGO_URL"] || ENV["BOXEN_REDIS_URL"] || "redis://localhost:6379")
 REDIS = Redis.new(:host => REDIS_URI.host, :port => REDIS_URI.port, :password => REDIS_URI.password, :driver => :hiredis)
 
+# stream server setup
+STREAM_SERVER = ENV['STREAM_SERVER'] || 'http://stream.emojitracker.com'
+
 # environment checks
 def is_production?
   ENV["RACK_ENV"] == 'production'

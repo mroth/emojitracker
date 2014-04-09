@@ -44,9 +44,6 @@ class WebApp < Sinatra::Base
     @kiosk_mode = false
     @benchmark_mode = false
 
-    # get streaming server URL from environment if it differs
-    @override_stream_server = ENV['STREAM_SERVER'] || 'http://stream.emojitracker.com'
-
     slim :index
   end
 
