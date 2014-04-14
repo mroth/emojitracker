@@ -98,6 +98,7 @@ javascript:
 
 coffee:
   pickPlatformIcon = (agent) ->
+    return "globe" if !agent?
     return "apple" if agent.match(/Macintosh/)
     return "mobile-phone" if agent.match(/iPhone/)
     return "tablet" if agent.match(/iPad/)
