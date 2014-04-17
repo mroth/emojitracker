@@ -5,6 +5,10 @@ require 'oj'
 require 'emoji_data'
 
 class WebAPI < Sinatra::Base
+  
+  before do
+    headers("Access-Control-Allow-Origin" => "*" )
+  end
 
   get '/details/:char' do
     cache_control :public, max_age: 30
