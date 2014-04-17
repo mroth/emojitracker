@@ -58,7 +58,15 @@ STREAMER = '' #blank for our own server
 @setStreamServerFromEnvironment = () ->
   server = $('html').data('stream-server')
   console.log "Environment is setting stream server to #{server}"
-  STREAMER = if (server isnt '/') then server else ''
+
+  servers = server.split(',')
+  if servers.length > 1
+    console.log "Multiple stream servers in rotation; randomly selecting for client"
+    rand = servers[Math.floor(Math.random() * servers.length)]
+    console.log "Randomly selected stream server: #{rand}"
+    STREAMER = rand
+  else
+    STREAMER = if (server isnt '/') then server else ''
 
 @startScoreStreaming = ->
   if use_capped_stream then startCappedScoreStreaming() else startRawScoreStreaming()
