@@ -84,8 +84,7 @@ coffee:
     renderData(node) for node in response
 
   renderData = (response) ->
-    renderDataTable(response.connections.stream_eps, 'connections', response.node)
-    renderDataTable(response.connections.stream_detail, 'connections', response.node)
+    renderDataTable(response.connections, 'connections', response.node)
 
   emptyAllTables = () ->
     $('tbody').empty()
