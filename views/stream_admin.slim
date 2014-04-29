@@ -101,7 +101,7 @@ coffee:
       context = {
         request_path: client.request_path
         remote_ip: client.client_ip
-        icon: "icon-" + pickPlatformIcon(client.client_user_agent)
+        icon: "icon-" + pickPlatformIcon(client.user_agent)
         tag: emoji.replace_unified tagRender(client.tag)
         age: prettyAge( Math.floor(Date.now() / 1000) - client.created_at )
         node: node
