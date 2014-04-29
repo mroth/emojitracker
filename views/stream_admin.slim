@@ -112,12 +112,6 @@ coffee:
 
     id_selector.find('.num').text tbody_selector.find('tr').length
 
-  newAdminConnect = (event) ->
-    addEntryToEventLog $.parseJSON(event.data), 'CONNECT', 'label-success'
-
-  newAdminDisconnect = (event) ->
-    addEntryToEventLog $.parseJSON(event.data), 'DISCONNECT'
-
   @refreshData = ->
     $.get("/admin/streamers/status.json", (response) ->
       renderMultiData(response)
