@@ -79,6 +79,15 @@ coffee:
     emoji_char = String.fromCodePoint parseInt(tag, 16)
     "<span class='label label-info'>#{emoji_char} #{tag}</span>"
 
+  # quick hack to get the "tag" -- what we used on the original streamer to
+  # identify conns from the new 'namespace' field.  since this is just for
+  # reverse compatibility, don't bother to do this in a robust way, just handle
+  # the one known legacy case.
+  tagFromNamespace = (namespace) ->
+    fields = namespace.split('/')
+    return null unless fields[1] is "details"
+    fields[2]
+
   renderMultiData = (response) ->
     emptyAllTables()
     renderData(node) for node in response
@@ -102,7 +111,7 @@ coffee:
         request_path: client.request_path
         remote_ip: client.client_ip
         icon: "icon-" + pickPlatformIcon(client.user_agent)
-        tag: emoji.replace_unified tagRender(client.tag)
+        tag: emoji.replace_unified tagRender( tagFromNamespace(client.namespace) )
         age: prettyAge( Math.floor(Date.now() / 1000) - client.created_at )
         node: node
       }
