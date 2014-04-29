@@ -104,7 +104,7 @@ coffee:
         remote_ip: client.client_ip
         icon: "icon-" + pickPlatformIcon(client.client_user_agent)
         tag: emoji.replace_unified tagRender(client.tag)
-        age: prettyAge client.age
+        age: prettyAge( Math.floor(Date.now() / 1000) - client.created_at )
         node: node
       }
       rendered_entry = Handlebars.templates.entry(context)
