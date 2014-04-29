@@ -3,77 +3,26 @@ div.container
     h2
       | stream admin
 
-    div.tabbable
-      ul.nav.nav-tabs
-        li.active
-          a href="#queue_status" data-toggle="tab" queue status
-
-      div.tab-content
-        div.tab-pane.active#queue_status
-          div.row
-            div.span6#eps_score
-              h3
-                | eps score streams&nbsp;
-                small
-                  strong.num N
-                  | &nbsp;open stream(s)
-              table.table.table-striped
-                thead
-                  tr
-                    th request_path
-                    th client
-                    th tag
-                    th age
-                    th node
-                tbody
-            div.span6#detail
-              h3
-                | detail streams&nbsp;
-                small
-                  strong.num N
-                  | &nbsp;open stream(s)
-              table.table.table-striped
-                thead
-                  tr
-                    th request_path
-                    th client
-                    th tag
-                    th age
-                    th node
-                tbody
-
-          button.btn.btn-small#refreshbtn
-            li.icon-refresh
-            | &nbsp;force refresh
-        div.tab-pane#event_log
-          h3
-            | realtime event log&nbsp;
-            small reminder: only shows what happens while this window session is active
-          table.table
-            thead
-              tr
-                th event
-                th request_path
-                th client
-                th tag
-                th timestamp
-            tbody
-        div.tab-pane#settings
-          h3 settings
+    div.row
+      div.span12#connections
+        h3
+          | open streams&nbsp;
           small
-            dl
-              // we can no longer see these since they are on a different server!
-              // and may vary as well.  get rid of entirely or find better way to monitor.
-              / dt SSE_FORCE_REFRESH
-              / dd = if SSE_FORCE_REFRESH then "TRUE" else "FALSE" end
-              / dt SSE_SCORE_RETRY_MS
-              / dd = SSE_SCORE_RETRY_MS
-              / dt SSE_DETAIL_RETRY_MS
-              / dd = SSE_DETAIL_RETRY_MS
-              / dt SSE_SCORE_FORCECLOSE_SEC
-              / dd = SSE_SCORE_FORCECLOSE_SEC
-              / dt SSE_DETAIL_FORCECLOSE_SEC
-              / dd = SSE_DETAIL_FORCECLOSE_SEC
+            strong.num N
+            | &nbsp;open stream(s)
+        table.table.table-striped
+          thead
+            tr
+              th request_path
+              th client
+              th tag
+              th age
+              th node
+          tbody
+
+    button.btn.btn-small#refreshbtn
+      li.icon-refresh
+      | &nbsp;force refresh
 
 
 
@@ -117,8 +66,8 @@ coffee:
     renderData(node) for node in response
 
   renderData = (response) ->
-    renderDataTable(response.connections.stream_eps, 'eps_score', response.node)
-    renderDataTable(response.connections.stream_detail, 'detail', response.node)
+    renderDataTable(response.connections.stream_eps, 'connections', response.node)
+    renderDataTable(response.connections.stream_detail, 'connections', response.node)
 
   emptyAllTables = () ->
     $('tbody').empty()
