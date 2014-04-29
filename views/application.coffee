@@ -238,7 +238,6 @@ class Tweet
 $ -> Handlebars.templates.styled_tweet = Handlebars.compile $('#styled-tweet-template').html()
 
 formattedTweet = (tweet, new_marker = false) ->
-  styled_tweet_template = Handlebars.compile $('#styled-tweet-template').html()
   wrappedTweet = new Tweet tweet
   context = {
     is_new: if new_marker && css_animation then 'new' else ''
