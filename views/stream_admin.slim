@@ -24,6 +24,24 @@ div.container
       li.icon-refresh
       | &nbsp;force refresh
 
+script#entry-template type='text/x-handlebars-template'
+  tr
+    td
+      code.new
+        | {{request_path}}
+    td
+      i class="{{icon}}" title="{{user_agent}}"
+      tt
+        | &nbsp;{{remote_ip}}
+    td
+      | {{{tag}}}
+    td
+      span.badge
+        i.icon-time
+        | {{age}}
+    td
+      span.badge.badge-success
+        | {{node}}
 
 
 javascript:
@@ -81,15 +99,17 @@ coffee:
     id_selector = $("##{id}")
     tbody_selector = id_selector.find('tbody')
     for client in response
-      tbody_selector.append("
-        <tr>
-          <td><code class='new'>#{client.request_path}</code></td>
-          <td style='white-space: nowrap'><i class='icon-#{pickPlatformIcon(client.client_user_agent)}' title='#{client.client_user_agent}'></i> <tt>#{client.client_ip}</tt></td>
-          <td>#{emoji.replace_unified tagRender(client.tag)}</td>
-          <td><span class='badge'><i class='icon-time'></i> #{prettyAge(client.age)}</span></td>
-          <td><span class='badge badge-success'>#{node}</span></td>
-        </tr>
-      ")
+      context = {
+        request_path: client.request_path
+        remote_ip: client.client_ip
+        icon: "icon-" + pickPlatformIcon(client.client_user_agent)
+        tag: emoji.replace_unified tagRender(client.tag)
+        age: prettyAge client.age
+        node: node
+      }
+      rendered_entry = Handlebars.templates.entry(context)
+      tbody_selector.append(rendered_entry)
+
     id_selector.find('.num').text tbody_selector.find('tr').length
 
   newAdminConnect = (event) ->
@@ -103,7 +123,10 @@ coffee:
       renderMultiData(response)
     , "json")
 
+  @Handlebars.templates = {}
   $ ->
+    Handlebars.templates.entry = Handlebars.compile $('#entry-template').html()
+
     $('#refreshbtn').click -> refreshData()
     setInterval refreshData, 10000
     refreshData()
