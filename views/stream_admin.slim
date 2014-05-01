@@ -38,7 +38,7 @@ script#entry-template type='text/x-handlebars-template'
     td
       span.badge
         i.icon-time
-        | {{age}}
+        | &nbsp;{{age}}
     td
       span.badge.badge-success
         | {{node}}
@@ -110,6 +110,7 @@ coffee:
       context = {
         request_path: client.request_path
         remote_ip: client.client_ip
+        user_agent: client.user_agent
         icon: "icon-" + pickPlatformIcon(client.user_agent)
         tag: emoji.replace_unified tagRender( tagFromNamespace(client.namespace) )
         age: prettyAge( Math.floor(Date.now() / 1000) - client.created_at )
