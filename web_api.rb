@@ -19,7 +19,7 @@ class WebAPI < Sinatra::Base
     @emoji_tweets_json = @emoji_tweets.map! {|t| Oj.load(t)}
     content_type :json
     Oj.dump( {
-      'char' => @emoji_char.char,
+      'char' => @emoji_char.char({variant_encoding: false}),
       'char_details' => @emoji_char,
       'popularity_rank' => @emoji_char_rank,
       'recent_tweets' => @emoji_tweets_json
@@ -33,7 +33,7 @@ class WebAPI < Sinatra::Base
     @scores = raw_scores.map do |score|
       emo_obj = EmojiData.find_by_unified(score[0])
       {
-        "char"  => emo_obj.char,
+        "char"  => emo_obj.char({variant_encoding: false}),
         "id"    => emo_obj.unified,
         "name"  => emo_obj.name,
         "score" => score[1].to_i
