@@ -55,6 +55,7 @@ function emoji(){}
 		var img = emoji.data[idx][7] || emoji.img_path+idx+'.png';
 		var title = emoji.include_title ? ' title="'+(actual || emoji.data[idx][3][0])+'"' : '';
 		var text  = emoji.include_text  ? wrapper+(actual || emoji.data[idx][3][0])+wrapper : '';
+		if (emoji.supports_css && emoji.use_css_imgs) return '<span class="emoji emoji-'+idx+'">:'+emoji.data[idx][3][0]+':</span>';
 		if (emoji.supports_css) {
 			if (emoji.use_sheet){
 				var px = emoji.data[idx][4];
