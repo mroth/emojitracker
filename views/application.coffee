@@ -228,7 +228,8 @@ class Tweet
 
   profile_image_url: ->
     return "http://a0.twimg.com/sticky/default_profile_images/default_profile_4_mini.png" unless @status.profile_image_url?
-    @status.profile_image_url.replace('_normal','_mini')
+    profile_image_url = @status.profile_image_url
+    '//' + profile_image_url.host + profile_image_url.path.replace('_normal','_mini')
 
   created_at: ->
     return "#" unless @status.created_at?
