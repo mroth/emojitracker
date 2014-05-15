@@ -1,2 +1,1 @@
-vendored individual files from iamcal/js-emoji
-
+vendored files from iamcal/js-emoji@0a5922a

@@ -47,7 +47,7 @@ html data-stream-server="#{STREAM_SERVER}"
   body
     div.navbar.navbar-static-top
       div.navbar-inner
-        a.brand.emojifont-restricted href="/" emojitracker
+        a.brand href="/" emojitracker
         ul.nav.pull-right
           li.dropdown
             a.dropdown-toggle data-toggle="dropdown"
@@ -69,7 +69,7 @@ html data-stream-server="#{STREAM_SERVER}"
 
     hr
     div.container.hide#footer
-      p#footline.emojifont-restricted
+      p#footline
         | :dizzy:<a href="http://twitter.com/emojitracker">emojitracker</a> is brought to you with :heart: by :man:<a href="http://twitter.com/mroth">mroth</a> &times; :rocket:<a href="http://twitter.com/rocketws">rocketws</a> &mdash; <a href="#aboutview" data-toggle="modal">more info</a>
       br
       br
@@ -77,7 +77,7 @@ html data-stream-server="#{STREAM_SERVER}"
     div#aboutview.modal.hide.fade tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
       div.modal-header
         button.close type="button" data-dismiss="modal" aria-hidden="true" &times;
-        h3.emojifont-restricted about emojitracker
+        h3 about emojitracker
       div.modal-body
         p this is an experiment in realtime tracking of all emoji used on twitter.  if you're a nerd, you can <a href="http://github.com/mroth/emojitrack">check out the code on github</a> and make it better!
         h4 like it? spread the word!
@@ -91,13 +91,13 @@ html data-stream-server="#{STREAM_SERVER}"
       li class='styled_tweet {{is_new}}'
         i.icon-li.icon-angle-right
         blockquote.twitter-tweet
-          p.emojifont-restricted
+          p
             | {{{prepared_tweet_text}}}
           span.tweet-details
             | &mdash;
             span.avatar.img-circle style='background-image:url({{profile_image_url}});'
             a.combo_name href='{{profile_url}}' target='_blank'
-              strong.name.emojifont-restricted
+              strong.name
                 | {{{name}}}
               span.screen_name
                 | @{{screen_name}}
