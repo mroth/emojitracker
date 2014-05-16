@@ -5,15 +5,21 @@ This is but a small part of emojitracker's infrastructure.  Major components of 
 
  - **[emojitrack-web](//github.com/mroth/emojitrack)** _the web frontend and application server (you are here!)_
  - **emojitrack-streamer** _handles streaming updates to clients via SSE_
-    * [ruby version](//github.com/mroth/emojitrack-streamer) (current)
-    * [nodejs version](//github.com/mroth/emojitrack-nodestreamer) (experimental)
-    * [streamer API spec](//github.com/mroth/emojitrack-streamer-spec)
+    * [ruby version](//github.com/mroth/emojitrack-streamer) (being deprecated)
+    * [nodejs version](//github.com/mroth/emojitrack-nodestreamer)
+    * [go version](//github.com/mroth/emojitrack-gostreamer)
+    * [streamer API spec](//github.com/mroth/emojitrack-streamer-spec) _defines the streamer spec, tests servers in staging_
  - **[emojitrack-feeder](//github.com/mroth/emojitrack-feeder)** _consumes the Twitter Streaming API and feeds our data pipeline_
 
-Additionally, many of the libraries emojitrack uses have also been carved out into independent open-source projects, see the following:
+Additionally, many of the libraries emojitrack uses have also been carved out into independent emoji-related open-source projects, see the following:
 
- - **[emoji_data.rb](http://github.com/mroth/emoji_data.rb)** _utility library for handling the Emoji vs Unicode nightmare_
- - **[emojistatic](http://github.com/mroth/emojistatic)** _generates static emoji assets for a public CDN_
+ - **[emoji_data.rb](//github.com/mroth/emoji_data.rb)** _utility library for handling the Emoji vs Unicode nightmare_
+ - **[emojistatic](//github.com/mroth/emojistatic)** _generates static emoji assets for a public CDN_
+
+As well as some general purpose libraries:
+
+ - **[cssquirt](//github.com/mroth/cssquirt)** _Embeds images (or directories of images) directly into CSS via the Data URI scheme_
+ - **[sse-bench](//github.com/mroth/sse-bench)** _benchmarks Server-Sent Events endpoints_
 
 ## emojitrack-web
 This is the main web application for the emojitracker frontend and APIs.  
