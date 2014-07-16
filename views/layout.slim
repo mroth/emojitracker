@@ -70,7 +70,7 @@ html data-stream-server="#{STREAM_SERVER}"
     hr
     div.container.hide#footer
       p#footline
-        | :dizzy:<a href="http://twitter.com/emojitracker">emojitracker</a> is brought to you with :heart: by :man:<a href="http://twitter.com/mroth">mroth</a> &times; :rocket:<a href="http://twitter.com/rocketws">rocketws</a> &mdash; <a href="#aboutview" data-toggle="modal">more info</a>
+        | :dizzy:<a href="http://twitter.com/emojitracker">emojitracker</a> is brought to you with :heart: by :man:<a href="http://twitter.com/mroth">mroth</a> &mdash; <a href="#aboutview" data-toggle="modal">more info</a>
       br
       br
 
@@ -79,13 +79,13 @@ html data-stream-server="#{STREAM_SERVER}"
         button.close type="button" data-dismiss="modal" aria-hidden="true" &times;
         h3 about emojitracker
       div.modal-body
-        p this is an experiment in realtime tracking of all emoji used on twitter.  if you're a nerd, you can <a href="http://github.com/mroth/emojitrack">check out the code on github</a> and make it better!
+        p this is an experiment in realtime tracking of all emoji used on twitter.
         h4 like it? spread the word!
         p
           a.twitter-share-button href="https://twitter.com/share" data-lang="en" data-count="horizontal" data-related="rocketws,mroth" data-dnt="true" data-text="emojitracker: visualizing realtime emoji use on twitter" data-url="http://www.emojitracker.com/" Tweet
           a.twitter-follow-button href="https://twitter.com/emojitracker" data-show-count="false" data-show-screen-name="true" data-dnt="true" Follow @emojitracker
       div.modal-footer
-        span#byline.emojifont-restricted built with :heart: in nyc.  this is a <a href="http://rocketws.com" target="new">rocket workshop :rocket:</a> project.
+        span#byline.emojifont-restricted built with :heart: in nyc.  this is a <a href="http://mroth.info" target="new">mroth :man:</a> project.
 
     script#styled-tweet-template type='text/x-handlebars-template'
       li class='styled_tweet {{is_new}}'
