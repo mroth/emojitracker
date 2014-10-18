@@ -12,7 +12,7 @@ group :web, :feeder do
 end
 
 group :web do
-  gem 'sinatra', '~> 1.4.4'
+  gem 'sinatra', '~> 1.4.5'
   gem 'slim', '~> 2.0.2'
   gem 'coffee-script', '~> 2.2.0'
   gem 'sass', '~> 3.2.12', :require => 'sass'
