@@ -16,7 +16,7 @@ GEM
     hiredis (0.5.1)
     kgio (2.9.2)
     memcachier (0.0.2)
-    newrelic_rpm (3.7.3.204)
+    newrelic_rpm (3.9.5.251)
     oj (2.6.1)
     rack (1.5.2)
     rack-cache (1.2)
