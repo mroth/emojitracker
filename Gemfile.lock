@@ -19,7 +19,7 @@ GEM
     kgio (2.9.2)
     memcachier (0.0.2)
     newrelic_rpm (3.9.5.251)
-    oj (2.6.1)
+    oj (2.9.9)
     rack (1.5.2)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -63,7 +63,7 @@ DEPENDENCIES
   hiredis (~> 0.5.1)
   memcachier (~> 0.0.2)
   newrelic_rpm
-  oj (~> 2.6.1)
+  oj (~> 2.9.9)
   rack-cache (~> 1.2)
   rack-timeout (~> 0.0.4)
   redis (~> 3.0.6)
