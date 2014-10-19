@@ -10,7 +10,7 @@ GEM
     dotenv (0.11.1)
       dotenv-deployment (~> 0.0.2)
     dotenv-deployment (0.0.2)
-    emoji_data (0.1.0)
+    emoji_data (0.2.0)
     execjs (2.0.2)
     foreman (0.75.0)
       dotenv (~> 0.11.1)
@@ -58,7 +58,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-script (~> 2.2.0)
   dalli (~> 2.6.4)
-  emoji_data (~> 0.1.0)
+  emoji_data (~> 0.2.0)
   foreman (~> 0.75.0)
   hiredis (~> 0.5.2)
   memcachier (~> 0.0.2)

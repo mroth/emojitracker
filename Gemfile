@@ -8,7 +8,7 @@ group :web, :feeder, :streamer do
 end
 
 group :web, :feeder do
-  gem 'emoji_data', '~> 0.1.0'
+  gem 'emoji_data', '~> 0.2.0'
 end
 
 group :web do
