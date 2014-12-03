@@ -71,6 +71,11 @@ html data-stream-server="#{STREAM_SERVER}"
     div.container.hide#footer
       p#footline
         | :dizzy:<a href="http://twitter.com/emojitracker">emojitracker</a> is brought to you with :heart: by :man:<a href="http://twitter.com/mroth">mroth</a> &mdash; <a href="#aboutview" data-toggle="modal">more info</a>
+      p
+        i
+          | &nbsp;&nbsp;want to help keep emojitracker running?&nbsp;
+          a#donatefooterlink data-ct-checkout="emojitracker.emojitracker-donate-button" href="#footer"
+            | donate today! :moneybag:
       br
       br
 
@@ -84,8 +89,8 @@ html data-stream-server="#{STREAM_SERVER}"
         ul
           li
             a href="https://medium.com/@mroth/how-i-built-emojitracker-179cfd8238ac"
-              | "how i built emojitracker"
-            | &nbsp;article <small>(for nerds)</small>
+              | "how i built emojitracker" article
+            | &nbsp;<small>(for nerds)</small>
           li
             a href="https://github.com/mroth/emojitrack"
               | source code
@@ -94,12 +99,22 @@ html data-stream-server="#{STREAM_SERVER}"
             a href="https://github.com/mroth/emojitrack/wiki/FAQ"
               | frequently asked questions
             | &nbsp;<small>(for everyone)</small>
-        h4 like this project? help spread the word!
+
+        h4 want to help out?
+        p
+          | you can donate to help me pay the server and bandwidth costs. <em>xoxo!</em>
+          button.btn.btn-lg.btn-success#donatebtn type="button" data-ct-checkout="emojitracker.emojitracker-donate-button"
+            | :moneybag: Donate Now
+
+        h4 help spread the word!
         p
           a.twitter-share-button href="https://twitter.com/share" data-lang="en" data-count="horizontal" data-related="rocketws,mroth" data-dnt="true" data-text="emojitracker: visualizing realtime emoji use on twitter" data-url="http://www.emojitracker.com/" Tweet
           a.twitter-follow-button href="https://twitter.com/emojitracker" data-show-count="false" data-show-screen-name="true" data-dnt="true" Follow @emojitracker
       div.modal-footer
         span#byline.emojifont-restricted built with :heart: in nyc.  this is a <a href="http://mroth.info" target="new">mroth :man:</a> project.
+
+    // stuff that can be loaded later
+    script src='//open.tilt.com/checkout.js' type='text/javascript'
 
     script#styled-tweet-template type='text/x-handlebars-template'
       li class='styled_tweet {{is_new}}'
@@ -135,5 +150,7 @@ html data-stream-server="#{STREAM_SERVER}"
         $('a.brand').html emoji.replace_colons(':dizzy:') + ' emojitracker<small class="hidden-phone">: realtime emoji use on twitter</small>'
         $('#aboutview #byline').html emoji.replace_colons( $('#aboutview #byline').html() )
         $('#footline').html emoji.replace_colons( $('#footline').html() )
+        $('#donatebtn').html emoji.replace_colons( $('#donatebtn').html() )
+        $('#donatefooterlink').html emoji.replace_colons( $('#donatefooterlink').html() )
         unhide_footer = -> $('#footer').show()
         setTimeout unhide_footer, 1000
