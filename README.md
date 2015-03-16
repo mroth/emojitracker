@@ -2,8 +2,10 @@
 
 > Emojitracker.com tracks realtime emoji usage on Twitter.
 
+![capture](http://f.cl.ly/items/1g3s3S460r2k0d200W1f/emojitracker_animated.gif)
+
 Emojitracker is a complex project with a service-oriented architecture, and thus
-has now been split up into multiple repositories.  This repository now just
+has now been split up into multiple repositories.  This repository mainly just
 serves as table of contents of sorts. Major components of the project are listed
 below.
 
