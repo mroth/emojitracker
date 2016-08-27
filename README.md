@@ -9,16 +9,20 @@ has now been split up into multiple repositories.  This repository mainly just
 serves as table of contents of sorts. Major components of the project are listed
 below.
 
+## Architecture
+Bad diagram of how the main parts fit together in production:
+![emojitracker-infrastructure](https://cloud.githubusercontent.com/assets/40650/18025171/e5bad858-6bee-11e6-957f-ede52efac808.png)
+
 ## Core Applications
 The core applications of Emojitracker. Note that while these are open source for
-educational purposes, they are currently _all rights reserved_. Please contact
+educational purposes, they are currently **all rights reserved**. Please contact
 me directly if you want to use them for something.
 
 - **[emojitrack-web]**     _web frontend and application server._
 - **[emojitrack-feeder]**  _consumes the Twitter Streaming API and feeds our data pipeline._
 - **emojitrack-streamer**  _handles streaming updates to clients via SSE._
-  * [Ruby version]    _(deprecated)_
-  * [NodeJS version]  _(deprecated)_
+  * ~~[Ruby version]~~    _(deprecated)_
+  * ~~[NodeJS version]~~  _(deprecated)_
   * [Go version]      _(production)_
   * [API spec]        _defines the streamer spec, tests servers in staging._
 
