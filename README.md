@@ -11,8 +11,8 @@ below.
 
 ## Architecture
 
-Bad diagram of how the main parts fit together in production:
-![emojitracker-infrastructure](https://cloud.githubusercontent.com/assets/40650/18025171/e5bad858-6bee-11e6-957f-ede52efac808.png)
+Bad and somewhat outdated diagram of how the main parts fit together in production:
+![emojitracker-infrastructure](resources/infrastructure_diagram.png)
 
 ## Core Applications
 
