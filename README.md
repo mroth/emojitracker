@@ -9,6 +9,9 @@ has now been split up into multiple repositories.  This repository mainly just
 serves as table of contents of sorts. Major components of the project are listed
 below.
 
+> **Note**
+> Since 2021, Emojitracker was [acquired by Emojipedia](https://blog.emojipedia.org/emojipedia-emojitracker/), and is now maintained by them. You can find all of the repositories in the [Emojitracker GitHub organization](https://github.com/emojipedia).
+
 ## Architecture
 
 Bad and somewhat outdated diagram of how the main parts fit together in production:
